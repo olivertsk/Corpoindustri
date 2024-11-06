@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function SignInPage() {
   return (
-    <div className='bg-white p-8 rounded-lg shadow-xl'>
+    <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
       <h1 className='text-4xl text-center font-black'>Iniciar Sesión</h1>
       <p className='text-xl text-center font-light  mt-5'>
         Adquiere los mejores productos {''}
@@ -12,7 +12,7 @@ export default function SignInPage() {
         <label htmlFor='email' className='block'>
           Email
           <input
-            className='w-full p-3 border-2 rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400'
             type='email'
             name=''
             placeholder='example@example.com'
@@ -22,7 +22,7 @@ export default function SignInPage() {
         <label htmlFor='password' className='block'>
           Contraseña
           <input
-            className='w-full p-3 border-2 rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400'
             type='password'
             name=''
             id='password'

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import AppHeader from '@/components/AppHeader';
 
 export const metadata: Metadata = {
   title: 'Corpoindustri',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <body className='bg-gray-100'>{children}</body>
+      <body className='bg-gray-100'>
+        <AppHeader />
+        {children}
+      </body>
     </html>
   );
 }

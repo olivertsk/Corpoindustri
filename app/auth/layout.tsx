@@ -7,7 +7,7 @@ export default function AuthLayout({
 }>) {
   return (
     <>
-      <main className='min-h-screen bg-gradient-to-b from-primary to-secondary grid grid-cols-5'>
+      <main className='min-h-screen  from-primary to-secondary grid grid-cols-5'>
         <div className='col-span-5 lg:col-span-3 h-full flex items-center justify-center'>
           <div className='max-w-[500px]'>
             <Image

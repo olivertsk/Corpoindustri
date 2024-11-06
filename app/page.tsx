@@ -1,3 +1,13 @@
+import BannerSlider from '@/components/home/BannerSlider';
+import ProductsSlider from '@/components/home/ProductsSlider';
+
 export default function Home() {
-  return <h1>Hola Mundo</h1>;
+  return (
+    <section>
+      <BannerSlider />
+      <div className='container mx-auto mb-4'>
+        <ProductsSlider />
+      </div>
+    </section>
+  );
 }
