@@ -5,3 +5,19 @@
 html {
   @apply text-slate-700;
 }
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-family: swiper-icons;
+  width: 30px;
+  height: 30px;
+  background: #01285d;
+  font-size: 1rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 100%;
+  padding: 1rem;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+}

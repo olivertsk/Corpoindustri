@@ -5,9 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 import CategoriesCard from './CategoriesCard';
+import { Autoplay, Navigation } from 'swiper/modules';
 
 export default function BannerSlider() {
   return (
@@ -19,6 +18,14 @@ export default function BannerSlider() {
           slidesPerView={1}
           onSlideChange={() => console.log('slide change')}
           onSwiper={(swiper) => console.log(swiper)}
+          navigation={true}
+          modules={[Navigation, Autoplay]}
+          loop={true}
+          autoplay={{
+            pauseOnMouseEnter: true,
+            disableOnInteraction: false,
+            delay: 5000,
+          }}
         >
           <SwiperSlide className='max-h-[300px]'>
             <Image
@@ -33,11 +40,9 @@ export default function BannerSlider() {
               }}
             />
           </SwiperSlide>
-          <SwiperSlide>Slide 2</SwiperSlide>
-          <SwiperSlide>Slide 3</SwiperSlide>
-          <SwiperSlide>Slide 4</SwiperSlide>
+          <SwiperSlide>hola</SwiperSlide>
         </Swiper>
-        <div className='absolute top-0 z-20 left-0 w-full h-full bg-gradient-to-b from-transparent from-[60%] to-gray-100'></div>
+        <div className='absolute bottom-0 z-20 left-0 w-full h-[40%] bg-gradient-to-b from-transparent from-[60%] to-gray-100'></div>
       </div>
       <div className='-mt-8 z-20  relative'>
         <div className='container mx-auto'>
