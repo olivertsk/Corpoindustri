@@ -4,7 +4,7 @@ export default function SignInPage() {
   return (
     <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
       <h1 className='text-4xl text-center font-black'>Iniciar Sesión</h1>
-      <p className='text-xl text-center font-light  mt-5'>
+      <p className='text-xl text-center font-light mt-5'>
         Adquiere los mejores productos {''}
         <span className='  font-bold'> Al mejor precio</span>
       </p>

@@ -1,0 +1,87 @@
+'use client';
+import ErrorMessage from '@/components/ErrorMessage';
+import { ForgotPasswordForm } from '@/types';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+
+export default function ForgotPassword() {
+  const initialValues: ForgotPasswordForm = {
+    email: '',
+  };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ defaultValues: initialValues });
+
+  const handleForgotPassword = (formData: ForgotPasswordForm) => {
+    console.log(formData);
+    reset();
+  };
+
+  return (
+    <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
+      <h1 className='text-4xl text-center font-black'>
+        Reestablecer Contraseña
+      </h1>
+      <p className='text-xl text-center font-light mt-5'>
+        ¿Olvidaste tu contraseña? ingresa tu email {''}
+        <span className=' text-secondary font-bold'>
+          {' '}
+          y reestablece tu contraseña
+        </span>
+      </p>
+      <form
+        onSubmit={handleSubmit(handleForgotPassword)}
+        className='space-y-8 mt-10 bg-white'
+        noValidate
+      >
+        <div className='flex flex-col gap-5'>
+          <label className='font-normal' htmlFor='email'>
+            Email
+            <input
+              id='email'
+              type='email'
+              placeholder='Email de Registro'
+              className='w-full p-3 border rounded-md border-gray-400'
+              {...register('email', {
+                required: 'El Email de registro es obligatorio',
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'E-mail no válido',
+                },
+              })}
+            />
+          </label>
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+        </div>
+
+        <input
+          type='submit'
+          value='Enviar Instrucciones'
+          className='bg-primary rounded-md transition-colors hover:bg-secondary w-full p-3  text-white font-black  text-xl cursor-pointer'
+        />
+      </form>
+
+      <nav className='mt-10 flex flex-col space-y-4'>
+        <Link
+          href='/auth/sign-in'
+          className='text-center text-gray-400 font-normal'
+        >
+          ¿Ya tienes cuenta?{' '}
+          <span className='text-secondary font-bold'>Iniciar Sesión</span>
+        </Link>
+
+        <Link
+          href='/auth/register'
+          className='text-center text-gray-400 font-normal'
+        >
+          ¿No tienes cuenta?{' '}
+          <span className='text-secondary font-bold'> Crea una</span>
+        </Link>
+      </nav>
+    </div>
+  );
+}
