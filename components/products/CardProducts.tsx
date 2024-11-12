@@ -1,31 +1,40 @@
 import { Product } from '@/types';
+import { normalizeAmounts } from '@/utils/normalizeAmounts';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type CardProductsProps = {
   product: Product;
 };
 
 export default function CardProducts({ product }: CardProductsProps) {
+  const handleButtonClick = () => {
+    console.log('Botón clicado');
+  };
+
   return (
-    <div className='bg-white shadow-lg rounded-md pb-3'>
-      <Image
-        width={1024}
-        height={1024}
-        alt='Harina Pan'
-        src='https://lh3.googleusercontent.com/p-K-FfFnpv0kgdVT1kNxI_lludARFkD-VpAFOimS0gbiIA9JxOP78PkQlhOnD6Q8W2cU-vvRkdLG0vdfvni86ChSo0UlXImPVYPJ2uUfAX78WSSd'
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      />
-      <h5 className='px-4 font-bold overflow-hidden text-ellipsis whitespace-nowrap'>
-        {product.name}
-      </h5>
+    <div className='bg-white block shadow-md rounded-md pb-3 overflow-hidden'>
+      <Link href='/products/1' className='block'>
+        <Image
+          width={1024}
+          height={1024}
+          alt='Harina Pan'
+          src={product.image}
+          style={{ width: '100%', height: '100%' }}
+        />
+        <h5 className='px-4 font-bold overflow-hidden text-ellipsis whitespace-nowrap'>
+          {product.name}
+        </h5>
+      </Link>
       <div className='flex px-4 justify-between items-center mt-2'>
         <p className='text-lg font-bold flex-1 overflow-hidden text-ellipsis'>
-          $899.999999999999
+          {normalizeAmounts(product.price)}
         </p>
-        <button className='text-white bg-secondary p-2 rounded-md'>
+        <button
+          className='text-black hover:bg-accent-200 transition-colors bg-accent-100 p-2 rounded-md'
+          onClick={handleButtonClick}
+          title='Agregar al carrito'
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='16'

@@ -18,6 +18,9 @@ export default function CategoriesCard() {
       <Swiper
         modules={[Navigation]}
         spaceBetween={16}
+        style={{
+          overflowY: 'visible',
+        }}
         breakpoints={{
           300: {
             slidesPerView: 2,
@@ -43,8 +46,8 @@ export default function CategoriesCard() {
         navigation={true}
       >
         {categories.map((category) => (
-          <SwiperSlide key={category}>
-            <div className='bg-white shadow-lg rounded-md p-4'>
+          <SwiperSlide key={category} className='pb-8'>
+            <div className='bg-white shadow-md rounded-md p-4'>
               <h4 className='text-center font-bold'>{category}</h4>
               <svg
                 className='mx-auto my-4 text-secondary'
@@ -64,7 +67,7 @@ export default function CategoriesCard() {
               <p className='text-center mb-4 text-sm'>
                 Ingresa para ver todas las {category} disponibles
               </p>
-              <button className='bg-accent w-full rounded-md p-1 text-sm'>
+              <button className='bg-accent-100 w-full rounded-md p-1 text-sm'>
                 Ver
               </button>
             </div>

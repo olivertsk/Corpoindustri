@@ -11,7 +11,10 @@ const config: Config = {
       colors: {
         primary: '#1958ac',
         secondary: '#01285d',
-        accent: '#ffed00',
+        accent: {
+          100: '#ffed00',
+          200: '#eddd0c',
+        },
       },
       boxShadow: {
         header: '0px 2px 3px rgba(0,0,0,.2)',

@@ -15,11 +15,14 @@ export type UserFormRegistration = Pick<
   User,
   'email' | 'password' | 'name' | 'passwordConfirmation'
 >;
+export type ForgotPasswordForm = Pick<User, 'email'>;
 
 /** PRODUCTS */
 
 export const productSchema = z.object({
   name: z.string(),
+  image: z.string(),
+  price: z.number(),
 });
 
 export type Product = z.infer<typeof productSchema>;
