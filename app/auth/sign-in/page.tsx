@@ -1,6 +1,38 @@
+'use client';
+import { authenticateUser } from '@/src/api/AuthApi';
+import { useAuthStore } from '@/src/store/authStore';
+import { UserFormLogin } from '@/src/types';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function SignInPage() {
+  const setUser = useAuthStore((state) => state.setUser);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<UserFormLogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const handleForm = async (data: UserFormLogin) => {
+    try {
+      const response = await authenticateUser(data);
+      if (!response.success) {
+        toast.error(response.message);
+        return;
+      }
+      setUser(response.user, response.token);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
       <h1 className='text-4xl text-center font-black'>Iniciar Sesión</h1>
@@ -8,26 +40,44 @@ export default function SignInPage() {
         Adquiere los mejores productos {''}
         <span className='  font-bold'> Al mejor precio</span>
       </p>
-      <form action='' className='mt-8 space-y-5'>
+      <form onSubmit={handleSubmit(handleForm)} className='mt-8 space-y-5'>
         <label htmlFor='email' className='block'>
           Email
           <input
             className='w-full p-3 border rounded-md border-gray-400'
             type='email'
-            name=''
             placeholder='example@example.com'
             id='email'
+            {...register('email', {
+              required: 'Este campo es requerido',
+              pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                message: 'El email no es válido',
+              },
+            })}
           />
         </label>
+        {errors.email && (
+          <span className='text-red-500 text-sm font-bold'>
+            {errors.email.message}
+          </span>
+        )}
         <label htmlFor='password' className='block'>
           Contraseña
           <input
             className='w-full p-3 border rounded-md border-gray-400'
             type='password'
-            name=''
             id='password'
+            {...register('password', {
+              required: 'Este campo es requerido',
+            })}
           />
         </label>
+        {errors.password && (
+          <span className='text-red-500 text-sm font-bold'>
+            {errors.password.message}
+          </span>
+        )}
         <input
           type='submit'
           value='Iniciar Sesión'

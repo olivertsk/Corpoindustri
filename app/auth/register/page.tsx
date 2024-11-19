@@ -1,33 +1,106 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import { UserFormRegistration } from '@/types';
+import { registerUser } from '@/src/api/AuthApi';
+import { uploadFile } from '@/src/api/FileApi';
+import ErrorMessage from '@/src/components/ErrorMessage';
+import { apiUrl } from '@/src/lib/global';
+import { useAuthStore } from '@/src/store/authStore';
+import { UserFormRegistration } from '@/src/types';
+import Image from 'next/image';
 import Link from 'next/link';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function RegisterPage() {
+  const setUser = useAuthStore((state) => state.setUser);
+  const [avatar, setAvatar] = useState('/User-avatar.svg.png');
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const {
     register,
     formState: { errors },
     handleSubmit,
     watch,
+    setValue,
+    setError,
   } = useForm<UserFormRegistration>({
     defaultValues: {
+      avatar: '',
       email: '',
       name: '',
       password: '',
       passwordConfirmation: '',
     },
   });
+
   const password = watch('password');
-  const handleForm = (formData: UserFormRegistration) => {
-    console.log(formData);
+  const handleForm = async (formData: UserFormRegistration) => {
+    try {
+      const response = await registerUser(formData);
+      if (!response.success) {
+        response.message.forEach(
+          (item: { field: keyof UserFormRegistration; message: string }) => {
+            setError(item.field, { message: item.message });
+          }
+        );
+      }
+      setUser(response.user, response.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFile = async (ev: ChangeEvent<HTMLInputElement>) => {
+    if (ev.target.files) {
+      const file = ev.target.files[0];
+      const res = await uploadFile(file);
+      inputFileRef.current!.value = '';
+      setAvatar(`${apiUrl}/file/${res.fileName[0]}`);
+      setValue('avatar', res.fileName[0]);
+    }
   };
 
   return (
     <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
       <h1 className='text-4xl text-center font-black'>Registro</h1>
       <form onSubmit={handleSubmit(handleForm)} className='mt-8 space-y-5'>
+        <div className='w-full flex justify-center '>
+          <div className='relative'>
+            <div className='relative max-w-32 mx-auto bg-gray-100 rounded-full overflow-hidden p-4'>
+              <Image
+                className='rounded-full'
+                src={avatar}
+                alt='upload image'
+                width={512}
+                height={512}
+              />
+            </div>
+            <button
+              type='button'
+              className='absolute bottom-0 right-0 bg-primary rounded-full p-2 text-white'
+              title='Subir imagen'
+              onClick={() => inputFileRef.current?.click()}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  fill='currentColor'
+                  d='M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m8 3a5 5 0 0 0-5 5a5 5 0 0 0 5 5a5 5 0 0 0 5-5a5 5 0 0 0-5-5m0 2a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3'
+                />
+              </svg>
+            </button>
+          </div>
+          <input
+            accept='.png,.svg,.jpg,.jpeg'
+            ref={inputFileRef}
+            onChange={handleFile}
+            type='file'
+            hidden
+          />
+        </div>
         <label htmlFor='name' className='block'>
           Nombre
           <input

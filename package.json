@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.7",
     "next": "15.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.1",
+    "react-toastify": "^10.0.6",
     "swiper": "^11.1.14",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

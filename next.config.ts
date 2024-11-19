@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'vallearriba.elplazas.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'h1ktmf8p-5002.use2.devtunnels.ms',
+      },
     ],
   },
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -12,9 +14,17 @@ const categories = [
   'Granos',
 ];
 
-export default function CategoriesCard() {
+type CategoriesCardProps = {
+  titleSection?: string;
+};
+
+export default function CategoriesCard({ titleSection }: CategoriesCardProps) {
   return (
     <div className=' gap-4 px-3'>
+      {titleSection && (
+        <h4 className='font-bold text-xl my-4'>{titleSection}</h4>
+      )}
+
       <Swiper
         modules={[Navigation]}
         spaceBetween={16}

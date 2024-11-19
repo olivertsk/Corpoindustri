@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import AppHeader from '@/components/AppHeader';
-import Footer from '@/components/Footer';
+import AppHeader from '@/src/components/AppHeader';
+import Footer from '@/src/components/Footer';
+import ToastWrapper from '@/src/components/ToastWrapper';
 
 export const metadata: Metadata = {
   title: 'Corpoindustri',
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang='es'>
       <body className='bg-gray-100'>
+        <ToastWrapper />
         <AppHeader />
         {children}
         <Footer />

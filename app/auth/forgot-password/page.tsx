@@ -1,6 +1,6 @@
 'use client';
-import ErrorMessage from '@/components/ErrorMessage';
-import { ForgotPasswordForm } from '@/types';
+import ErrorMessage from '@/src/components/ErrorMessage';
+import { ForgotPasswordForm } from '@/src/types';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 

@@ -1,6 +1,6 @@
-import CategoriesWrapper from '@/components/categories/CategoriesWrapper';
-import BannerSlider from '@/components/home/BannerSlider';
-import ProductsSlider from '@/components/home/ProductsSlider';
+import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
+import BannerSlider from '@/src/components/home/BannerSlider';
+import ProductsSlider from '@/src/components/home/ProductsSlider';
 
 export default function Home() {
   return (
@@ -13,8 +13,9 @@ export default function Home() {
       />
       <CategoriesWrapper />
       <div className='container mx-auto mb-4'>
-        <ProductsSlider titleSection='Productos Destacados' />
-        <ProductsSlider titleSection='Productos Nuevos' />
+        <ProductsSlider titleSection='Viveres' />
+        <ProductsSlider titleSection='Limpieza' />
+        <ProductsSlider titleSection='Confiteria' />
       </div>
       <BannerSlider
         slides={[

@@ -1,4 +1,15 @@
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function HeaderSearchbar() {
+  const [search, setSearch] = useState('');
+  const router = useRouter();
+
+  const onSearch = () => {
+    router.push(`/search?q=${search}`);
+    setSearch('');
+  };
+
   return (
     <div className='flex-1 flex justify-center'>
       <div className='flex flex-1 max-w-2xl justify-between bg-white rounded-sm overflow-hidden items-center shadow-header'>
@@ -6,8 +17,14 @@ export default function HeaderSearchbar() {
           type='text'
           className='p-2 w-full outline-none'
           placeholder='Buscar Productos...'
+          onKeyDown={(e) => e.key === 'Enter' && onSearch()}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <button className='border-l border-gray-300 h-full px-2 lg:px-3'>
+        <button
+          onClick={onSearch}
+          className='border-l border-gray-300 h-full px-2 lg:px-3'
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='18'

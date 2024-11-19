@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import CardProducts from '../products/CardProducts';
-import { Product } from '@/types';
+import { Product } from '@/src/types';
 
 const products: Product[] = [
   {

@@ -15,7 +15,7 @@ export default function AppHeader() {
 
   return (
     !pathname.includes('auth') && (
-      <header className='bg-primary py-4 px-2'>
+      <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
         <div className='container mx-auto flex gap-4 items-center'>
           <Link href='/' className='max-w-[50px] lg:max-w-[100]'>
             <Logo />

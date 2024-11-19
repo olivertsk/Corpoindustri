@@ -1,6 +1,6 @@
-import BackBtn from '@/components/BackBtn';
-import ProductsSlider from '@/components/home/ProductsSlider';
-import { normalizeAmounts } from '@/utils/normalizeAmounts';
+import BackBtn from '@/src/components/BackBtn';
+import ProductsSlider from '@/src/components/home/ProductsSlider';
+import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import Image from 'next/image';
 
 export default function ProductShowPage() {
