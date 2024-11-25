@@ -9,21 +9,27 @@ import { Product } from '@/src/types';
 const products: Product[] = [
   {
     name: 'Harina Pan',
-    image:
+    coverImage:
       'https://lh3.googleusercontent.com/p-K-FfFnpv0kgdVT1kNxI_lludARFkD-VpAFOimS0gbiIA9JxOP78PkQlhOnD6Q8W2cU-vvRkdLG0vdfvni86ChSo0UlXImPVYPJ2uUfAX78WSSd',
     price: 1,
+    code: '12',
+    stock: 1,
   },
   {
     name: 'Frijoles',
-    image:
+    coverImage:
       'https://lacolonia.vtexassets.com/arquivos/ids/223824-800-800?v=637352996875900000&width=800&height=800&aspect=true',
     price: 2.5,
+    code: '12',
+    stock: 1,
   },
   {
     name: 'Salsa de tomate',
-    image:
+    coverImage:
       'https://vallearriba.elplazas.com/media/catalog/product/cache/3e568157972a1320c1e54e4ca9aac161/1/0/10014472un_3.jpg',
     price: 2.47,
+    code: '12',
+    stock: 1,
   },
 ];
 

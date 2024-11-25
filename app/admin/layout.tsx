@@ -1,0 +1,79 @@
+'use client';
+
+import Breadcrumb from '@/src/components/admin/Breadcrumb';
+import Logo from '@/src/components/Logo';
+import { adminButtons } from '@/src/config/adminPages';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import SplitPane, { Pane } from 'split-pane-react';
+import 'split-pane-react/esm/themes/default.css';
+import { ISplitProps } from 'split-pane-react/esm/types';
+
+export default function AdminLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const [mQuery, setMQuery] = useState<{ matches: boolean }>({
+    matches: window.innerWidth >= 1024 ? true : false,
+  });
+
+  const [sizes, setSizes] = useState<ISplitProps['sizes']>([
+    mQuery.matches ? 100 : 0,
+    mQuery.matches ? '40%' : '100%',
+  ]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1023px)');
+    mediaQuery.addEventListener('change', (ev) => {
+      if (ev.matches) {
+        setMQuery({ matches: true });
+        setSizes([100, '40%']);
+      } else {
+        setMQuery({ matches: false });
+        setSizes([0, '100%']);
+      }
+    });
+  }, []);
+
+  const pathname = usePathname();
+
+  return (
+    <main className='h-screen'>
+      <SplitPane
+        sashRender={() => <></>}
+        split='vertical'
+        sizes={sizes}
+        onChange={setSizes}
+        allowResize={false}
+      >
+        <Pane minSize={50} className='transition-all'>
+          <div className='min-h-screen bg-primary space-y-4 p-2'>
+            <div className='max-w-[150px] mx-auto my-4 mb-7'>
+              <Logo />
+            </div>
+            {adminButtons.map((button) => (
+              <Link
+                className={`${
+                  pathname === button.url ? 'bg-white shadow-lg' : ' text-white'
+                } p-2 flex rounded-md  text-sm gap-2`}
+                key={button.url}
+                href={button.url}
+              >
+                <div dangerouslySetInnerHTML={{ __html: button.svg }}></div>
+                {button.text}
+              </Link>
+            ))}
+          </div>
+        </Pane>
+        <Pane className={` !overflow-auto transition-all`}>
+          <Breadcrumb></Breadcrumb>
+          <section className='p-4'>{children}</section>
+        </Pane>
+      </SplitPane>
+      <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
+    </main>
+  );
+}

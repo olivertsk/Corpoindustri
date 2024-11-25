@@ -7,7 +7,8 @@ export default function Footer() {
   const pathname = usePathname();
 
   return (
-    !pathname.includes('auth') && (
+    !pathname.includes('auth') &&
+    !pathname.includes('admin') && (
       <>
         <div className=' h-2 bg-accent-100'></div>
         <footer className='grid grid-cols-3 bg-primary p-4 pt-8 space-y-8 lg:space-y-0'>
