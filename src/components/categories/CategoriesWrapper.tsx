@@ -1,5 +1,4 @@
 'use client';
-
 import { ICategory } from '@/src/types/category';
 import CategoriesCard from './CategoriesCard';
 

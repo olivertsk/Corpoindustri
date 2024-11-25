@@ -2,8 +2,11 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 console.log('apiUrl :>> ', apiUrl);
 
 const comprobeToken = () => {
-  const token = localStorage.getItem('token');
-  return token ? `Bearer ${token}` : '';
+  const token = localStorage.getItem('auth-storage');
+  if (token) {
+    return `Bearer ${JSON.parse(token).state.token}`;
+  }
+  return '';
 };
 
 export const makeFetch = (url: string) => {
@@ -48,7 +51,9 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const all = async (url: string, parameters?: Record<string, any>, auth: boolean = false) => {
   try {
-    const queryString = parameters ? '?' + new URLSearchParams(parameters).toString() : '';
+    const queryString = parameters
+    ? '?' + new URLSearchParams(parameters).toString()
+    : '';
   
     const headers: { 'Content-Type': string, 'Authorization'?: string } = {
       'Content-Type': 'application/json',
@@ -56,6 +61,7 @@ export const all = async (url: string, parameters?: Record<string, any>, auth: b
     if (auth) {
       headers['Authorization'] = comprobeToken()
     }
+
     const response = await fetch(`${apiUrl}${url}${queryString}`, {
       method: 'GET',
       headers: headers,

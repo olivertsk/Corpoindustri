@@ -5,7 +5,7 @@ import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 const thClass = 'text-center bg-primary py-2 text-white';
 
 export default function ProductsPage() {
-  useBreadcrumb('Productos');
+  useBreadcrumb('Productos', 'Todos los productos');
 
   return (
     <section>

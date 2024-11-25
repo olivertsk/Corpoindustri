@@ -57,7 +57,9 @@ export default function AdminLayout({
             {adminButtons.map((button) => (
               <Link
                 className={`${
-                  pathname === button.url ? 'bg-white shadow-lg' : ' text-white'
+                  pathname.includes(button.url)
+                    ? 'bg-white shadow-lg'
+                    : ' text-white'
                 } p-2 flex rounded-md  text-sm gap-2`}
                 key={button.url}
                 href={button.url}
