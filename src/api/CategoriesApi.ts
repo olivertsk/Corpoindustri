@@ -1,21 +1,23 @@
-import { makePost } from '@/src/config/fetch';
-import { UserFormLogin } from '../types/user';
-import { ICategory, ICategoryFilter } from '../types/category';
+import { all, show } from '@/src/config/fetch';
+import { ICategoryFilter } from '../types/category';
 
 export const fxAllCategories = async (
   parameters: ICategoryFilter
-): Promise<ICategory> => {
+) => {
   try {
-    return await makePost('/category/all', parameters);
+    console.log('parameters :>> ', parameters);
+    const response = await all('/categories/all', parameters, false);
+    console.log('response fxAllCategories :>> ', response);
+    return response.data
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const category = async (body: UserFormLogin) => {
+export const category = async (id: string) => {
   try {
-    return await makePost('/category/login', body);
+    return await show('/categories/show', id, false);
   } catch (error) {
     console.error(error);
     throw error;

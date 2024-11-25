@@ -1,8 +1,16 @@
+import { fxAllCategories } from '@/src/api/CategoriesApi';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
+import { ICategory, ICategoryFilter } from '@/src/types/category';
 
-export default function Home() {
+
+
+export default async function Home() {
+  const categoryFilter: ICategoryFilter = {
+    isSalient: true,
+  };
+  const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
   return (
     <section>
       <BannerSlider
@@ -11,7 +19,9 @@ export default function Home() {
         ]}
         showFadeOut={true}
       />
-      <CategoriesWrapper />
+      { categoryData &&
+        <CategoriesWrapper categoryData={categoryData}/>
+      }
       <div className='container mx-auto mb-4'>
         <ProductsSlider titleSection='Viveres' />
         <ProductsSlider titleSection='Limpieza' />
