@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useAppGlobalStore } from '../stores/useAppGlobalStore';
+import { useAppGlobalStore } from '../store/useAppGlobalStore';
 
 export const useBreadcrumb = (title: string, subTitle?: string) => {
   const setBreadcrumb = useAppGlobalStore((state) => state.setBreadcrumb);

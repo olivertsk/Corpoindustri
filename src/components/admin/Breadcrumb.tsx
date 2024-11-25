@@ -1,4 +1,4 @@
-import { useAppGlobalStore } from '@/src/stores/useAppGlobalStore';
+import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 
 export default function Breadcrumb() {
   const breadcrumbName = useAppGlobalStore((state) => state.breadcrumb);

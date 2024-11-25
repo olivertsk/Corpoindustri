@@ -1,5 +1,3 @@
-'use client';
-
 import CategoriesCard from './CategoriesCard';
 
 export default function CategoriesWrapper() {

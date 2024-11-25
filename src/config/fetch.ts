@@ -2,8 +2,11 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 console.log('apiUrl :>> ', apiUrl);
 
 const comprobeToken = () => {
-  const token = localStorage.getItem('token');
-  return token ? `Bearer ${token}` : '';
+  const token = localStorage.getItem('auth-storage');
+  if (token) {
+    return `Bearer ${JSON.parse(token).state.token}`;
+  }
+  return '';
 };
 
 export const makeFetch = (url: string) => {
@@ -48,7 +51,9 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
 export const all = async (url: string, parameters?: null | []) => {
   try {
     console.log('parameters :>> ', parameters);
-    const queryString = parameters ? '?' + new URLSearchParams(parameters).toString() : '';
+    const queryString = parameters
+      ? '?' + new URLSearchParams(parameters).toString()
+      : '';
     console.log('queryString :>> ', queryString);
     const response = await fetch(`${apiUrl}${url}${queryString}`, {
       method: 'GET',
