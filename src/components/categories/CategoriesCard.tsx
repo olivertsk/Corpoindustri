@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { ICategory } from '@/src/types';
 
 const categories = [
   'Harinas',
@@ -16,9 +17,10 @@ const categories = [
 
 type CategoriesCardProps = {
   titleSection?: string;
+  categorySalient: ICategory
 };
-
-export default function CategoriesCard({ titleSection }: CategoriesCardProps) {
+export default function CategoriesCard({ titleSection, categorySalient }: CategoriesCardProps) {
+  if (categorySalient)
   return (
     <div className=' gap-4 px-3'>
       {titleSection && (

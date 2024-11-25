@@ -44,3 +44,21 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
     throw error;
   }
 };
+
+export const all = async (url: string, parameters?: null | []) => {
+  try {
+    console.log('parameters :>> ', parameters);
+    const queryString = parameters ? '?' + new URLSearchParams(parameters).toString() : '';
+    console.log('queryString :>> ', queryString);
+    const response = await fetch(`${apiUrl}${url}${queryString}`, {
+      method: 'GET',
+      headers: {
+        Authorization: comprobeToken(),
+        'Content-Type': 'application/json',
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
