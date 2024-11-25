@@ -1,7 +1,10 @@
 import { makePost } from '@/src/config/fetch';
-import { UserFormLogin, ICategory, ICategoryFilter } from '@/src/types';
+import { UserFormLogin } from '../types/user';
+import { ICategory, ICategoryFilter } from '../types/category';
 
-export const fxAllCategories = async (parameters: ICategoryFilter): Promise<ICategory> => {
+export const fxAllCategories = async (
+  parameters: ICategoryFilter
+): Promise<ICategory> => {
   try {
     return await makePost('/category/all', parameters);
   } catch (error) {

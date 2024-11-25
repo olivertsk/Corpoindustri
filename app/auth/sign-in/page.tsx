@@ -1,7 +1,7 @@
 'use client';
 import { authenticateUser } from '@/src/api/AuthApi';
 import { useAuthStore } from '@/src/store/authStore';
-import { UserFormLogin } from '@/src/types';
+import { UserFormLogin } from '@/src/types/user';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';

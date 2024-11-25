@@ -5,7 +5,7 @@ import { uploadFile } from '@/src/api/FileApi';
 import ErrorMessage from '@/src/components/ErrorMessage';
 import { apiUrl } from '@/src/lib/global';
 import { useAuthStore } from '@/src/store/authStore';
-import { UserFormRegistration } from '@/src/types';
+import { UserFormRegistration } from '@/src/types/user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChangeEvent, useRef, useState } from 'react';

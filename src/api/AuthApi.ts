@@ -1,5 +1,5 @@
 import { makePost } from '@/src/config/fetch';
-import { UserFormLogin, UserFormRegistration } from '@/src/types';
+import { UserFormLogin, UserFormRegistration } from '../types/user';
 
 export const registerUser = async (body: UserFormRegistration) => {
   try {

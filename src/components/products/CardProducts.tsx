@@ -1,8 +1,9 @@
-import { Product } from '@/src/types';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import HandleProductClick from './HandleProductClick';
+import { Product } from '@/src/types/product';
 
 type CardProductsProps = {
   product: Product;
