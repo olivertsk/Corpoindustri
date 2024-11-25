@@ -27,7 +27,25 @@ export const productSchema = z.object({
   price: z.number(),
 });
 
-export type Product = z.infer<typeof productSchema>;
+export type Product = {
+  id?: string;
+  name: string;
+  code: string;
+  departmentId?: string | null;
+  categoryId?: string | null;
+  status?: boolean;
+  description?: string | null;
+  longDescription?: string | null;
+  price: number;
+  promotionalPrice?: number | null;
+  stock: number;
+  brand?: string | null;
+  taxRate?: number | null;
+  coverImage?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
+};
 
 /** CATEGORIES */
 /** Filter in all */
