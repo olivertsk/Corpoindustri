@@ -4,13 +4,12 @@ import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 
-
-
 export default async function Home() {
   const categoryFilter: ICategoryFilter = {
     isSalient: true,
   };
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
+  console.log('categoryData :>> ', categoryData);
   return (
     <section>
       <BannerSlider
@@ -19,9 +18,7 @@ export default async function Home() {
         ]}
         showFadeOut={true}
       />
-      { categoryData &&
-        <CategoriesWrapper categoryData={categoryData}/>
-      }
+      {categoryData && <CategoriesWrapper categoryData={categoryData} />}
       <div className='container mx-auto mb-4'>
         <ProductsSlider titleSection='Viveres' />
         <ProductsSlider titleSection='Limpieza' />

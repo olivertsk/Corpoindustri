@@ -6,7 +6,9 @@ export default function Logo() {
     <Image
       width={500}
       height={250}
-      objectFit='contain'
+      style={{
+        objectFit: 'contain',
+      }}
       src='/logo.png'
       alt='Corpoindustri Logo'
     />

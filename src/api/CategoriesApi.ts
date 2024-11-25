@@ -1,14 +1,14 @@
-import { all, show } from '@/src/config/fetch';
+import { makeGet, show } from '@/src/config/fetch';
 import { ICategoryFilter } from '../types/category';
 
-export const fxAllCategories = async (
-  parameters: ICategoryFilter
-) => {
+export const fxAllCategories = async (parameters: ICategoryFilter) => {
   try {
-    console.log('parameters :>> ', parameters);
-    const response = await all('/categories/all', parameters, false);
-    console.log('response fxAllCategories :>> ', response);
-    return response.data
+    const response = await makeGet(
+      `/categories/all`,
+      parameters as Record<string, string>,
+      false
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
