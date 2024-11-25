@@ -58,9 +58,11 @@ export default function CategoriesCard({
             <SwiperSlide key={category.id} className='pb-8'>
               <div className='bg-white shadow-md rounded-md p-4'>
                 <h4 className='text-center font-bold'>{category.name}</h4>
-                <CategoryIcon iconUrl={category.icon} fillColor="red" width="64px" height="64px" />
+                <div className='my-4'>
+                  <CategoryIcon iconUrl={category.icon} fillColor="#334155" width="64px" height="64px" />
+                </div>
                 <p className='text-center mb-4 text-sm'>
-                  Ingresa para ver todas las {category.name} disponibles
+                 {category.description}
                 </p>
                 <button className='bg-accent-100 w-full rounded-md p-1 text-sm'>
                   Ver

@@ -1,15 +1,29 @@
 import { fxAllCategories } from '@/src/api/CategoriesApi';
+import { fxAllDepartament } from '@/src/api/DepartmentsApi';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
+import { Department, TDepartmenFilter } from '@/src/types/department';
 
 export default async function Home() {
+  /** Categorias destacadas para carrousel */
   const categoryFilter: ICategoryFilter = {
     isSalient: true,
   };
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
-  console.log('categoryData :>> ', categoryData);
+
+  /** Departamentos destacadas para secciones de productos */
+  const departamentFilter: TDepartmenFilter = {
+    isSalient: true,
+    product: true,
+  };
+
+  const departamentData: Department[] = await fxAllDepartament(departamentFilter);
+  const half = Math.ceil(departamentData.length / 2);
+  const firstHalf = departamentData.slice(0, half);
+  const secondHalf = departamentData.slice(half);
+  
   return (
     <section>
       <BannerSlider
@@ -20,9 +34,9 @@ export default async function Home() {
       />
       {categoryData && <CategoriesWrapper categoryData={categoryData} />}
       <div className='container mx-auto mb-4'>
-        <ProductsSlider titleSection='Viveres' />
-        <ProductsSlider titleSection='Limpieza' />
-        <ProductsSlider titleSection='Confiteria' />
+        {firstHalf.map((department: Department) => (
+          <ProductsSlider key={department.id} titleSection={department.name} />
+        ))}
       </div>
       <BannerSlider
         slides={[
@@ -30,7 +44,9 @@ export default async function Home() {
         ]}
       />
       <div className='container mx-auto mb-4'>
-        <ProductsSlider titleSection='Productos Mas Vendidos' />
+        {secondHalf.map((department: Department) => (
+          <ProductsSlider key={department.id} titleSection={department.name} />
+        ))}
       </div>
     </section>
   );

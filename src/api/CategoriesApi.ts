@@ -1,4 +1,4 @@
-import { makeGet, show } from '@/src/config/fetch';
+import { makeGet } from '@/src/config/fetch';
 import { ICategoryFilter } from '../types/category';
 
 export const fxAllCategories = async (parameters: ICategoryFilter) => {
@@ -15,11 +15,3 @@ export const fxAllCategories = async (parameters: ICategoryFilter) => {
   }
 };
 
-export const category = async (id: string) => {
-  try {
-    return await show('/categories/show', id, false);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};

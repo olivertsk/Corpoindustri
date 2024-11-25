@@ -33,6 +33,8 @@ export const makeGet = async (
     if (response.ok) {
       const respJSON = await response.json();
       return respJSON.data;
+    } else {
+      console.log('response :>> ', response);
     }
     return [];
   } catch (error) {
@@ -71,21 +73,6 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
   }
 };
 
-export const show = async (url: string, id: string, auth: boolean) => {
-  console.log('auth :>> ', auth);
-  try {
-    const response = await fetch(`${apiUrl}${url}/${id}`, {
-      method: 'GET',
-      headers: {
-        Authorization: comprobeToken(),
-        'Content-Type': 'application/json',
-      },
-    });
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const fetchSvg = async (
   iconUrl: string,
@@ -109,7 +96,6 @@ export const fetchSvg = async (
       svgText = new XMLSerializer().serializeToString(svgElement);
     }
 
-    console.log('svgText :>> ', svgText);
     return svgText;
   } catch (error) {
     console.error('Error fetching SVG:', error);
