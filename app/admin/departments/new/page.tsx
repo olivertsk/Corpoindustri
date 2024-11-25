@@ -4,6 +4,7 @@ import { createDepartment } from '@/src/api/DepartmentsApi';
 import DepartmentForm from '@/src/components/admin/departments/DepartmentForm';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { TDepartmentForm } from '@/src/types/department';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -24,12 +25,16 @@ export default function NewCategory() {
       name: '',
       description: '',
       status: true,
+      isSalient: false,
     },
   });
+  const queryClient = useQueryClient();
 
   const handleForm = async (formData: TDepartmentForm) => {
     const response = await createDepartment(formData);
     if (response.success) {
+      queryClient.invalidateQueries({ queryKey: ['departments'] });
+
       toast.success('Departamento creado correctamente');
       navigate.replace('/admin/departments');
       reset();

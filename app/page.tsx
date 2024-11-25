@@ -9,7 +9,7 @@ export default async function Home() {
     isSalient: true,
   };
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
-  console.log('categoryData :>> ', categoryData);
+
   return (
     <section>
       <BannerSlider
