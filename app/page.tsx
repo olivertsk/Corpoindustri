@@ -1,10 +1,10 @@
 import { fxAllCategories } from '@/src/api/CategoriesApi';
-import { fxAllDepartament } from '@/src/api/DepartmentsApi';
+import { getDepartments } from '@/src/api/DepartmentsApi';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
-import { Department, TDepartmenFilter } from '@/src/types/department';
+import { Department, DepartmentFilters } from '@/src/types/department';
 
 export default async function Home() {
   /** Categorias destacadas para carrousel */
@@ -14,16 +14,16 @@ export default async function Home() {
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
 
   /** Departamentos destacadas para secciones de productos */
-  const departamentFilter: TDepartmenFilter = {
+  const departamentFilter: DepartmentFilters = {
     isSalient: true,
     product: true,
   };
 
-  const departamentData: Department[] = await fxAllDepartament(departamentFilter);
-  const half = Math.ceil(departamentData.length / 2);
-  const firstHalf = departamentData.slice(0, half);
-  const secondHalf = departamentData.slice(half);
-  
+  const departamentData: { data: Department[] } = await getDepartments(departamentFilter);
+  console.log('departamentData :>> ', departamentData);
+  const half = Math.ceil(departamentData.data.length / 2);
+  const firstHalf = departamentData.data.slice(0, half);
+  const secondHalf = departamentData.data.slice(half);
   return (
     <section>
       <BannerSlider

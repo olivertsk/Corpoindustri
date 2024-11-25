@@ -5,11 +5,15 @@ import { uploadFile } from '../api/FileApi';
 
 type UploadImageProps = {
   callback: (fileName: string) => void;
+  initialValue?: string;
 };
 
-export default function UploadImage({ callback }: UploadImageProps) {
+export default function UploadImage({
+  callback,
+  initialValue,
+}: UploadImageProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [icon, setIcon] = useState('');
+  const [icon, setIcon] = useState(initialValue || '');
 
   const handleFile = async (ev: ChangeEvent<HTMLInputElement>) => {
     if (ev.target.files) {

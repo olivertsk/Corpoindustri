@@ -1,6 +1,11 @@
-import { inputStlyes, primaryBtn } from '@/src/lib/global';
+import { apiUrl, inputStlyes, primaryBtn } from '@/src/lib/global';
 import { TDepartmentForm } from '@/src/types/department';
-import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 import UploadImage from '../../UploadImage';
 import ErrorMessage from '../../ErrorMessage';
 
@@ -8,12 +13,14 @@ type DepartmentFormProps = {
   setValue: UseFormSetValue<TDepartmentForm>;
   register: UseFormRegister<TDepartmentForm>;
   errors: FieldErrors<TDepartmentForm>;
+  getValues?: UseFormGetValues<TDepartmentForm>;
 };
 
 export default function DepartmentForm({
   setValue,
   register,
   errors,
+  getValues,
 }: DepartmentFormProps) {
   const uploadImgCb = (fileName: string) => {
     setValue('icon', fileName);
@@ -22,7 +29,12 @@ export default function DepartmentForm({
   return (
     <>
       <div>
-        <UploadImage callback={uploadImgCb} />
+        <UploadImage
+          initialValue={`${
+            getValues ? `${apiUrl}/file/${getValues('icon')}` : ''
+          }`}
+          callback={uploadImgCb}
+        />
         <div className='grid grid-cols-2 gap-4 mt-8'>
           <div>
             <label htmlFor=''>
@@ -56,6 +68,23 @@ export default function DepartmentForm({
               >
                 <option value='true'>Activo</option>
                 <option value='false'>Inactivo</option>
+              </select>
+            </label>
+            {errors.status && (
+              <ErrorMessage>{errors.status.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label htmlFor=''>
+              Destacado
+              <select
+                className={inputStlyes}
+                {...register('isSalient', {
+                  required: 'Este campo es requerido',
+                })}
+              >
+                <option value='true'>Destacado</option>
+                <option value='false'>No Destacado</option>
               </select>
             </label>
             {errors.status && (

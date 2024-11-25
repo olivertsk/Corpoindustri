@@ -11,12 +11,13 @@ const comprobeToken = () => {
 
 export const makeGet = async (
   url: string,
-  parameters?: Record<string, string>,
+  parameters?: unknown,
   auth: boolean = true
 ) => {
   try {
     const queryString = parameters
-      ? '?' + new URLSearchParams(parameters).toString()
+      ? '?' +
+        new URLSearchParams(parameters as Record<string, string>).toString()
       : '';
 
     const headers: { 'Content-Type': string; Authorization?: string } = {
@@ -42,10 +43,14 @@ export const makeGet = async (
   }
 };
 
-export const makePost = async (url: string, body: unknown) => {
+export const makePost = async (
+  url: string,
+  body: unknown,
+  method: 'POST' | 'DELETE' | 'PUT' = 'POST'
+) => {
   try {
     const response = await fetch(`${apiUrl}${url}`, {
-      method: 'POST',
+      method,
       headers: {
         Authorization: comprobeToken(),
         'Content-Type': 'application/json',
