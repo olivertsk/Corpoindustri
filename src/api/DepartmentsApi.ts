@@ -19,7 +19,6 @@ export const getDepartments = async (
 }> => {
   try {
     const response = await makeGet('/departments/all', params, auth);
-    console.log('response :>> ', response);
     return response;
   } catch (error) {
     throw error;

@@ -39,7 +39,6 @@ export default function NewCategory() {
       navigate.replace('/admin/departments');
       reset();
     }
-    console.log('response :>> ', response);
   };
 
   return (

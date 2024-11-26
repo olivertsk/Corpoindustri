@@ -1,8 +1,10 @@
+import { fxAllBanner } from '@/src/api/BannerApi';
 import { fxAllCategories } from '@/src/api/CategoriesApi';
 import { getDepartments } from '@/src/api/DepartmentsApi';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
+import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
 
@@ -12,6 +14,12 @@ export default async function Home() {
     isSalient: true,
   };
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
+  const principalBannerData: IBanner[] = await fxAllBanner({
+    position: EPositionBanner.HomePrincipal
+  });
+  const secondaryBannerData: IBanner[] = await fxAllBanner({
+    position: EPositionBanner.HomeSecondary
+  });
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
@@ -20,29 +28,32 @@ export default async function Home() {
   };
 
   const departamentData: { data: Department[] } = await getDepartments(departamentFilter);
-  console.log('departamentData :>> ', departamentData);
   const half = Math.ceil(departamentData.data.length / 2);
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);
+
   return (
     <section>
-      <BannerSlider
-        slides={[
-          'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/4a/d3/38/inside-mercado.jpg?w=1200&h=-1&s=1',
-        ]}
-        showFadeOut={true}
-      />
+      {
+        principalBannerData &&
+        <BannerSlider
+          slides={principalBannerData}
+          showFadeOut={true}
+        />
+      }
+
       {categoryData && <CategoriesWrapper categoryData={categoryData} />}
       <div className='container mx-auto mb-4'>
         {firstHalf.map((department: Department) => (
           <ProductsSlider key={department.id} titleSection={department.name} />
         ))}
       </div>
-      <BannerSlider
-        slides={[
-          'https://img.freepik.com/foto-gratis/concepto-viaje-primer-plano-retrato-joven-hermosa-atractiva-chica-pelirroja-sombrero-moda-gafas-sol_1258-126774.jpg?t=st=1731374393~exp=1731377993~hmac=cb8f1c9458ccdd7098355591e6557973013099446a0f871c9a478709828cf310&w=1380',
-        ]}
-      />
+      {
+        secondaryBannerData && 
+          <BannerSlider
+          slides={secondaryBannerData}
+        />
+      }
       <div className='container mx-auto mb-4'>
         {secondHalf.map((department: Department) => (
           <ProductsSlider key={department.id} titleSection={department.name} />
