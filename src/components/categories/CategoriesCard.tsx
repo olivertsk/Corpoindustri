@@ -6,6 +6,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { ICategory } from '@/src/types/category';
 import CategoryIcon from './CategorySVG';
+import Image from 'next/image';
 
 type CategoriesCardProps = {
   titleSection?: string;
@@ -59,7 +60,20 @@ export default function CategoriesCard({
               <div className='bg-white shadow-md rounded-md p-4'>
                 <h4 className='text-center font-bold'>{category.name}</h4>
                 <div className='my-4'>
-                  <CategoryIcon iconUrl={category.icon} fillColor="#334155" width="64px" height="64px" />
+                  { category.icon.includes('.svg') &&
+                    <CategoryIcon iconUrl={category.icon} fillColor="#334155" width="64px" height="64px" />
+                  }
+                  { !category.icon.includes('.svg') &&
+                    <Image
+                    width={64}
+                    height={64}
+                    src={category.icon}
+                    alt={category.name}
+                    style={{
+                      width: '100%',
+                    }}
+                    />
+                  }
                 </div>
                 <p className='text-center mb-4 text-sm'>
                  {category.description}
