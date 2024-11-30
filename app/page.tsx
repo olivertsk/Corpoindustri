@@ -1,5 +1,5 @@
 import { fxAllCategories } from '@/src/api/CategoriesApi';
-import { getDepartments } from '@/src/api/DepartmentsApi';
+import { getHomeDepartments } from '@/src/api/DepartmentsApi';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
@@ -19,11 +19,13 @@ export default async function Home() {
     product: true,
   };
 
-  const departamentData: { data: Department[] } = await getDepartments(departamentFilter);
+  const departamentData: Department[] = await getHomeDepartments(
+    departamentFilter
+  );
   console.log('departamentData :>> ', departamentData);
-  const half = Math.ceil(departamentData.data.length / 2);
-  const firstHalf = departamentData.data.slice(0, half);
-  const secondHalf = departamentData.data.slice(half);
+  const half = Math.ceil(departamentData.length / 2);
+  const firstHalf = departamentData.slice(0, half);
+  const secondHalf = departamentData.slice(half);
   return (
     <section>
       <BannerSlider

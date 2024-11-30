@@ -1,5 +1,9 @@
 import { makeGet, makePost } from '../config/fetch';
-import { DepartmentFilters, TDepartmentForm, Department } from '../types/department';
+import {
+  DepartmentFilters,
+  TDepartmentForm,
+  Department,
+} from '../types/department';
 import { Meta } from '../types';
 
 export const createDepartment = async (data: TDepartmentForm) => {
@@ -17,6 +21,19 @@ export const getDepartments = async (
   data: Department[];
   meta: Meta;
 }> => {
+  try {
+    const response = await makeGet('/departments/all', params, auth);
+    console.log('response :>> ', response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getHomeDepartments = async (
+  params: DepartmentFilters,
+  auth: boolean = false
+): Promise<Department[]> => {
   try {
     const response = await makeGet('/departments/all', params, auth);
     console.log('response :>> ', response);

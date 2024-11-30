@@ -1,8 +1,5 @@
 'use client';
-import {
-  deleteDepartment,
-  getDepartments,
-} from '@/src/api/DepartmentsApi';
+import { deleteDepartment, getDepartments } from '@/src/api/DepartmentsApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { Department, DepartmentFilters } from '@/src/types/department';
@@ -135,7 +132,7 @@ export default function CategoriesPage() {
                   </Link>
                   <button
                     onClick={() => handleDeleteBtn(department.id)}
-                    className='border border-accent-200 text-accent-200 px-4 py-1 rounded-md ml-2'
+                    className='border border-red-600 text-red-600 px-4 py-1 rounded-md ml-2'
                   >
                     Eliminar
                   </button>
