@@ -9,8 +9,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'login-bg': "url('/login-bg.jpeg')",
+      },
       colors: {
         primary: '#1958ac',
+        primaryHover: '#0e3a7f',
         secondary: '#01285d',
         accent: {
           100: '#ffed00',

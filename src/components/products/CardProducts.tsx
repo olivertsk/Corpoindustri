@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import HandleProductClick from './HandleProductClick';
 import { Product } from '@/src/types/product';
+import AddProductFavorite from './AddProductFavorite';
 
 type CardProductsProps = {
   product: Product;
@@ -16,8 +17,11 @@ export default function CardProducts({
 }: CardProductsProps) {
   return (
     <div
-      className={`bg-white block shadow-md rounded-md pb-3 overflow-hidden ${className}`}
+      className={`bg-white product block shadow-md rounded-lg pb-3 overflow-hidden ${className} relative group`}
     >
+      <div className='absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+        <AddProductFavorite product={product} />
+      </div>
       <Link href='/products/1' className='block'>
         <Image
           width={1024}

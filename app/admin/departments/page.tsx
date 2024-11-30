@@ -2,6 +2,7 @@
 import { deleteDepartment, getDepartments } from '@/src/api/DepartmentsApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
+import { tableBodyStyles } from '@/src/lib/global';
 import { Department, DepartmentFilters } from '@/src/types/department';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -11,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const thClass = 'text-center bg-primary py-2 text-white';
 
-export default function CategoriesPage() {
+export default function DepartmentPage() {
   useBreadcrumb('Departamentos', 'Todos los departamentos');
   const [filters, setFilters] = useState<DepartmentFilters>({
     pag: 1,
@@ -29,7 +30,10 @@ export default function CategoriesPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['departments'],
     queryFn: () => getDepartments(filters, true),
+    refetchOnWindowFocus: false,
   });
+
+  console.log('data :>> ', data);
 
   const changePage = (page: number) => {
     setFilters({ ...filters, pag: page });
@@ -114,16 +118,14 @@ export default function CategoriesPage() {
           <tbody>
             {data.data.map((department) => (
               <tr key={department.id}>
-                <td className='text-center border-b-[1px] py-3'>
-                  {department.name}
-                </td>
-                <td className='text-center border-b-[1px] py-3'>
+                <td className={tableBodyStyles}>{department.name}</td>
+                <td className={tableBodyStyles}>
                   {department.status ? 'Activo' : 'Inactivo'}
                 </td>
-                <td className='text-center border-b-[1px] py-3'>
+                <td className={tableBodyStyles}>
                   {department.isSalient ? 'Si' : 'No'}
                 </td>
-                <td className='text-center border-b-[1px] py-3'>
+                <td className={tableBodyStyles}>
                   <Link
                     href={`departments/${department.id}`}
                     className='bg-accent-100 px-4 py-1 rounded-md'

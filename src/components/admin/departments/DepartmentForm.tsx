@@ -1,4 +1,9 @@
-import { apiUrl, inputStlyes, primaryBtn } from '@/src/lib/global';
+import {
+  apiUrl,
+  inputStlyes,
+  primaryBtn,
+  secondaryBtn,
+} from '@/src/lib/global';
 import { TDepartmentForm } from '@/src/types/department';
 import {
   FieldErrors,
@@ -8,6 +13,7 @@ import {
 } from 'react-hook-form';
 import UploadImage from '../../UploadImage';
 import ErrorMessage from '../../ErrorMessage';
+import { useRouter } from 'next/navigation';
 
 type DepartmentFormProps = {
   setValue: UseFormSetValue<TDepartmentForm>;
@@ -25,6 +31,7 @@ export default function DepartmentForm({
   const uploadImgCb = (fileName: string) => {
     setValue('icon', fileName);
   };
+  const navigate = useRouter();
 
   return (
     <>
@@ -93,8 +100,15 @@ export default function DepartmentForm({
           </div>
         </div>
       </div>
-      <div className='flex justify-center mt-8'>
+      <div className='flex justify-center mt-8 gap-2'>
         <button className={`${primaryBtn} `}>Guardar</button>
+        <button
+          onClick={() => navigate.push('/admin/departments')}
+          type='button'
+          className={secondaryBtn}
+        >
+          Cancelar
+        </button>
       </div>
     </>
   );

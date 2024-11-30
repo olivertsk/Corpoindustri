@@ -10,9 +10,8 @@ export default function Footer() {
     !pathname.includes('auth') &&
     !pathname.includes('admin') && (
       <>
-        <div className=' h-2 bg-accent-100'></div>
-        <footer className='grid grid-cols-3 bg-primary p-4 pt-8 space-y-8 lg:space-y-0'>
-          <div className='px-16 col-span-3 lg:col-span-1'>
+        <footer className='grid grid-cols-3 bg-primary p-4 rounded-tl-xl rounded-tr-xl lg:rounded-xl shadow-lg py-16 items-center lg:mb-8 container mx-auto pt-8 space-y-8 lg:space-y-0'>
+          <div className='col-span-3 lg:col-span-1'>
             <div className='max-w-[200px] mx-auto'>
               <Logo></Logo>
             </div>

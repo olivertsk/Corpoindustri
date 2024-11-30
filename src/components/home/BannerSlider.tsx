@@ -2,13 +2,23 @@
 
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { apiUrl } from '@/src/lib/global';
+import { IBanner } from '@/src/types/banner';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Autoplay, Navigation } from 'swiper/modules';
 
+
+// type slidesData = {
+//   id: string,
+//   images: string,
+//   name?: string,
+//   description?: string
+// }
+
 type BannerSliderProps = {
-  slides: string[];
+  slides: IBanner[];
   showFadeOut?: boolean;
 };
 
@@ -31,11 +41,11 @@ export default function BannerSlider({
             delay: 5000,
           }}
         >
-          {slides.map((image) => (
-            <SwiperSlide key={image}>
+          {slides.map((slide) => (
+            <SwiperSlide key={slide.id}>
               <Image
-                src={image}
-                alt='mercado'
+                src={`${apiUrl}/file/${slide.images}`}
+                alt={slide?.alt || 'mercado' }
                 objectFit='contain'
                 width={1200}
                 height={250}

@@ -60,8 +60,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
-      <h1 className='text-4xl text-center font-black'>Registro</h1>
+    <div className='bg-gradient-to-b from-primary to-primaryHover p-8 rounded-xl shadow-2xl w-full max-w-2xl'>
+      <h1 className='text-4xl text-center font-black text-white'>Registro</h1>
       <form onSubmit={handleSubmit(handleForm)} className='mt-8 space-y-5'>
         <div className='w-full flex justify-center '>
           <div className='relative'>
@@ -101,10 +101,10 @@ export default function RegisterPage() {
             hidden
           />
         </div>
-        <label htmlFor='name' className='block'>
+        <label htmlFor='name' className='block text-white'>
           Nombre
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='text'
             id='name'
             {...register('name', {
@@ -113,10 +113,10 @@ export default function RegisterPage() {
           />
         </label>
         {errors.name && <ErrorMessage> {errors.name.message} </ErrorMessage>}
-        <label htmlFor='email' className='block'>
+        <label htmlFor='email' className='block text-white'>
           Email
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='email'
             placeholder='example@example.com'
             id='email'
@@ -130,10 +130,10 @@ export default function RegisterPage() {
           />
         </label>
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-        <label htmlFor='password' className='block'>
+        <label htmlFor='password' className='block text-white'>
           Contraseña
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='password'
             id='password'
             {...register('password', {
@@ -148,10 +148,10 @@ export default function RegisterPage() {
         {errors.password && (
           <ErrorMessage>{errors.password.message}</ErrorMessage>
         )}
-        <label htmlFor='passwordConfirmation' className='block'>
+        <label htmlFor='passwordConfirmation' className='block text-white'>
           Repetir Contraseña
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='password'
             id='passwordConfirmation'
             {...register('passwordConfirmation', {
@@ -167,7 +167,7 @@ export default function RegisterPage() {
         <input
           type='submit'
           value='Registrarse'
-          className='bg-primary rounded-md transition-colors hover:bg-secondary w-full p-3  text-white font-black  text-xl cursor-pointer'
+          className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3  font-black  text-xl cursor-pointer'
         />
       </form>
       <nav className='mt-8 flex flex-col space-y-4'>
@@ -176,14 +176,14 @@ export default function RegisterPage() {
           className='text-center text-gray-400 font-normal'
         >
           ¿Ya tienes cuenta?{' '}
-          <span className='text-secondary font-bold'>Iniciar Sesión</span>
+          <span className='text-accent-100 font-bold'>Iniciar Sesión</span>
         </Link>
         <Link
           href='/auth/forgot-password'
           className='text-center text-gray-400 font-normal'
         >
           ¿Olvidaste tu contraseña?{' '}
-          <span className='text-secondary font-bold'>Reestablecer</span>
+          <span className='text-accent-100 font-bold'>Reestablecer</span>
         </Link>
       </nav>
     </div>

@@ -61,6 +61,7 @@ export default function UploadImage({
                 className=' bg-gray-100 w-full h-full'
                 src={icon}
                 alt='upload image'
+                style={{ objectFit: 'cover' }}
                 width={512}
                 height={512}
               />

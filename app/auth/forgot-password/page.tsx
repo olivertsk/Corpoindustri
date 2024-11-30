@@ -22,30 +22,30 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
-      <h1 className='text-4xl text-center font-black'>
+    <div className='bg-gradient-to-b from-primary to-primaryHover p-8 rounded-xl shadow-2xl w-full max-w-2xl'>
+      <h1 className='text-4xl text-center font-black text-white'>
         Reestablecer Contraseña
       </h1>
-      <p className='text-xl text-center font-light mt-5'>
+      <p className='text-xl text-center font-light mt-5 text-white'>
         ¿Olvidaste tu contraseña? ingresa tu email {''}
-        <span className=' text-secondary font-bold'>
+        <span className=' text-accent-100 font-bold'>
           {' '}
           y reestablece tu contraseña
         </span>
       </p>
       <form
         onSubmit={handleSubmit(handleForgotPassword)}
-        className='space-y-8 mt-10 bg-white'
+        className='space-y-8 mt-10 '
         noValidate
       >
         <div className='flex flex-col gap-5'>
-          <label className='font-normal' htmlFor='email'>
+          <label className='font-normal text-white' htmlFor='email'>
             Email
             <input
               id='email'
               type='email'
               placeholder='Email de Registro'
-              className='w-full p-3 border rounded-md border-gray-400'
+              className='w-full p-3 border rounded-md border-gray-400 text-black'
               {...register('email', {
                 required: 'El Email de registro es obligatorio',
                 pattern: {
@@ -61,7 +61,7 @@ export default function ForgotPassword() {
         <input
           type='submit'
           value='Enviar Instrucciones'
-          className='bg-primary rounded-md transition-colors hover:bg-secondary w-full p-3  text-white font-black  text-xl cursor-pointer'
+          className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3   font-black  text-xl cursor-pointer'
         />
       </form>
 
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
           className='text-center text-gray-400 font-normal'
         >
           ¿Ya tienes cuenta?{' '}
-          <span className='text-secondary font-bold'>Iniciar Sesión</span>
+          <span className='text-accent-100 font-bold'>Iniciar Sesión</span>
         </Link>
 
         <Link
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
           className='text-center text-gray-400 font-normal'
         >
           ¿No tienes cuenta?{' '}
-          <span className='text-secondary font-bold'> Crea una</span>
+          <span className='text-accent-100 font-bold'> Crea una</span>
         </Link>
       </nav>
     </div>

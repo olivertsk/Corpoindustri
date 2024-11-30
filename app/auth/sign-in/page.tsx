@@ -34,17 +34,19 @@ export default function SignInPage() {
   };
 
   return (
-    <div className='bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl'>
-      <h1 className='text-4xl text-center font-black'>Iniciar Sesión</h1>
-      <p className='text-xl text-center font-light mt-5'>
+    <div className='bg-gradient-to-b from-primary to-primaryHover p-8 rounded-xl shadow-2xl w-full max-w-2xl'>
+      <h1 className='text-4xl text-center font-black text-white'>
+        Iniciar Sesión
+      </h1>
+      <p className='text-xl text-center font-light mt-5 text-white'>
         Adquiere los mejores productos {''}
-        <span className='  font-bold'> Al mejor precio</span>
+        <span className=' text-accent-100 font-bold'> Al mejor precio</span>
       </p>
       <form onSubmit={handleSubmit(handleForm)} className='mt-8 space-y-5'>
-        <label htmlFor='email' className='block'>
+        <label htmlFor='email' className='block text-white'>
           Email
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='email'
             placeholder='example@example.com'
             id='email'
@@ -62,10 +64,10 @@ export default function SignInPage() {
             {errors.email.message}
           </span>
         )}
-        <label htmlFor='password' className='block'>
+        <label htmlFor='password' className='block text-white'>
           Contraseña
           <input
-            className='w-full p-3 border rounded-md border-gray-400'
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
             type='password'
             id='password'
             {...register('password', {
@@ -81,7 +83,7 @@ export default function SignInPage() {
         <input
           type='submit'
           value='Iniciar Sesión'
-          className='bg-primary rounded-md transition-colors hover:bg-secondary w-full p-3  text-white font-black  text-xl cursor-pointer'
+          className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3   font-black  text-xl cursor-pointer'
         />
       </form>
       <nav className='mt-8 flex flex-col space-y-4'>
@@ -90,14 +92,14 @@ export default function SignInPage() {
           className='text-center text-gray-400 font-normal'
         >
           ¿No tienes cuenta?{' '}
-          <span className='text-secondary font-bold'>Crear Una</span>
+          <span className='text-accent-100 font-bold'>Crear Una</span>
         </Link>
         <Link
           href='/auth/forgot-password'
           className='text-center text-gray-400 font-normal'
         >
           ¿Olvidaste tu contraseña?{' '}
-          <span className='text-secondary font-bold'>Reestablecer</span>
+          <span className='text-accent-100 font-bold'>Reestablecer</span>
         </Link>
       </nav>
     </div>

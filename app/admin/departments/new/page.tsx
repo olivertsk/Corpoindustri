@@ -9,9 +9,9 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-export default function NewCategory() {
+export default function NewDepartment() {
   const navigate = useRouter();
-  useBreadcrumb('Departamentos', 'Nuevo departamento');
+  useBreadcrumb('Departamentos', 'Nuevo Departamento');
 
   const {
     register,
@@ -34,12 +34,12 @@ export default function NewCategory() {
     const response = await createDepartment(formData);
     if (response.success) {
       queryClient.invalidateQueries({ queryKey: ['departments'] });
+      queryClient.invalidateQueries({ queryKey: ['allDepartments'] });
 
       toast.success('Departamento creado correctamente');
       navigate.replace('/admin/departments');
       reset();
     }
-    console.log('response :>> ', response);
   };
 
   return (

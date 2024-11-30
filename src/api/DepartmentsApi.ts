@@ -15,7 +15,7 @@ export const createDepartment = async (data: TDepartmentForm) => {
 };
 
 export const getDepartments = async (
-  params: DepartmentFilters,
+  params?: DepartmentFilters,
   auth: boolean = false
 ): Promise<{
   data: Department[];
@@ -23,7 +23,6 @@ export const getDepartments = async (
 }> => {
   try {
     const response = await makeGet('/departments/all', params, auth);
-    console.log('response :>> ', response);
     return response;
   } catch (error) {
     throw error;

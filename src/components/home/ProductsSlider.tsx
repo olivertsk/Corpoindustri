@@ -14,6 +14,7 @@ const products: Product[] = [
     price: 1,
     code: '12',
     stock: 1,
+    isFavorite: true,
   },
   {
     name: 'Frijoles',
@@ -22,6 +23,7 @@ const products: Product[] = [
     price: 2.5,
     code: '12',
     stock: 1,
+    isFavorite: false,
   },
   {
     name: 'Salsa de tomate',
@@ -30,6 +32,7 @@ const products: Product[] = [
     price: 2.47,
     code: '12',
     stock: 1,
+    isFavorite: true,
   },
 ];
 
@@ -69,7 +72,7 @@ export default function ProductsSlider({ titleSection }: ProductsSliderProps) {
         navigation={true}
       >
         {products.map((prduct) => (
-          <SwiperSlide key={prduct.name} className='pb-6'>
+          <SwiperSlide key={prduct.name} className='pb-6 lg:px-1'>
             <CardProducts product={prduct} />
           </SwiperSlide>
         ))}

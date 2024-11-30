@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { Department } from './department';
 
 export type ICategoryFilter = {
   pag?: number;
   limit?: number;
   name?: string;
-  isSalient?: boolean;
+  isSalient?: boolean | string;
+  departmentId?: Department['id'];
 };
 
 export const categorySchema = z.object({
@@ -18,3 +20,7 @@ export const categorySchema = z.object({
 });
 
 export type ICategory = z.infer<typeof categorySchema>;
+export type TCategoryForm = Pick<
+  ICategory,
+  'icon' | 'name' | 'description' | 'status' | 'departmentId' | 'isSalient'
+>;
