@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import './Accordion.css';
 
 export default function Accordion() {
-  const queryParams = new URLSearchParams(window.location.search);
+  // const queryParams = new URLSearchParams(window.location.search);
   const [isOpen, setIsOpen] = useState(false);
   const isOpenStyles = useMemo(
     () =>
@@ -18,15 +18,34 @@ export default function Accordion() {
 
   /** VALIDATE MATCH MEDIA TO SHOW THE FILTERS */
   const [isMobile, setIsMobile] = useState(false);
-  const matchMedia = window.matchMedia('(max-width: 1024px)');
+  // const [matchMedia, setMatchMedia] = useState(null);
+  const [queryParams, setQueryParams] = useState<URLSearchParams | null>(null);
+
+  // const matchMedia = window.matchMedia('(max-width: 1024px)');
   useEffect(() => {
-    if (matchMedia.matches) {
-      setIsMobile(matchMedia.matches);
+    if (typeof window !== 'undefined') {
+      const queryParams = new URLSearchParams(window.location.search);
+      setQueryParams(queryParams);
+
+      const matchMedia = window.matchMedia('(max-width: 1024px)');
+      // setMatchMedia(matchMedia);
+
+      if (matchMedia.matches) {
+        setIsMobile(matchMedia.matches);
+      }
+      matchMedia.addEventListener('change', (e) => {
+        setIsMobile(e.matches);
+      });
     }
-    matchMedia.addEventListener('change', (e) => {
-      setIsMobile(e.matches);
-    });
   }, []);
+  // useEffect(() => {
+  //   if (matchMedia.matches) {
+  //     setIsMobile(matchMedia.matches);
+  //   }
+  //   matchMedia.addEventListener('change', (e) => {
+  //     setIsMobile(e.matches);
+  //   });
+  // }, []);
 
   return (
     <>
@@ -52,7 +71,7 @@ export default function Accordion() {
         </svg>
       </button>
       <p className='mb-4 text-xl'>
-        Busqueda: <strong>{queryParams.get('q')}</strong>{' '}
+        Busqueda: <strong>{queryParams?.get('q')}</strong>{' '}
       </p>
       <section
         className={`fixed left-0 top-0 lg:relative  h-screen  lg:h-auto z-10 ${

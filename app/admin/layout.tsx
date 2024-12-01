@@ -1,7 +1,6 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
 import Breadcrumb from '@/src/components/admin/Breadcrumb';
 import Logo from '@/src/components/Logo';
 import { adminButtons } from '@/src/config/adminPages';
@@ -20,26 +19,28 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [mQuery, setMQuery] = useState<{ matches: boolean }>({
-    matches: window.innerWidth >= 1024 ? true : false,
-  });
+  // const [mQuery, setMQuery] = useState<{ matches: boolean }>({
+  //   matches: false,
+  // });
 
-  const [sizes, setSizes] = useState<ISplitProps['sizes']>([
-    mQuery.matches ? 100 : 0,
-    mQuery.matches ? '40%' : '100%',
-  ]);
+  const [sizes, setSizes] = useState<ISplitProps['sizes']>([0, '100%']);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 1023px)');
-    mediaQuery.addEventListener('change', (ev) => {
-      if (ev.matches) {
-        setMQuery({ matches: true });
-        setSizes([100, '40%']);
-      } else {
-        setMQuery({ matches: false });
-        setSizes([0, '100%']);
-      }
-    });
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(min-width: 1023px)');
+      // setMQuery({ matches: mediaQuery.matches });
+      setSizes(mediaQuery.matches ? [100, '40%'] : [0, '100%']);
+
+      mediaQuery.addEventListener('change', (ev) => {
+        if (ev.matches) {
+          // setMQuery({ matches: true });
+          setSizes([100, '40%']);
+        } else {
+          // setMQuery({ matches: false });
+          setSizes([0, '100%']);
+        }
+      });
+    }
   }, []);
 
   const pathname = usePathname();

@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 export default function NewProductPage() {
   useBreadcrumb('Productos', 'Nuevo Producto');
@@ -56,6 +57,16 @@ export default function NewProductPage() {
     name: 'images',
     keyName: '_id',
   });
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <form onSubmit={handleSubmit(handleForm)} className={containerStyles}>

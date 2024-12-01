@@ -58,9 +58,9 @@ export default function CategoriesPage() {
   };
 
   const handleDeleteBtn = (id: ICategory['id']) => {
-    if (window.confirm('¿Estás seguro de eliminar esta categoria?')) {
+    // if (window.confirm('¿Estás seguro de eliminar esta categoria?')) {
       mutate(id);
-    }
+    // }
   };
 
   if (isLoading) {

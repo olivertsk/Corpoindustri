@@ -60,9 +60,9 @@ export default function DepartmentPage() {
   };
 
   const handleDeleteBtn = (id: Department['id']) => {
-    if (window.confirm('¿Estás seguro de eliminar este departamento?')) {
+    // if (window.confirm('¿Estás seguro de eliminar este departamento?')) {
       mutate(id);
-    }
+    // }
   };
 
   if (isLoading) {

@@ -67,7 +67,7 @@ export type TProductForm = Pick<
   | 'promotionalPrice'
   | 'status'
 > & {
-  images: Array<
+  images?: Array<
     Pick<Product['images'][0], 'alt' | 'file' | 'isVideo' | 'position'>
   >;
 };

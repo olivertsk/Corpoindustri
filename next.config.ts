@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'api.corpoindustri.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'dynamic-media-cdn.tripadvisor.com',
       },
       {

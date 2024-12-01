@@ -3,12 +3,8 @@ import ProductsSlider from '@/src/components/home/ProductsSlider';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import Image from 'next/image';
 
-export default async function ProductShowPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  console.log('params :>> ', params.id);
+export default async function ProductShowPage() {
+  // console.log('params :>> ', params.id);
   return (
     <>
       <div className='container mx-auto my-4'>
