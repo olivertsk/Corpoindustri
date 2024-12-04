@@ -29,3 +29,33 @@ export const createProduct = async (data: TProductForm) => {
     throw error;
   }
 };
+
+export const deleteProduct = async (id: Product['id']) => {
+  try {
+    return await makePost(`/products/deleted/${id}`, {}, 'DELETE');
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProduct = async (id: string): Promise<Product> => {
+  try {
+    return await makeGet(`/products/show/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateProduct = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: TProductForm;
+}) => {
+  try {
+    return await makePost(`/products/update/${id}`, data, 'PUT');
+  } catch (error) {
+    throw error;
+  }
+};

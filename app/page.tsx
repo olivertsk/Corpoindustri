@@ -40,20 +40,28 @@ export default async function Home() {
 
   return (
     <section>
-      {principalBannerData && (
-        <BannerSlider slides={principalBannerData} showFadeOut={true} />
-      )}
-
-      {categoryData && <CategoriesWrapper categoryData={categoryData} />}
       <div className='container mx-auto mb-4'>
+        {principalBannerData && (
+          <BannerSlider slides={principalBannerData} showFadeOut={false} />
+        )}
+
+        {categoryData && <CategoriesWrapper categoryData={categoryData} />}
         {firstHalf.map((department: Department) => (
-          <ProductsSlider key={department.id} titleSection={department.name} />
+          <ProductsSlider
+            key={department.id}
+            titleSection={department.name}
+            products={department.products || []}
+          />
         ))}
       </div>
-      {secondaryBannerData && <BannerSlider slides={secondaryBannerData} />}
       <div className='container mx-auto mb-4'>
+        {secondaryBannerData && <BannerSlider slides={secondaryBannerData} />}
         {secondHalf.map((department: Department) => (
-          <ProductsSlider key={department.id} titleSection={department.name} />
+          <ProductsSlider
+            products={department.products || []}
+            key={department.id}
+            titleSection={department.name}
+          />
         ))}
       </div>
       <div className='container mx-auto mb-4'>

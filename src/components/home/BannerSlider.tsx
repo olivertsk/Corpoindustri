@@ -9,7 +9,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Autoplay, Navigation } from 'swiper/modules';
 
-
 // type slidesData = {
 //   id: string,
 //   images: string,
@@ -28,7 +27,7 @@ export default function BannerSlider({
 }: BannerSliderProps) {
   return (
     <>
-      <div className='relative'>
+      <div className='relative md:mt-8 md:rounded-xl md:shadow-2xl overflow-hidden'>
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
@@ -43,19 +42,14 @@ export default function BannerSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <Image
-                src={`${apiUrl}/file/${slide.images}`}
-                alt={slide?.alt || 'mercado' }
-                objectFit='contain'
-                width={1200}
-                height={250}
-                style={{
-                  width: '100%',
-                  height: '350px',
-                  objectFit: 'cover',
-                  aspectRatio: '16/9',
-                }}
-              />
+              <div className='relative w-full h-96  '>
+                <Image
+                  src={`${apiUrl}/file/${slide.images}`}
+                  alt={slide?.description || 'mercado'}
+                  objectFit='cover'
+                  fill
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -3,7 +3,6 @@
 import { Department, TDepartmentForm } from '@/src/types/department';
 import DepartmentForm from './DepartmentForm';
 import { useRouter } from 'next/navigation';
-import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { useForm } from 'react-hook-form';
 import { updateDepartment } from '@/src/api/DepartmentsApi';
 import { useParams } from 'next/navigation';
@@ -18,7 +17,6 @@ export default function EditDepartmentWrapper({
   department,
 }: EditDepartmentWrapperProps) {
   const navigate = useRouter();
-  useBreadcrumb('Departamentos', 'Nuevo departamento');
 
   const {
     register,
@@ -47,9 +45,11 @@ export default function EditDepartmentWrapper({
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       queryClient.invalidateQueries({ queryKey: ['allDepartments'] });
       queryClient.invalidateQueries({ queryKey: ['department', id] });
-      toast.success('Departamento creado correctamente');
+      toast.success('Departamento editado correctamente');
       navigate.replace('/admin/departments');
       reset();
+    } else {
+      toast.error('Ha ocurrido un error');
     }
   };
   return (

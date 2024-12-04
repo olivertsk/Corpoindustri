@@ -2,7 +2,7 @@
 import { deleteDepartment, getDepartments } from '@/src/api/DepartmentsApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { tableBodyStyles } from '@/src/lib/global';
+import { deleteBtn, editBtn, tableBodyStyles } from '@/src/lib/global';
 import { Department, DepartmentFilters } from '@/src/types/department';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -60,9 +60,11 @@ export default function DepartmentPage() {
   };
 
   const handleDeleteBtn = (id: Department['id']) => {
-    // if (window.confirm('¿Estás seguro de eliminar este departamento?')) {
-      mutate(id);
-    // }
+    if (typeof window !== 'undefined') {
+      if (window.confirm('¿Estás seguro de eliminar este departamento?')) {
+        mutate(id);
+      }
+    }
   };
 
   if (isLoading) {
@@ -103,7 +105,7 @@ export default function DepartmentPage() {
             href='departments/new'
             className='bg-accent-100 font-bold py-2 px-4 rounded-md'
           >
-            Nuevo departamento
+            Nuevo Departamento
           </Link>
         </div>
         <table className='w-full rounded-md overflow-hidden bg-white'>
@@ -128,13 +130,13 @@ export default function DepartmentPage() {
                 <td className={tableBodyStyles}>
                   <Link
                     href={`departments/${department.id}`}
-                    className='bg-accent-100 px-4 py-1 rounded-md'
+                    className={editBtn}
                   >
                     Editar
                   </Link>
                   <button
                     onClick={() => handleDeleteBtn(department.id)}
-                    className='border border-red-600 text-red-600 px-4 py-1 rounded-md ml-2'
+                    className={deleteBtn}
                   >
                     Eliminar
                   </button>

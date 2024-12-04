@@ -1,26 +1,34 @@
 import Image from 'next/image';
 import { ChangeEvent, useRef, useState } from 'react';
 import { apiUrl } from '../lib/global';
-import { uploadFile } from '../api/FileApi';
+import { deleteFile, uploadFile } from '../api/FileApi';
 
 type UploadImageProps = {
   callback: (fileName: string) => void;
-  initialValue?: string;
+  initialValue?: string | null;
+  type?: 'square' | 'circle';
 };
 
 export default function UploadImage({
   callback,
   initialValue,
+  type = 'circle',
 }: UploadImageProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [icon, setIcon] = useState(initialValue || '');
 
   const handleFile = async (ev: ChangeEvent<HTMLInputElement>) => {
     if (ev.target.files) {
+      if (icon) {
+        if (!(await deleteFile(icon))) {
+          inputFileRef.current!.value = '';
+          return;
+        }
+      }
       const file = ev.target.files[0];
       const res = await uploadFile(file);
       inputFileRef.current!.value = '';
-      setIcon(`${apiUrl}/file/${res.fileName[0]}`);
+      setIcon(res.fileName[0]);
       callback(res.fileName[0]);
     }
   };
@@ -28,7 +36,11 @@ export default function UploadImage({
   return (
     <div className='w-full flex justify-center '>
       <div className='relative'>
-        <div className='relative wrapper w-52 bg-gray-300 h-52 overflow-hidden rounded-full flex justify-center items-center'>
+        <div
+          className={`relative wrapper w-52 bg-gray-300 h-52 overflow-hidden flex justify-center items-center ${
+            type === 'circle' ? 'rounded-full' : 'rounded-md'
+          }`}
+        >
           <div
             onClick={() => inputFileRef.current?.click()}
             className={`absolute w-full h-full bg-gray-400 ${
@@ -55,11 +67,15 @@ export default function UploadImage({
               <span className='text-white'>Subir Imagen</span>
             </div>
           </div>
-          <div className=' w-44 h-44 rounded-full overflow-hidden'>
+          <div
+            className={`w-44 h-44 overflow-hidden ${
+              type === 'circle' ? 'rounded-full' : 'rounded-md'
+            }`}
+          >
             {icon && (
               <Image
                 className=' bg-gray-100 w-full h-full'
-                src={icon}
+                src={`${apiUrl}/file/${icon}`}
                 alt='upload image'
                 style={{ objectFit: 'cover' }}
                 width={512}
@@ -88,7 +104,7 @@ export default function UploadImage({
         </button>
       </div>
       <input
-        accept='.png,.svg,.jpg,.jpeg'
+        accept='.png,.svg,.jpg,.jpeg,.webp'
         ref={inputFileRef}
         onChange={handleFile}
         type='file'

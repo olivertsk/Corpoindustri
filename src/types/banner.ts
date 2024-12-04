@@ -4,12 +4,12 @@ export type IBannerFilter = {
   pag?: number;
   limit?: number;
   name?: string;
-  position?: EPositionBanner;
+  position?: EPositionBanner | string;
 };
 
 export enum EPositionBanner {
   HomePrincipal = 'homePrincipal',
-  HomeSecondary = 'homeSecondary'
+  HomeSecondary = 'homeSecondary',
 }
 
 export const bannerSchema = z.object({
@@ -19,7 +19,7 @@ export const bannerSchema = z.object({
   description: z.string(),
   status: z.boolean(),
   position: z.nativeEnum(EPositionBanner),
-  alt: z.string()
 });
 
 export type IBanner = z.infer<typeof bannerSchema>;
+export type IBannerCreate = Omit<IBanner, 'id' | 'alt'>;

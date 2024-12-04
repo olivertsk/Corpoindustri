@@ -9,11 +9,12 @@ import {
   FieldErrors,
   UseFieldArrayReturn,
   UseFormRegister,
+  UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
 import ErrorMessage from '../../ErrorMessage';
 import { ChangeEvent } from 'react';
-import { uploadFile } from '@/src/api/FileApi';
+import { deleteFile, uploadFile } from '@/src/api/FileApi';
 import Image from 'next/image';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
@@ -21,12 +22,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getDepartments } from '@/src/api/DepartmentsApi';
 import Spinner from '../../spinner/Spinner';
 import { getCategories } from '@/src/api/CategoriesApi';
+import UploadImage from '../../UploadImage';
 
 type ProductFormProps = {
   register: UseFormRegister<TProductForm>;
   errors: FieldErrors<TProductForm>;
   handleImageArray: UseFieldArrayReturn<TProductForm, 'images', '_id'>;
   watch: UseFormWatch<TProductForm>;
+  setValue: UseFormSetValue<TProductForm>;
 };
 
 export default function ProductForm({
@@ -34,19 +37,24 @@ export default function ProductForm({
   errors,
   handleImageArray,
   watch,
+  setValue,
 }: ProductFormProps) {
   const { data, isLoading } = useQuery({
     queryKey: ['allDepartments'],
     queryFn: () => getDepartments(),
+    refetchOnWindowFocus: false,
   });
+
   const departmentId = watch('departmentId');
-  const { data: categories } = useQuery({
+  console.log('departmentId :>> ', departmentId);
+  const { data: categories, isLoading: isLoadingCategories } = useQuery({
     queryKey: [`allCategories${departmentId}`],
     queryFn: () =>
       getCategories({
         departmentId: departmentId!,
       }),
     enabled: !!departmentId,
+    refetchOnWindowFocus: false,
   });
 
   const navigate = useRouter();
@@ -70,9 +78,14 @@ export default function ProductForm({
     e.target.value = '';
   };
 
-  const handleRemoveFile = (index: number) => {
-    handleImageArray.remove(index);
+  const handleRemoveFile = async (index: number) => {
+    const file = handleImageArray.fields[index].file;
+    if (await deleteFile(file)) {
+      handleImageArray.remove(index);
+    }
   };
+
+  const uploadImageCb = (fileName: string) => setValue('coverImage', fileName);
 
   if (isLoading) {
     return <Spinner />;
@@ -82,9 +95,19 @@ export default function ProductForm({
     return (
       <>
         <div className='grid lg:grid-cols-2 gap-4 mb-8'>
+          <div className='col-span-2'>
+            <h4 className='text-center font-bold mb-4 text-xl'>
+              Imagen Miniatura
+            </h4>
+            <UploadImage
+              callback={uploadImageCb}
+              type='square'
+              initialValue={watch('coverImage')}
+            />
+          </div>
           <div>
             <label htmlFor='upload'>
-              Subir Imagenes
+              Subir Imagenes del producto
               <input
                 id='upload'
                 type='file'
@@ -93,7 +116,7 @@ export default function ProductForm({
               />
             </label>
           </div>
-          <div className='flex flex-wrap'>
+          <div className='flex flex-wrap col-span-2'>
             {handleImageArray.fields.map((item, index) => (
               <div key={item.file} className='relative group'>
                 <Image
@@ -163,22 +186,32 @@ export default function ProductForm({
             )}
           </div>
           <div>
-            <label htmlFor=''>
-              Categoria
-              <select
-                className={inputStlyes}
-                {...register('categoryId', {
-                  required: 'Este campo es requerido',
-                })}
-              >
-                <option value=''>Seleccionar</option>
-                {categories?.data.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {isLoadingCategories && (
+              <p className='mt-8 text-slate-500'>Cargando...</p>
+            )}
+            {!isLoadingCategories && categories?.data.length === 0 && (
+              <p className='mt-8 text-slate-500'>
+                No existen categorias para este departamento
+              </p>
+            )}
+            {!isLoadingCategories && categories?.data.length !== 0 && (
+              <label htmlFor=''>
+                Categoria
+                <select
+                  className={inputStlyes}
+                  {...register('categoryId', {
+                    required: 'Este campo es requerido',
+                  })}
+                >
+                  <option value=''>Seleccionar</option>
+                  {categories?.data.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             {errors.categoryId && (
               <ErrorMessage>{errors.categoryId.message}</ErrorMessage>
             )}
@@ -191,6 +224,7 @@ export default function ProductForm({
                   required: 'Este campo es requerido',
                 })}
                 type='number'
+                step='0.01'
                 className={inputStlyes}
               />
             </label>
@@ -202,10 +236,9 @@ export default function ProductForm({
             <label htmlFor=''>
               Precio Promocional
               <input
-                {...register('promotionalPrice', {
-                  required: 'Este campo es requerido',
-                })}
+                {...register('promotionalPrice')}
                 type='number'
+                step='0.01'
                 className={inputStlyes}
               />
             </label>

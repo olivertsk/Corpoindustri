@@ -1,29 +1,31 @@
 'use client';
-import { deleteCategory, getCategories } from '@/src/api/CategoriesApi';
+import { deleteBanner, getBanners } from '@/src/api/BannerApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import {
+  apiUrl,
   deleteBtn,
   editBtn,
   tableBodyStyles,
   tableHeadStyles,
   tableStyles,
 } from '@/src/lib/global';
-import { ICategory, ICategoryFilter } from '@/src/types/category';
+import { EPositionBanner, IBanner, IBannerFilter } from '@/src/types/banner';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const queryKey = 'categories';
+const queryKey = 'banners';
 
-export default function CategoriesPage() {
-  useBreadcrumb('Categorias', 'Todos las categorias');
-  const [filters, setFilters] = useState<ICategoryFilter>({
+export default function BannerPage() {
+  useBreadcrumb('Banners', 'Todos los Banners');
+  const [filters, setFilters] = useState<IBannerFilter>({
     pag: 1,
     name: '',
-    isSalient: '',
+    position: '',
   });
 
   const handleChange = (
@@ -35,7 +37,7 @@ export default function CategoriesPage() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [queryKey],
-    queryFn: () => getCategories(filters, true),
+    queryFn: () => getBanners(filters),
     refetchOnWindowFocus: false,
   });
 
@@ -47,11 +49,11 @@ export default function CategoriesPage() {
   };
 
   const { mutate } = useMutation({
-    mutationFn: deleteCategory,
+    mutationFn: deleteBanner,
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: [queryKey] });
-        toast.success('Categoria eliminada correctamente');
+        toast.success('Banner eliminado correctamente');
       }
     },
   });
@@ -63,40 +65,39 @@ export default function CategoriesPage() {
     });
   };
 
-  const handleDeleteBtn = (id: ICategory['id']) => {
+  const handleDeleteBtn = (id: IBanner['id']) => {
     if (typeof window !== 'undefined') {
-      if (window.confirm('¿Estás seguro de eliminar esta categoria?')) {
+      if (window.confirm('¿Estás seguro de eliminar este banner?')) {
         mutate(id);
       }
     }
   };
 
   if (isLoading) {
-    <Spinner />;
+    return <Spinner />;
   }
 
   if (data)
     return (
-      <section>
+      <>
         <h4 className='font-bold mb-2'>Filtros</h4>
         <div className='mb-4 flex gap-2'>
           <select
             onChange={handleChange}
-            value={filters.isSalient + ''}
-            id=''
-            name='isSalient'
+            value={filters.position}
+            name='position'
             className='bg-white rounded-md px-4'
           >
             <option value=''>Todos</option>
-            <option value='true'>Destacada</option>
-            <option value='false'>No Destacada</option>
+            <option value={EPositionBanner.HomePrincipal}>Principal</option>
+            <option value={EPositionBanner.HomeSecondary}>Secundario</option>
           </select>
           <input
             value={filters.name!}
             onChange={handleChange}
             type='text'
             name='name'
-            placeholder='Buscar Categorias'
+            placeholder='Buscar Banner'
             className='h-full py-2 rounded-md flex-1 px-4'
           />
           <button
@@ -106,44 +107,50 @@ export default function CategoriesPage() {
             Filtrar
           </button>
           <Link
-            href='categories/new'
+            href='banners/new'
             className='bg-accent-100 font-bold py-2 px-4 rounded-md'
           >
-            Nueva Categoria
+            Nuevo Banner
           </Link>
         </div>
         <table className={tableStyles}>
           <thead>
             <tr>
               <th className={tableHeadStyles}>Nombre</th>
-              <th className={tableHeadStyles}>Estatus</th>
-              <th className={tableHeadStyles}>Destacada</th>
+              <th className={tableHeadStyles}>Imagen</th>
+              <th className={tableHeadStyles}>Tipo</th>
               <th className={tableHeadStyles}>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {data.data.map((department) => (
-              <tr key={department.id}>
-                <td className={tableBodyStyles}>{department.name}</td>
-                <td className={tableBodyStyles}>
-                  {department.status ? 'Activo' : 'Inactivo'}
+            {data?.data.map((banner: IBanner) => (
+              <tr key={banner.id}>
+                <td className={tableBodyStyles}>{banner.name}</td>
+                <td className={`${tableBodyStyles} flex justify-center`}>
+                  <Image
+                    src={`${apiUrl}/file/${banner.images}`}
+                    alt={banner.description || 'description'}
+                    width={250}
+                    height={300}
+                  />
                 </td>
-                <td className={tableBodyStyles}>
-                  {department.isSalient ? 'Si' : 'No'}
+                <td className={`${tableBodyStyles} `}>
+                  {banner.position === EPositionBanner.HomePrincipal
+                    ? 'Principal'
+                    : 'Secundario'}
                 </td>
-                <td className={tableBodyStyles}>
-                  <Link
-                    href={`categories/${department.id}`}
-                    className={editBtn}
-                  >
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDeleteBtn(department.id)}
-                    className={deleteBtn}
-                  >
-                    Eliminar
-                  </button>
+                <td className={`${tableBodyStyles} `}>
+                  <div className='flex gap-4 justify-center'>
+                    <Link href={`banners/${banner.id}`} className={editBtn}>
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => handleDeleteBtn(banner.id)}
+                      className={deleteBtn}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -153,11 +160,11 @@ export default function CategoriesPage() {
           <Pagination
             count={data.meta.totalPage}
             page={data.meta.actualPage}
-            onChange={(ev, page) => changePage(page)}
+            onChange={(_, page) => changePage(page)}
             showFirstButton
             showLastButton
           />
         </div>
-      </section>
+      </>
     );
 }

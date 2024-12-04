@@ -1,3 +1,5 @@
+import { Product } from './product';
+
 export type Department = {
   id?: string;
   icon?: string | null;
@@ -8,6 +10,7 @@ export type Department = {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  products: Product[];
 };
 
 export type TDepartmentForm = Pick<

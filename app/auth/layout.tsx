@@ -18,7 +18,7 @@ export default function AuthLayout({
       toast.success(`Bienvenido ${user.name}`);
       router.push('/');
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
     <>

@@ -35,7 +35,7 @@ export const makeGet = async (
       const respJSON = await response.json();
       return respJSON.data;
     } else {
-      console.log('response :>> ', response);
+      throw new Error('Error fetching data');
     }
     return [];
   } catch (error) {
@@ -77,7 +77,6 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
     throw error;
   }
 };
-
 
 export const fetchSvg = async (
   iconUrl: string,

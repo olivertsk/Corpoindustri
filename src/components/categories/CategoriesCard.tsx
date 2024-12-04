@@ -5,8 +5,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { ICategory } from '@/src/types/category';
-import CategoryIcon from './CategorySVG';
 import Image from 'next/image';
+import { apiUrl } from '@/src/lib/global';
 
 type CategoriesCardProps = {
   titleSection?: string;
@@ -55,34 +55,30 @@ export default function CategoriesCard({
           navigation={true}
         >
           {categoryData.map((category) => (
-            <SwiperSlide key={category.id} className='pb-8 lg:px-1'>
-              <div className='bg-white shadow-md rounded-lg p-4'>
-                <h4 className='text-center font-bold'>{category.name}</h4>
-                <div className='my-4'>
-                  {category.icon.includes('.svg') && (
-                    <CategoryIcon
-                      iconUrl={category.icon}
-                      fillColor='#334155'
-                      width='64px'
-                      height='64px'
-                    />
-                  )}
-                  {!category.icon.includes('.svg') && (
+            <SwiperSlide key={category.id} className='pb-8 lg:px-1 !h-auto'>
+              <div className='bg-white shadow-md rounded-xl p-4 h-full flex flex-col justify-between'>
+                <div>
+                  <h4 className='text-center font-bold'>{category.name}</h4>
+                  <div className='my-4'>
                     <Image
-                      width={64}
-                      height={64}
-                      src={category.icon}
+                      width={100}
+                      height={100}
+                      src={`${apiUrl}/file/${category.icon}`}
                       alt={category.name}
                       style={{
                         width: '100%',
+                        aspectRatio: '1/1',
+                        height: '64px',
+                        maxHeight: '64px',
+                        objectFit: 'contain',
                       }}
                     />
-                  )}
+                  </div>
+                  <p className='text-center mb-4 text-sm'>
+                    {category.description}
+                  </p>
                 </div>
-                <p className='text-center mb-4 text-sm'>
-                  {category.description}
-                </p>
-                <button className='bg-accent-100 w-full rounded-md p-1 text-sm'>
+                <button className='bg-accent-100 w-full rounded-xl p-1 text-sm font-bold'>
                   Ver
                 </button>
               </div>

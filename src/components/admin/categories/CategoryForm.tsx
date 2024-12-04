@@ -1,9 +1,4 @@
-import {
-  apiUrl,
-  inputStlyes,
-  primaryBtn,
-  secondaryBtn,
-} from '@/src/lib/global';
+import { inputStlyes, primaryBtn, secondaryBtn } from '@/src/lib/global';
 import {
   FieldErrors,
   UseFormGetValues,
@@ -34,6 +29,7 @@ export default function CategoryForm({
   const { data, isLoading } = useQuery({
     queryKey: ['allDepartments'],
     queryFn: () => getDepartments(),
+    refetchOnWindowFocus: false,
   });
 
   const navigate = useRouter();
@@ -50,9 +46,7 @@ export default function CategoryForm({
       <>
         <div>
           <UploadImage
-            initialValue={`${
-              getValues ? `${apiUrl}/file/${getValues('icon')}` : ''
-            }`}
+            initialValue={`${getValues ? getValues('icon') : ''}`}
             callback={uploadImgCb}
           />
           <div className='grid grid-cols-2 gap-4 mt-8'>
@@ -105,6 +99,7 @@ export default function CategoryForm({
                     required: 'Este campo es requerido',
                   })}
                 >
+                  <option value=''>Seleccionar</option>
                   <option value='true'>Destacado</option>
                   <option value='false'>No Destacado</option>
                 </select>

@@ -20,6 +20,7 @@ export default function NewProductPage() {
     control,
     watch,
     handleSubmit,
+    setValue,
   } = useForm<TProductForm>({
     defaultValues: {
       brand: '',
@@ -35,6 +36,7 @@ export default function NewProductPage() {
       status: undefined,
       stock: 0,
       taxRate: 0,
+      coverImage: '',
     },
   });
   const navigate = useRouter();
@@ -44,6 +46,14 @@ export default function NewProductPage() {
       if (data.success) {
         toast.success('Producto creado exitosamente');
         navigate.push('/admin/products');
+      } else {
+        data.message.forEach((item: { field: string }) => {
+          if (item.field === 'categoryId') {
+            toast.error('Debe seleccionar una categoría para continuar');
+          } else if (item.field === 'code') {
+            toast.error('El código de producto ya existe');
+          }
+        });
       }
     },
     onError: (err) => {
@@ -71,6 +81,7 @@ export default function NewProductPage() {
   return (
     <form onSubmit={handleSubmit(handleForm)} className={containerStyles}>
       <ProductForm
+        setValue={setValue}
         handleImageArray={handleImageArray}
         register={register}
         errors={errors}

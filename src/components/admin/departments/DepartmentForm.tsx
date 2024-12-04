@@ -1,9 +1,4 @@
-import {
-  apiUrl,
-  inputStlyes,
-  primaryBtn,
-  secondaryBtn,
-} from '@/src/lib/global';
+import { inputStlyes, primaryBtn, secondaryBtn } from '@/src/lib/global';
 import { TDepartmentForm } from '@/src/types/department';
 import {
   FieldErrors,
@@ -37,9 +32,7 @@ export default function DepartmentForm({
     <>
       <div>
         <UploadImage
-          initialValue={`${
-            getValues ? `${apiUrl}/file/${getValues('icon')}` : ''
-          }`}
+          initialValue={`${getValues ? getValues('icon') : ''}`}
           callback={uploadImgCb}
         />
         <div className='grid grid-cols-2 gap-4 mt-8'>
@@ -90,6 +83,7 @@ export default function DepartmentForm({
                   required: 'Este campo es requerido',
                 })}
               >
+                <option value=''>Seleccionar</option>
                 <option value='true'>Destacado</option>
                 <option value='false'>No Destacado</option>
               </select>

@@ -41,6 +41,12 @@ export default function NewCategory() {
       toast.success('Categoria creada correctamente');
       navigate.replace('/admin/categories');
       reset();
+    } else {
+      response.message.forEach((item: { field: string }) => {
+        if (item.field === 'icon') {
+          toast.error('Debe subir una imagen para continuar');
+        }
+      });
     }
   };
 

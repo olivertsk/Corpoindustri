@@ -1,18 +1,17 @@
 'use client';
-
-import { getDepartment } from '@/src/api/DepartmentsApi';
-import EditDepartmentWrapper from '@/src/components/admin/departments/EditDepartmentWrapper';
+import { getProduct } from '@/src/api/ProductApi';
+import EditProductFormWrapper from '@/src/components/admin/products/EditProductFormWrapper';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 
-export default function EditDepartment() {
-  useBreadcrumb('Departamentos', 'Editar Departamento');
+export default function EditProductPage() {
+  useBreadcrumb('Productos', 'Editar Producto');
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useQuery({
-    queryKey: ['department', id],
-    queryFn: () => getDepartment(id),
+    queryKey: ['product', id],
+    queryFn: () => getProduct(id),
     refetchOnWindowFocus: false,
   });
 
@@ -20,5 +19,5 @@ export default function EditDepartment() {
     return <Spinner />;
   }
 
-  if (data) return <EditDepartmentWrapper department={data} />;
+  if (data) return <EditProductFormWrapper product={data} />;
 }

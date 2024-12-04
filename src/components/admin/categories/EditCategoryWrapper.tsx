@@ -20,7 +20,7 @@ export default function EditCategoryWrapper({
   category,
 }: EditCategoryWrapperProps) {
   const navigate = useRouter();
-  useBreadcrumb('Departamentos', 'Editar Categoria');
+  useBreadcrumb('Categorias', 'Editar Categoria');
 
   const {
     register,
@@ -52,6 +52,12 @@ export default function EditCategoryWrapper({
       toast.success('Categoria actualizada correctamente');
       navigate.replace('/admin/categories');
       reset();
+    } else {
+      response.message.forEach((item: { field: string }) => {
+        if (item.field === 'icon') {
+          toast.error('Debe subir una imagen para continuar');
+        }
+      });
     }
   };
   return (

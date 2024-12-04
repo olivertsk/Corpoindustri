@@ -1,4 +1,4 @@
-import { uploadFileRequest } from '@/src/config/fetch';
+import { makePost, uploadFileRequest } from '@/src/config/fetch';
 
 export const uploadFile = async (file: File) => {
   try {
@@ -11,5 +11,29 @@ export const uploadFile = async (file: File) => {
   } catch (error) {
     console.error(error);
     throw new Error(String(error));
+  }
+};
+
+export const deleteFile = async (fileName: string) => {
+  if (
+    typeof window !== 'undefined' &&
+    window.confirm('¿Estás seguro de que quieres eliminar esta imagen?')
+  ) {
+    try {
+      const res = await makePost(
+        '/files/delete',
+        { type: location.pathname.split('/')[2], fileName },
+        'DELETE'
+      );
+
+      if (res.success) {
+        return true;
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(String(error));
+    }
+  } else {
+    return false;
   }
 };

@@ -19,24 +19,17 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const [mQuery, setMQuery] = useState<{ matches: boolean }>({
-  //   matches: false,
-  // });
-
   const [sizes, setSizes] = useState<ISplitProps['sizes']>([0, '100%']);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(min-width: 1023px)');
-      // setMQuery({ matches: mediaQuery.matches });
       setSizes(mediaQuery.matches ? [100, '40%'] : [0, '100%']);
 
       mediaQuery.addEventListener('change', (ev) => {
         if (ev.matches) {
-          // setMQuery({ matches: true });
           setSizes([100, '40%']);
         } else {
-          // setMQuery({ matches: false });
           setSizes([0, '100%']);
         }
       });
