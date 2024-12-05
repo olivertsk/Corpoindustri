@@ -6,7 +6,7 @@ export default function HeaderSearchbar() {
   const router = useRouter();
 
   const onSearch = () => {
-    router.push(`/search?q=${search}`);
+    router.push(`/search?name=${search}`);
     setSearch('');
   };
 

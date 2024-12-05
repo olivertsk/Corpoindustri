@@ -92,7 +92,7 @@ export default function DepartmentPage() {
             onChange={handleChange}
             type='text'
             name='name'
-            placeholder='Buscar Categorias'
+            placeholder='Buscar Departamentos'
             className='h-full py-2 rounded-md flex-1 px-4'
           />
           <button

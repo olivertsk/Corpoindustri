@@ -35,9 +35,9 @@ export const makeGet = async (
       const respJSON = await response.json();
       return respJSON.data;
     } else {
+      console.log(response);
       throw new Error('Error fetching data');
     }
-    return [];
   } catch (error) {
     throw error;
   }

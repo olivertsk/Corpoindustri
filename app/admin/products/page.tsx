@@ -83,7 +83,7 @@ export default function ProductsPage() {
             onChange={handleChange}
             type='text'
             name='name'
-            placeholder='Buscar Categorias'
+            placeholder='Buscar Productos'
             className='h-full py-2 rounded-md flex-1 px-4'
           />
           <button

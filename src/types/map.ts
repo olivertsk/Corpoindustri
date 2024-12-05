@@ -20,3 +20,4 @@ export const mapSchema = z.object({
 });
 
 export type TMap = z.infer<typeof mapSchema>;
+export type TMapCreate = Omit<TMap, 'id'>;
