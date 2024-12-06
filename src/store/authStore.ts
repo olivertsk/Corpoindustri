@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, PersistOptions } from 'zustand/middleware';
 import { TUser } from '../types/user';
+import { setCookie } from 'cookies-next';
 
 interface AuthState {
   user: TUser | null;
@@ -14,7 +15,10 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       token: null,
-      setUser: (user, token) => set({ user, token }),
+      setUser: async (user, token) => {
+        setCookie('token', token, { path: '/', maxAge: 60 * 60 * 24 * 30 });
+        set({ user, token });
+      },
       logout: () => {
         set({ user: null, token: null });
         localStorage.removeItem('auth-storage');

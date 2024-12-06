@@ -1,6 +1,7 @@
 import { getProduct, getProducts } from '@/src/api/ProductApi';
 import BackBtn from '@/src/components/BackBtn';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
+import AddProductToOrder from '@/src/components/products/AddProductToOrder';
 import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
@@ -82,9 +83,7 @@ export default async function ProductShowPage({
                   __html: product.description || '',
                 }}
               ></div>
-              <button className='bg-accent-100 hover:bg-accent-200 transition-colors py-3 font-bold mt-8 w-full px-8 rounded-full'>
-                Comprar
-              </button>
+              <AddProductToOrder product={product} />
             </div>
           </aside>
         </div>

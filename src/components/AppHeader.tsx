@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import HeaderButtons from './header/HeaderButtons';
 import HeaderSearchbar from './header/HeaderSearchbar';
 import Logo from './Logo';
@@ -18,9 +17,9 @@ export default function AppHeader() {
     !pathname.includes('admin') && (
       <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
         <div className='container mx-auto flex gap-4 items-center'>
-          <Link href='/' className='max-w-[50px] lg:max-w-[100]'>
+          <div className='max-w-[50px] lg:max-w-[100]'>
             <Logo />
-          </Link>
+          </div>
           <HeaderSearchbar />
           <div className='hidden lg:block'>
             <HeaderButtons />

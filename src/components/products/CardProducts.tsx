@@ -58,7 +58,7 @@ export default function CardProducts({
           )}
         </div>
         <div className='min-h-12 flex items-center justify-center'>
-          <HandleProductClick />
+          <HandleProductClick product={product} />
         </div>
       </div>
     </div>

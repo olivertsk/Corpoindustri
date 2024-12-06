@@ -1,10 +1,12 @@
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-console.log('apiUrl :>> ', apiUrl);
+'use server';
 
-const comprobeToken = () => {
-  const token = localStorage.getItem('auth-storage');
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { cookies } from 'next/headers';
+
+const comprobeToken = async () => {
+  const token = (await cookies()).get('token')?.value || '';
   if (token) {
-    return `Bearer ${JSON.parse(token).state.token}`;
+    return `Bearer ${token}`;
   }
   return '';
 };
@@ -24,7 +26,7 @@ export const makeGet = async (
       'Content-Type': 'application/json',
     };
     if (auth) {
-      headers['Authorization'] = comprobeToken();
+      headers['Authorization'] = await comprobeToken();
     }
 
     const response = await fetch(`${apiUrl}${url}${queryString}`, {
@@ -52,7 +54,7 @@ export const makePost = async (
     const response = await fetch(`${apiUrl}${url}`, {
       method,
       headers: {
-        Authorization: comprobeToken(),
+        Authorization: await comprobeToken(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -68,7 +70,7 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
     const response = await fetch(`${apiUrl}${url}`, {
       method: 'POST',
       headers: {
-        Authorization: comprobeToken(),
+        Authorization: await comprobeToken(),
       },
       body: body as BodyInit,
     });

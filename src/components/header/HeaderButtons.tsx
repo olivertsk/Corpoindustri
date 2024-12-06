@@ -5,6 +5,8 @@ import { useAuthStore } from '@/src/store/authStore';
 import { apiUrl } from '@/src/lib/global';
 import Logo from '../Logo';
 import { toast } from 'react-toastify';
+import { useCartStore } from '@/src/store/cartSlice';
+import { useMemo } from 'react';
 
 const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
 const subStyles = 'bottom-0 lg:-bottom-[5px]';
@@ -17,11 +19,14 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
   /** IMPLEMENTING AUTH STORE */
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const orderProducts = useCartStore((state) => state.orderProducts);
 
   const handleLogout = () => {
     logout();
     toast.success('Sesión cerrada correctamente');
   };
+
+  const productsQuantity = useMemo(() => orderProducts.length, [orderProducts]);
 
   return (
     <nav className='flex lg:gap-8 lg:ml-8 flex-col items-start lg:flex-row'>
@@ -140,7 +145,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
           </div>
         )}
       </div>
-      <Link href='/home/cart' className={menuBtnStyles}>
+      <Link href='/cart' className={menuBtnStyles}>
         <div className='relative'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -154,7 +159,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
             />
           </svg>
           <span className='absolute text-xs -top-1 -right-1 bg-accent-100 text-black rounded-full px-1'>
-            10
+            {productsQuantity}
           </span>
         </div>
         <sub className={subStyles}>Carrito</sub>

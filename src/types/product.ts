@@ -72,3 +72,10 @@ export type TProductForm = Pick<
     Pick<Product['images'][0], 'alt' | 'file' | 'isVideo' | 'position'>
   >;
 };
+export type OrderProduct = Pick<
+  Product,
+  'id' | 'name' | 'price' | 'promotionalPrice' | 'coverImage'
+> & {
+  quantity: number;
+  subtotal: number;
+};
