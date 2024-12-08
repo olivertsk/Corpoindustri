@@ -50,6 +50,8 @@ export const makePost = async (
   body: unknown,
   method: 'POST' | 'DELETE' | 'PUT' = 'POST'
 ) => {
+  console.log('makePost', body);
+  console.log('apiUrl :>> ', apiUrl);
   try {
     const response = await fetch(`${apiUrl}${url}`, {
       method,

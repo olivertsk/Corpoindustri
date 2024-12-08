@@ -14,15 +14,14 @@
   animation: sk-chase-dot 2s infinite ease-in-out both;
 }
 
-.sk-chase-dot:before {
+/* .sk-chase-dot:before {
   content: '';
   display: block;
   width: 25%;
   height: 25%;
-  background-color: #0050d1;
   border-radius: 100%;
   animation: sk-chase-dot-before 2s infinite ease-in-out both;
-}
+} */
 
 .sk-chase-dot:nth-child(1) {
   animation-delay: -1.1s;

@@ -21,3 +21,14 @@ html {
   padding: 1rem;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
 }
+
+#transition-wrapper {
+  transition-property: opacity height;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition {
+  height: 100vh;
+  opacity: 1;
+}

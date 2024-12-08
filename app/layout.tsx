@@ -3,6 +3,7 @@ import './globals.css';
 import AppHeader from '@/src/components/AppHeader';
 import Footer from '@/src/components/Footer';
 import ToastWrapper from '@/src/components/ToastWrapper';
+import TransitionWrapper from '@/src/components/TransitionWrapper';
 
 export const metadata: Metadata = {
   title: 'Corpoindustri',
@@ -17,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <body className='bg-gray-100'>
+      <body className='bg-gray-100 relative'>
+        <TransitionWrapper />
+
         <ToastWrapper />
         <AppHeader />
         {children}

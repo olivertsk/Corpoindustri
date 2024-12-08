@@ -3,6 +3,7 @@ import { UserFormLogin, UserFormRegistration } from '../types/user';
 
 export const registerUser = async (body: UserFormRegistration) => {
   try {
+    console.log('body :>> ', body);
     return await makePost('/auth/register', body);
   } catch (error) {
     console.error(error);

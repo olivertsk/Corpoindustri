@@ -55,7 +55,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
         >
           {user !== null && user.avatar ? (
             <Image
-              className='rounded-full'
+              className='rounded-full w-[24px] h-[24px]'
               src={`${apiUrl}/file/${user.avatar}`}
               alt='upload image'
               width={24}

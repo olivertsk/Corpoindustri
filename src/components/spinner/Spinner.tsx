@@ -1,15 +1,20 @@
 import './Spinner.css';
 
-export default function Spinner() {
+type SpinnerProps = {
+  spinnerColor?: string;
+};
+
+const spinnerClasses = `sk-chase-dot before:bg-[#fff] before:content-[''] before:block before:w-1/4 before:h-1/4 before:rounded-full before:animate-spinner`;
+export default function Spinner({ spinnerColor = '#0050d1' }: SpinnerProps) {
   return (
-    <div className='p-16 flex justify-center items-center'>
+    <div className='p-8 flex justify-center items-center'>
       <div className='sk-chase'>
-        <div className='sk-chase-dot'></div>
-        <div className='sk-chase-dot'></div>
-        <div className='sk-chase-dot'></div>
-        <div className='sk-chase-dot'></div>
-        <div className='sk-chase-dot'></div>
-        <div className='sk-chase-dot'></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
+        <div className={`${spinnerClasses} before:bg-[${spinnerColor}]`}></div>
       </div>
     </div>
   );
