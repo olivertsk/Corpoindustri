@@ -45,7 +45,11 @@ export const productSchema = z.object({
   brand: z.string().nullable(),
   taxRate: z.number().nullable(),
   coverImage: z.string().nullable(),
-  isFavorite: z.boolean().optional(),
+  favorite: z
+    .object({
+      id: z.string(),
+    })
+    .optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
   deletedAt: z.string().optional(),

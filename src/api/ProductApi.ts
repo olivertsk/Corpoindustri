@@ -15,17 +15,17 @@ export type ProductFilters = {
   maxPrice?: string | null;
   order?: 'maxPrice' | 'minPrice';
   typeSearch?: string | null;
+  isClent?: boolean;
 };
 
 export const getProducts = async (
-  params?: ProductFilters,
-  auth: boolean = false
+  params?: ProductFilters
 ): Promise<{
   data: Product[];
   meta: Meta;
 }> => {
   try {
-    const response = await makeGet('/products/all', params, auth);
+    const response = await makeGet('/products/all', params);
     return response;
   } catch (error) {
     throw error;
@@ -50,10 +50,12 @@ export const deleteProduct = async (id: Product['id']) => {
 
 export const getProduct = async (
   id: string,
-  reqLocal: boolean = false
+  isClient: boolean = false
 ): Promise<Product> => {
   try {
-    return await makeGet(`/products/show/${id}`, undefined, reqLocal);
+    return await makeGet(`/products/show/${id}`, {
+      isClient,
+    });
   } catch (error) {
     throw error;
   }

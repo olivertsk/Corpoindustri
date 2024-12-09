@@ -11,11 +11,7 @@ const comprobeToken = async () => {
   return '';
 };
 
-export const makeGet = async (
-  url: string,
-  parameters?: unknown,
-  auth: boolean = true
-) => {
+export const makeGet = async (url: string, parameters?: unknown) => {
   try {
     const queryString = parameters
       ? '?' +
@@ -25,9 +21,7 @@ export const makeGet = async (
     const headers: { 'Content-Type': string; Authorization?: string } = {
       'Content-Type': 'application/json',
     };
-    if (auth) {
-      headers['Authorization'] = await comprobeToken();
-    }
+    headers['Authorization'] = await comprobeToken();
 
     const response = await fetch(`${apiUrl}${url}${queryString}`, {
       method: 'GET',

@@ -2,15 +2,11 @@ import { makeGet, makePost } from '@/src/config/fetch';
 import { ICategory, ICategoryFilter, TCategoryForm } from '../types/category';
 import { Meta } from '../types';
 
-export const fxAllCategories = async (
-  parameters: ICategoryFilter,
-  reqAuth = false
-) => {
+export const fxAllCategories = async (parameters: ICategoryFilter) => {
   try {
     const response = await makeGet(
       `/categories/all`,
-      parameters as Record<string, string>,
-      reqAuth
+      parameters as Record<string, string>
     );
     return response.data;
   } catch (error) {
@@ -20,8 +16,7 @@ export const fxAllCategories = async (
 };
 
 export const getCategories = async (
-  parameters: ICategoryFilter,
-  reqAuth = false
+  parameters: ICategoryFilter
 ): Promise<{
   meta: Meta;
   data: ICategory[];
@@ -29,8 +24,7 @@ export const getCategories = async (
   try {
     const response = await makeGet(
       `/categories/all`,
-      parameters as Record<string, string>,
-      reqAuth
+      parameters as Record<string, string>
     );
     return response;
   } catch (error) {

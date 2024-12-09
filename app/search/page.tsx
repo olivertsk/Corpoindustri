@@ -19,6 +19,7 @@ export default function SearchPage() {
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
     order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
+    isClent: true,
   });
 
   const { data, isLoading } = useQuery({

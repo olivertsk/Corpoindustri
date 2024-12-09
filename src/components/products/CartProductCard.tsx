@@ -2,8 +2,8 @@ import { apiUrl } from '@/src/lib/global';
 import { OrderProduct } from '@/src/types/product';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import Image from 'next/image';
-import HandleQuantity from './HandleQuantity';
-import { useCartStore } from '@/src/store/cartSlice';
+import CartProductsQuantity from './CartProductsQuantity';
+import Link from 'next/link';
 
 type CartProductCardProps = {
   orderProduct: OrderProduct;
@@ -12,17 +12,6 @@ type CartProductCardProps = {
 export default function CartProductCard({
   orderProduct,
 }: CartProductCardProps) {
-  const addQuantity = useCartStore((state) => state.addQuantity);
-  const subtractQuantity = useCartStore((state) => state.subtractQuantity);
-
-  const minusCb = () => {
-    subtractQuantity(orderProduct);
-  };
-
-  const plusCb = () => {
-    addQuantity(orderProduct);
-  };
-
   return (
     <div className='grid grid-cols-3 border rounded-lg p-2 overflow-hidden'>
       <Image
@@ -32,7 +21,9 @@ export default function CartProductCard({
         height={100}
       />
       <div className='col-span-2'>
-        <h2>{orderProduct.name}</h2>
+        <Link href={`/products/${orderProduct.id}`} className='font-bold'>
+          {orderProduct.name}
+        </Link>
         <p
           className={`${
             orderProduct.promotionalPrice &&
@@ -44,13 +35,7 @@ export default function CartProductCard({
         {orderProduct.promotionalPrice && (
           <p>{normalizeAmounts(orderProduct.promotionalPrice)}</p>
         )}
-        <HandleQuantity
-          minusCb={minusCb}
-          plusCb={plusCb}
-          quantity={orderProduct.quantity}
-          orderProduct={orderProduct}
-          showRemove={true}
-        />
+        <CartProductsQuantity orderProduct={orderProduct} />
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ export default function AddProductToOrder({ product }: AddProductToOrderProps) {
 
   return (
     <>
-      <div className='flex gap-4'>
+      <div className='flex gap-4 mt-4 '>
         <HandleQuantity
           minusCb={setQuantity}
           plusCb={setQuantity}
@@ -32,7 +32,7 @@ export default function AddProductToOrder({ product }: AddProductToOrderProps) {
         />
         <button
           onClick={handleAddCart}
-          className='bg-accent-100 hover:bg-accent-200 transition-colors py-3 font-bold mt-4 px-8 flex items-center gap-2 rounded-full'
+          className='bg-accent-100 hover:bg-accent-200 transition-colors py-3 font-bold px-8 flex items-center gap-2 rounded-full'
         >
           <ShoppingCartIcon className='w-4' />
           Agregar

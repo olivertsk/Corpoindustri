@@ -19,9 +19,9 @@ export const useAuthStore = create<AuthState>()(
         setCookie('token', token, { path: '/', maxAge: 60 * 60 * 24 * 30 });
         set({ user, token });
       },
-      logout: () => {
+      logout: async () => {
         set({ user: null, token: null });
-        localStorage.removeItem('auth-storage');
+        setCookie('token', '', { path: '/', maxAge: 60 * 60 * 24 * 30 });
       },
     }),
     {

@@ -28,7 +28,7 @@ export default function HandleQuantity({
   };
 
   return (
-    <div className='border rounded-full flex items-center p-2 px-4 max-w-[50%] mx-auto mt-4'>
+    <div className='border rounded-full flex items-center p-2 px-4 max-w-[50%]'>
       <button
         disabled={quantity <= 1 && !showRemove}
         className='disabled:opacity-50'

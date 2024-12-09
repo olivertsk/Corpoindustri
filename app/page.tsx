@@ -19,21 +19,28 @@ export default async function Home() {
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
   const principalBannerData: IBanner[] = await fxAllBanner({
     position: EPositionBanner.HomePrincipal,
+    isClient: true,
   });
   const secondaryBannerData: IBanner[] = await fxAllBanner({
     position: EPositionBanner.HomeSecondary,
+    isClient: true,
   });
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
     isSalient: true,
     product: true,
+    isClient: true,
   };
 
-  const mapData: { data: TMap[] } = await getMaps({});
+  const mapData: { data: TMap[] } = await getMaps({
+    isClient: true,
+  });
+
   const departamentData: { data: Department[] } = await getDepartments(
     departamentFilter
   );
+
   const half = Math.ceil(departamentData.data.length / 2);
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);

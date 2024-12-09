@@ -6,8 +6,7 @@ export const fxAllBanner = async (parameters: IBannerFilter) => {
   try {
     const response = await makeGet(
       `/banners/all`,
-      parameters as Record<string, string>,
-      false
+      parameters as Record<string, string>
     );
     return response.data;
   } catch (error) {
@@ -25,8 +24,7 @@ export const getBanners = async (
   try {
     const response = await makeGet(
       `/banners/all`,
-      parameters as Record<string, string>,
-      true
+      parameters as Record<string, string>
     );
     return response;
   } catch (error) {

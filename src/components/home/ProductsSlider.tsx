@@ -15,6 +15,7 @@ export default function ProductsSlider({
   titleSection,
   products,
 }: ProductsSliderProps) {
+  console.log(products);
   return (
     <div className='px-3 pb-8'>
       <h4 className='font-bold text-xl my-4'>{titleSection}</h4>

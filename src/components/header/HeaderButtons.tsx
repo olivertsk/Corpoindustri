@@ -7,6 +7,7 @@ import Logo from '../Logo';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/src/store/cartSlice';
 import { useMemo } from 'react';
+import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 
 const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
 const subStyles = 'bottom-0 lg:-bottom-[5px]';
@@ -20,13 +21,23 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const orderProducts = useCartStore((state) => state.orderProducts);
+  const favoriteProducts = useAppGlobalStore((state) => state.favorite);
 
   const handleLogout = () => {
     logout();
     toast.success('Sesión cerrada correctamente');
+    toggleMenu();
+  };
+
+  const toggleMenu = () => {
+    if (handleOpenMenu) handleOpenMenu();
   };
 
   const productsQuantity = useMemo(() => orderProducts.length, [orderProducts]);
+  const favoriteQuantity = useMemo(
+    () => favoriteProducts.length,
+    [favoriteProducts]
+  );
 
   return (
     <nav className='flex lg:gap-8 lg:ml-8 flex-col items-start lg:flex-row'>
@@ -48,10 +59,11 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
           </svg>
         </button>
       </div>
-      <div className={`${menuBtnStyles} group`}>
+      <div className={`${menuBtnStyles} group relative`}>
         <Link
-          className={menuBtnStyles}
+          className={`${menuBtnStyles} !p-0`}
           href={user !== null ? '/profile' : '/auth/sign-in'}
+          onClick={toggleMenu}
         >
           {user !== null && user.avatar ? (
             <Image
@@ -90,6 +102,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
             <Link
               className='hover:text-gray-700 p-1 flex justify-between'
               href='/profile'
+              onClick={toggleMenu}
             >
               Perfil
               <svg
@@ -110,6 +123,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
             <Link
               className='hover:text-gray-700 p-1 flex justify-between'
               href='/profile/orders'
+              onClick={toggleMenu}
             >
               Mis Pedidos
               <svg
@@ -145,7 +159,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
           </div>
         )}
       </div>
-      <Link href='/cart' className={menuBtnStyles}>
+      <Link href='/cart' className={menuBtnStyles} onClick={toggleMenu}>
         <div className='relative'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -164,25 +178,34 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
         </div>
         <sub className={subStyles}>Carrito</sub>
       </Link>
-      <Link href='/home/favorites' className={menuBtnStyles}>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-        >
-          <path
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='1.5'
-            d='M7.75 3.5C5.127 3.5 3 5.76 3 8.547C3 14.125 12 20.5 12 20.5s9-6.375 9-11.953C21 5.094 18.873 3.5 16.25 3.5c-1.86 0-3.47 1.136-4.25 2.79c-.78-1.654-2.39-2.79-4.25-2.79'
-          />
-        </svg>
+      <Link href='/favorites' className={menuBtnStyles} onClick={toggleMenu}>
+        <div className='relative'>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+          >
+            <path
+              fill='none'
+              stroke='currentColor'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='1.5'
+              d='M7.75 3.5C5.127 3.5 3 5.76 3 8.547C3 14.125 12 20.5 12 20.5s9-6.375 9-11.953C21 5.094 18.873 3.5 16.25 3.5c-1.86 0-3.47 1.136-4.25 2.79c-.78-1.654-2.39-2.79-4.25-2.79'
+            />
+          </svg>
+          <span className='absolute text-xs -top-1 -right-1 bg-accent-100 text-black rounded-full px-1'>
+            {favoriteQuantity}
+          </span>
+        </div>
         <sub className={subStyles}>Favoritos</sub>
       </Link>
-      <Link href='/home/favorites' className={menuBtnStyles}>
+      <Link
+        href='/home/favorites'
+        className={menuBtnStyles}
+        onClick={toggleMenu}
+      >
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='24'
@@ -196,8 +219,8 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
         </svg>
         <sub className={subStyles}>Notificaciones</sub>
       </Link>
-      <Link
-        href='/home/favorites'
+      <button
+        onClick={handleLogout}
         className={`${menuBtnStyles} block lg:hidden`}
       >
         <svg
@@ -212,7 +235,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
           />
         </svg>
         <sub className={subStyles}>Cerrar Sesión</sub>
-      </Link>
+      </button>
     </nav>
   );
 }

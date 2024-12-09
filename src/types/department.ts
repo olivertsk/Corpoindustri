@@ -24,4 +24,5 @@ export type DepartmentFilters = {
   name?: string | null;
   isSalient?: boolean | null | string;
   product?: boolean;
+  isClient?: boolean;
 };

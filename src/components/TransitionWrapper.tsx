@@ -11,7 +11,6 @@ export default function TransitionWrapper() {
   const transitionWrapper = document.querySelector('#transition-wrapper');
 
   useEffect(() => {
-    console.log('changedpathName :>> ', pathName);
     setTimeout(async () => {
       if (transitionWrapper) {
         await sleep(500);
