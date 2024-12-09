@@ -36,12 +36,14 @@ export default function RegisterPage() {
   const handleForm = async (formData: UserFormRegistration) => {
     try {
       const response = await registerUser(formData);
+      console.log('response :>> ', response);
       if (!response.success) {
         response.message.forEach(
           (item: { field: keyof UserFormRegistration; message: string }) => {
             setError(item.field, { message: item.message });
           }
         );
+        return;
       }
       setUser(response.user, response.token);
     } catch (error) {
@@ -67,7 +69,7 @@ export default function RegisterPage() {
           <div className='relative'>
             <div className='relative max-w-32 mx-auto bg-gray-100 rounded-full overflow-hidden p-4'>
               <Image
-                className='rounded-full'
+                className='rounded-full w-[96px] h-[96px]'
                 src={avatar}
                 alt='upload image'
                 width={512}
@@ -93,6 +95,7 @@ export default function RegisterPage() {
               </svg>
             </button>
           </div>
+
           <input
             accept='.png,.svg,.jpg,.jpeg'
             ref={inputFileRef}
@@ -101,6 +104,9 @@ export default function RegisterPage() {
             hidden
           />
         </div>
+        {errors.avatar && (
+          <ErrorMessage> {errors.avatar.message} </ErrorMessage>
+        )}
         <label htmlFor='name' className='block text-white'>
           Nombre
           <input

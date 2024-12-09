@@ -3,14 +3,13 @@ import { TMapFilter, TMap } from '../types/map';
 import { Meta } from '../types';
 
 export const getMaps = async (
-  params: TMapFilter,
-  auth: boolean = false
+  params: TMapFilter
 ): Promise<{
   data: TMap[];
   meta: Meta;
 }> => {
   try {
-    const response = await makeGet('/maps/all', params, auth);
+    const response = await makeGet('/maps/all', params);
     return response;
   } catch (error) {
     throw error;
@@ -24,7 +23,6 @@ export const getMap = async (id: string): Promise<TMap> => {
     throw error;
   }
 };
-
 
 export const deleteMap = async (id: TMap['id']) => {
   try {

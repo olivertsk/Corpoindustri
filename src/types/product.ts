@@ -45,7 +45,11 @@ export const productSchema = z.object({
   brand: z.string().nullable(),
   taxRate: z.number().nullable(),
   coverImage: z.string().nullable(),
-  isFavorite: z.boolean().optional(),
+  favorite: z
+    .object({
+      id: z.string(),
+    })
+    .optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
   deletedAt: z.string().optional(),
@@ -71,4 +75,11 @@ export type TProductForm = Pick<
   images?: Array<
     Pick<Product['images'][0], 'alt' | 'file' | 'isVideo' | 'position'>
   >;
+};
+export type OrderProduct = Pick<
+  Product,
+  'id' | 'name' | 'price' | 'promotionalPrice' | 'coverImage'
+> & {
+  quantity: number;
+  subtotal: number;
 };

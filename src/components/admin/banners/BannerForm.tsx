@@ -52,7 +52,7 @@ export default function BannerForm({
           )}
           <button
             onClick={() => inputFileRef.current?.click()}
-            className={primaryBtn}
+            className={`${primaryBtn} mt-4`}
             type='button'
           >
             Seleccionar Imagen

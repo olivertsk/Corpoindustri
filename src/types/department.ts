@@ -22,6 +22,7 @@ export type DepartmentFilters = {
   pag?: number;
   limit?: number;
   name?: string | null;
-  isSalient: boolean | null | string;
+  isSalient?: boolean | null | string;
   product?: boolean;
+  isClient?: boolean;
 };

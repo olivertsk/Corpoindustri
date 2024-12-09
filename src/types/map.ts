@@ -4,6 +4,7 @@ export type TMapFilter = {
   pag?: number;
   limit?: number;
   name?: string;
+  isClient?: boolean;
 };
 
 export const mapSchema = z.object({
@@ -20,3 +21,4 @@ export const mapSchema = z.object({
 });
 
 export type TMap = z.infer<typeof mapSchema>;
+export type TMapCreate = Omit<TMap, 'id'>;

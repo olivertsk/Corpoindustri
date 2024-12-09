@@ -323,6 +323,18 @@ export default function ProductForm({
               <ErrorMessage>{errors.description.message}</ErrorMessage>
             )}
           </div>
+          <div className='col-span-2'>
+            <label htmlFor=''>
+              Descripción Larga
+              <textarea
+                {...register('longDescription')}
+                className={`${inputStlyes} resize-none min-h-[250px]`}
+              />
+            </label>
+            {errors.longDescription && (
+              <ErrorMessage>{errors.longDescription.message}</ErrorMessage>
+            )}
+          </div>
         </div>
         <div className='flex justify-center gap-2 mt-8'>
           <button className={primaryBtn}>Guardar</button>

@@ -2,6 +2,7 @@
 
 import { createBanner } from '@/src/api/BannerApi';
 import BannerForm from '@/src/components/admin/banners/BannerForm';
+import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { containerStyles, primaryBtn, secondaryBtn } from '@/src/lib/global';
 import { EPositionBanner, IBannerCreate } from '@/src/types/banner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function NewBannerPage() {
+  useBreadcrumb('Banners', 'Nuevo Banner');
   const {
     register,
     formState: { errors },

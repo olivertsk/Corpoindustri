@@ -24,6 +24,9 @@ const config: Config = {
       boxShadow: {
         header: '0px 2px 3px rgba(0,0,0,.2)',
       },
+      animation: {
+        spinner: 'sk-chase-dot-before 2s infinite ease-in-out both',
+      },
     },
   },
   plugins: [],

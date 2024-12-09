@@ -71,7 +71,7 @@ export const MapSection = ({ data }: MapSeccionProps) => {
                   </div>
                 </div>
                 <div
-                  className='col-span-2 lg:col-span-1 p-4 rounded'
+                  className='col-span-2 lg:col-span-1 p-4 rounded-md overflow-hidden'
                   style={{ height: '450' }}
                 >
                   <iframe
@@ -81,6 +81,7 @@ export const MapSection = ({ data }: MapSeccionProps) => {
                     height='450'
                     allowFullScreen
                     title='Google Maps'
+                    className='rounded-lg shadow-md'
                   ></iframe>
                 </div>
               </div>

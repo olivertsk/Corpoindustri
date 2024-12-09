@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import HandleProductClick from './HandleProductClick';
 import { Product } from '@/src/types/product';
-import AddProductFavorite from './AddProductFavorite';
 import { apiUrl } from '@/src/lib/global';
 
 type CardProductsProps = {
@@ -20,16 +19,21 @@ export default function CardProducts({
     <div
       className={`bg-white product block shadow-md rounded-xl pb-3 overflow-hidden ${className} relative group`}
     >
-      <div className='absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity'>
+      {/* <div className='absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity'>
         <AddProductFavorite product={product} />
-      </div>
-      <Link href='/products/1' className='block'>
+      </div> */}
+      <Link href={`/products/${product.id}`} className='block'>
         <Image
           width={1024}
           height={1024}
           alt='Harina Pan'
           src={`${apiUrl}/file/${product.coverImage}` || ''}
-          style={{ width: '100%', height: '100%' }}
+          style={{
+            width: '100%',
+            height: '100%',
+            aspectRatio: '1/1',
+            objectFit: 'contain',
+          }}
         />
         <h5 className='px-4 font-bold overflow-hidden text-ellipsis whitespace-nowrap'>
           {product.name}
@@ -52,7 +56,9 @@ export default function CardProducts({
             ''
           )}
         </div>
-        <HandleProductClick />
+        <div className='min-h-12 flex items-center justify-center'>
+          <HandleProductClick product={product} />
+        </div>
       </div>
     </div>
   );

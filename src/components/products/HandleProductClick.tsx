@@ -1,8 +1,19 @@
 'use client';
 
-export default function HandleProductClick() {
+import { useCartStore } from '@/src/store/cartSlice';
+import { Product } from '@/src/types/product';
+import { toast } from 'react-toastify';
+type HandleProductClickProps = {
+  product: Product;
+};
+
+export default function HandleProductClick({
+  product,
+}: HandleProductClickProps) {
+  const addProduct = useCartStore((state) => state.addProduct);
   const handleButtonClick = () => {
-    console.log('Botón clicado');
+    addProduct(product, 1);
+    toast.success('Producto agregado al carrito');
   };
 
   return (

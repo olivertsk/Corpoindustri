@@ -5,6 +5,7 @@ export type IBannerFilter = {
   limit?: number;
   name?: string;
   position?: EPositionBanner | string;
+  isClient?: boolean;
 };
 
 export enum EPositionBanner {

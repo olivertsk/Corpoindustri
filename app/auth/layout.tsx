@@ -1,6 +1,7 @@
 'use client';
 import Logo from '@/src/components/Logo';
 import { useAuthStore } from '@/src/store/authStore';
+import { useAddTransition } from '@/src/utils/addTransitionAnimation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,10 +14,11 @@ export default function AuthLayout({
 }>) {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const { handleTransition } = useAddTransition();
   useEffect(() => {
     if (user !== null) {
       toast.success(`Bienvenido ${user.name}`);
-      router.push('/');
+      handleTransition('/');
     }
   }, [user, router]);
 

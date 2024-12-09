@@ -1,21 +1,31 @@
 import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
+import { Department } from '../types/department';
 import { Product, TProductForm } from '../types/product';
 
 export type ProductFilters = {
-  pag: number;
-  name: string;
+  pag?: number;
+  limit?: number;
+  name?: string | null;
+  departmentId?: string | null;
+  departmentIds?: Department['id'][] | null;
+  categoryId?: string | null;
+  categoryIds?: string | null;
+  minPrice?: string | null;
+  maxPrice?: string | null;
+  order?: 'maxPrice' | 'minPrice';
+  typeSearch?: string | null;
+  isClent?: boolean;
 };
 
 export const getProducts = async (
-  params?: ProductFilters,
-  auth: boolean = false
+  params?: ProductFilters
 ): Promise<{
   data: Product[];
   meta: Meta;
 }> => {
   try {
-    const response = await makeGet('/products/all', params, auth);
+    const response = await makeGet('/products/all', params);
     return response;
   } catch (error) {
     throw error;
@@ -38,9 +48,14 @@ export const deleteProduct = async (id: Product['id']) => {
   }
 };
 
-export const getProduct = async (id: string): Promise<Product> => {
+export const getProduct = async (
+  id: string,
+  isClient: boolean = false
+): Promise<Product> => {
   try {
-    return await makeGet(`/products/show/${id}`);
+    return await makeGet(`/products/show/${id}`, {
+      isClient,
+    });
   } catch (error) {
     throw error;
   }

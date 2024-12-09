@@ -15,14 +15,13 @@ export const createDepartment = async (data: TDepartmentForm) => {
 };
 
 export const getDepartments = async (
-  params?: DepartmentFilters,
-  auth: boolean = false
+  params?: DepartmentFilters
 ): Promise<{
   data: Department[];
   meta: Meta;
 }> => {
   try {
-    const response = await makeGet('/departments/all', params, auth);
+    const response = await makeGet('/departments/all', params);
     return response;
   } catch (error) {
     throw error;
@@ -30,11 +29,10 @@ export const getDepartments = async (
 };
 
 export const getHomeDepartments = async (
-  params: DepartmentFilters,
-  auth: boolean = false
+  params: DepartmentFilters
 ): Promise<Department[]> => {
   try {
-    const response = await makeGet('/departments/all', params, auth);
+    const response = await makeGet('/departments/all', params);
     return response;
   } catch (error) {
     throw error;
