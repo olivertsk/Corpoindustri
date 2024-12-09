@@ -84,6 +84,9 @@ export default function Footer() {
             </div>
           </div>
           <div className='text-center flex flex-col gap-3 col-span-3 lg:col-span-1'>
+            <Link href='about' className='text-white underline text-center'>
+              Conocenos
+            </Link>
             <Link href='terms' className='text-white underline text-center'>
               Terminos y Condiciones
             </Link>
