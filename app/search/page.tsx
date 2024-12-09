@@ -7,9 +7,9 @@ import CardProducts from '@/src/components/products/CardProducts';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-export default function SearchPage() {
+function Main() {
   const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState<ProductFilters>({
@@ -84,4 +84,12 @@ export default function SearchPage() {
         </main>
       </>
     );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <Main />
+    </Suspense>
+  );
 }

@@ -12,6 +12,7 @@ const comprobeToken = async () => {
 };
 
 export const makeGet = async (url: string, parameters?: unknown) => {
+  const token = await comprobeToken();
   try {
     const queryString = parameters
       ? '?' +
@@ -21,7 +22,7 @@ export const makeGet = async (url: string, parameters?: unknown) => {
     const headers: { 'Content-Type': string; Authorization?: string } = {
       'Content-Type': 'application/json',
     };
-    headers['Authorization'] = await comprobeToken();
+    headers['Authorization'] = token;
 
     const response = await fetch(`${apiUrl}${url}${queryString}`, {
       method: 'GET',
@@ -44,13 +45,12 @@ export const makePost = async (
   body: unknown,
   method: 'POST' | 'DELETE' | 'PUT' = 'POST'
 ) => {
-  console.log('makePost', body);
-  console.log('apiUrl :>> ', apiUrl);
+  const token = await comprobeToken();
   try {
     const response = await fetch(`${apiUrl}${url}`, {
       method,
       headers: {
-        Authorization: await comprobeToken(),
+        Authorization: token,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -62,11 +62,12 @@ export const makePost = async (
 };
 
 export const uploadFileRequest = async (url: string, body: unknown) => {
+  const token = await comprobeToken();
   try {
     const response = await fetch(`${apiUrl}${url}`, {
       method: 'POST',
       headers: {
-        Authorization: await comprobeToken(),
+        Authorization: token,
       },
       body: body as BodyInit,
     });

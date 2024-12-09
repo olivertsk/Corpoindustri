@@ -1,14 +1,20 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { sleep } from '../utils/addTransitionAnimation';
 import Logo from './Logo';
 import Spinner from './spinner/Spinner';
 
 export default function TransitionWrapper() {
   const pathName = usePathname();
-  const transitionWrapper = document.querySelector('#transition-wrapper');
+  const [transitionWrapper, setTransitionWrapper] = useState<Element | null>();
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      setTransitionWrapper(document.querySelector('#transition-wrapper'));
+    }
+  }, []);
 
   useEffect(() => {
     setTimeout(async () => {

@@ -10,7 +10,7 @@ import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 export default async function ProductShowPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const product = await getProduct(id, true);
@@ -18,8 +18,6 @@ export default async function ProductShowPage({
     pag: 1,
     categoryId: product.category?.id,
   });
-
-  console.log('product :>> ', product);
 
   return (
     <>

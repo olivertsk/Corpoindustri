@@ -29,7 +29,7 @@ export default function DepartmentPage() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ['departments'],
-    queryFn: () => getDepartments(filters, true),
+    queryFn: () => getDepartments(filters),
     refetchOnWindowFocus: false,
   });
 

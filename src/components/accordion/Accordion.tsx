@@ -37,7 +37,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
 
   const { data } = useQuery({
     queryKey: ['departments'],
-    queryFn: () => getDepartments(undefined, true),
+    queryFn: () => getDepartments(undefined),
     refetchOnWindowFocus: false,
   });
 

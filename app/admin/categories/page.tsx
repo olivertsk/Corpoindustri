@@ -35,7 +35,7 @@ export default function CategoriesPage() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [queryKey],
-    queryFn: () => getCategories(filters, true),
+    queryFn: () => getCategories(filters),
     refetchOnWindowFocus: false,
   });
 
