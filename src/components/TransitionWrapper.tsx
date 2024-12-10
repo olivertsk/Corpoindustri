@@ -11,7 +11,7 @@ export default function TransitionWrapper() {
   const [transitionWrapper, setTransitionWrapper] = useState<Element | null>();
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
+    if (document) {
       setTransitionWrapper(document.querySelector('#transition-wrapper'));
     }
   }, []);

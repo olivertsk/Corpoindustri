@@ -49,7 +49,7 @@ function Main() {
   }, [searchParams, queryClient]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner spinnerColor={''} />;
   }
 
   if (data)

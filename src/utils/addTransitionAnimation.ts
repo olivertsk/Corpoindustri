@@ -10,12 +10,14 @@ export const useAddTransition = () => {
   const [transitionWrapper, setTransitionWrapper] = useState<Element | null>();
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      setTransitionWrapper(document.querySelector('.page-transition'));
+    if (typeof window !== 'undefined') {
+      console.log('Aqui setenado doc');
+      setTransitionWrapper(document.querySelector('#transition-wrapper'));
     }
   }, []);
 
   const handleTransition = async (route: string) => {
+    console.log(transitionWrapper);
     if (transitionWrapper) {
       transitionWrapper.classList.add('page-transition');
       await sleep(500);

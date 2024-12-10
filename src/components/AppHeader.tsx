@@ -17,7 +17,7 @@ export default function AppHeader() {
     !pathname.includes('admin') && (
       <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
         <div className='container mx-auto flex gap-4 items-center'>
-          <div className='max-w-[50px] lg:max-w-[100px]'>
+          <div className='max-w-[50px] lg:max-w-[100pxH]'>
             <Logo />
           </div>
           <HeaderSearchbar />

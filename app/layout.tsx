@@ -17,6 +17,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log('aqui');
   return (
     <html lang='es'>
       <body className='bg-gray-100 relative'>

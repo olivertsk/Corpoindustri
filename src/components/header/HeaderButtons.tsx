@@ -1,16 +1,16 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 import { useAuthStore } from '@/src/store/authStore';
-import { apiUrl } from '@/src/lib/global';
 import Logo from '../Logo';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/src/store/cartSlice';
 import { useMemo } from 'react';
 import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
+import AuthButton from './AuthButton';
+import AuthButtonMobile from './AuthButtonMobile';
 
-const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
-const subStyles = 'bottom-0 lg:-bottom-[5px]';
+export const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
+export const subStyles = 'bottom-0 lg:-bottom-[5px]';
 
 type HeaderButtonsProps = {
   handleOpenMenu?: () => void;
@@ -18,7 +18,6 @@ type HeaderButtonsProps = {
 
 export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
   /** IMPLEMENTING AUTH STORE */
-  const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const orderProducts = useCartStore((state) => state.orderProducts);
   const favoriteProducts = useAppGlobalStore((state) => state.favorite);
@@ -59,106 +58,8 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
           </svg>
         </button>
       </div>
-      <div className={`${menuBtnStyles} group relative`}>
-        <Link
-          className={`${menuBtnStyles} !p-0`}
-          href={user !== null ? '/profile' : '/auth/sign-in'}
-          onClick={toggleMenu}
-        >
-          {user !== null && user.avatar ? (
-            <Image
-              className='rounded-full w-[24px] h-[24px]'
-              src={`${apiUrl}/file/${user.avatar}`}
-              alt='upload image'
-              width={24}
-              height={24}
-            />
-          ) : (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-            >
-              <g
-                fill='none'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='1.5'
-                color='currentColor'
-              >
-                <circle cx='12' cy='12' r='10' />
-                <path d='M7.5 17c2.332-2.442 6.643-2.557 9 0m-2.005-7.5c0 1.38-1.12 2.5-2.503 2.5a2.5 2.5 0 0 1-2.504-2.5c0-1.38 1.12-2.5 2.504-2.5a2.5 2.5 0 0 1 2.503 2.5' />
-              </g>
-            </svg>
-          )}
-          <sub className={subStyles}>
-            {user !== null ? user.name : 'Iniciar Sesión'}
-          </sub>
-        </Link>
-        {user !== null && (
-          <div className='absolute top-[80%] w-64 bg-white p-4 hidden user-options group-hover:flex shadow-lg rounded-md text-black flex-col gap-2 text-sm'>
-            <Link
-              className='hover:text-gray-700 p-1 flex justify-between'
-              href='/profile'
-              onClick={toggleMenu}
-            >
-              Perfil
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-              >
-                <g fill='none' stroke='currentColor'>
-                  <path
-                    strokeLinejoin='round'
-                    d='M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z'
-                  />
-                  <circle cx='12' cy='7' r='3' />
-                </g>
-              </svg>
-            </Link>
-            <Link
-              className='hover:text-gray-700 p-1 flex justify-between'
-              href='/profile/orders'
-              onClick={toggleMenu}
-            >
-              Mis Pedidos
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-              >
-                <path
-                  fill='currentColor'
-                  d='M11.962 20q-3.046 0-5.311-1.99q-2.264-1.989-2.62-5.01h1.011q.408 2.58 2.351 4.29T11.962 19q2.925 0 4.962-2.037T18.962 12t-2.038-4.963T11.962 5q-1.553 0-2.918.656q-1.365.655-2.41 1.805h2.481v1H4.962V4.309h1v2.388q1.16-1.273 2.718-1.984T11.962 4q1.663 0 3.118.626t2.542 1.714t1.714 2.542t.626 3.118t-.626 3.118t-1.714 2.542t-2.542 1.714t-3.118.626m3.204-4.146l-3.647-3.646V7h1v4.792l3.354 3.354z'
-                />
-              </svg>
-            </Link>
-            <button
-              className='hover:text-gray-700 p-1 text-left flex justify-between'
-              type='button'
-              onClick={handleLogout}
-            >
-              Cerrar Sesión
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-              >
-                <path
-                  fill='currentColor'
-                  d='M5 3h6a3 3 0 0 1 3 3v4h-1V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-4h1v4a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3m3 9h11.25L16 8.75l.66-.75l4.5 4.5l-4.5 4.5l-.66-.75L19.25 13H8z'
-                />
-              </svg>
-            </button>
-          </div>
-        )}
-      </div>
+      <AuthButton toggleMenu={toggleMenu} handleLogout={handleLogout} />
+      <AuthButtonMobile toggleMenu={toggleMenu} />
       <Link href='/cart' className={menuBtnStyles} onClick={toggleMenu}>
         <div className='relative'>
           <svg
