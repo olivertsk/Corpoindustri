@@ -48,11 +48,10 @@ export default async function Home() {
   return (
     <>
       <section>
+        {principalBannerData && (
+          <BannerSlider slides={principalBannerData} showFadeOut={true} />
+        )}
         <div className='container mx-auto mb-4'>
-          {principalBannerData && (
-            <BannerSlider slides={principalBannerData} showFadeOut={false} />
-          )}
-
           {categoryData && <CategoriesWrapper categoryData={categoryData} />}
           {firstHalf.map((department: Department) => (
             <ProductsSlider
@@ -63,14 +62,18 @@ export default async function Home() {
           ))}
         </div>
         <div className='container mx-auto mb-4'>
-          {secondaryBannerData && <BannerSlider slides={secondaryBannerData} />}
-          {secondHalf.map((department: Department) => (
-            <ProductsSlider
-              products={department.products || []}
-              key={department.id}
-              titleSection={department.name}
-            />
-          ))}
+          {secondaryBannerData && (
+            <BannerSlider floatingBanner={true} slides={secondaryBannerData} />
+          )}
+          <div className='mt-12'>
+            {secondHalf.map((department: Department) => (
+              <ProductsSlider
+                products={department.products || []}
+                key={department.id}
+                titleSection={department.name}
+              />
+            ))}
+          </div>
         </div>
         <div className='container mx-auto mb-4'>
           <MapSection data={mapData.data} />
