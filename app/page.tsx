@@ -46,34 +46,36 @@ export default async function Home() {
   const secondHalf = departamentData.data.slice(half);
 
   return (
-    <section>
-      <div className='container mx-auto mb-4'>
-        {principalBannerData && (
-          <BannerSlider slides={principalBannerData} showFadeOut={false} />
-        )}
+    <>
+      <section>
+        <div className='container mx-auto mb-4'>
+          {principalBannerData && (
+            <BannerSlider slides={principalBannerData} showFadeOut={false} />
+          )}
 
-        {categoryData && <CategoriesWrapper categoryData={categoryData} />}
-        {firstHalf.map((department: Department) => (
-          <ProductsSlider
-            key={department.id}
-            titleSection={department.name}
-            products={department.products || []}
-          />
-        ))}
-      </div>
-      <div className='container mx-auto mb-4'>
-        {secondaryBannerData && <BannerSlider slides={secondaryBannerData} />}
-        {secondHalf.map((department: Department) => (
-          <ProductsSlider
-            products={department.products || []}
-            key={department.id}
-            titleSection={department.name}
-          />
-        ))}
-      </div>
-      <div className='container mx-auto mb-4'>
-        <MapSection data={mapData.data} />
-      </div>
-    </section>
+          {categoryData && <CategoriesWrapper categoryData={categoryData} />}
+          {firstHalf.map((department: Department) => (
+            <ProductsSlider
+              key={department.id}
+              titleSection={department.name}
+              products={department.products || []}
+            />
+          ))}
+        </div>
+        <div className='container mx-auto mb-4'>
+          {secondaryBannerData && <BannerSlider slides={secondaryBannerData} />}
+          {secondHalf.map((department: Department) => (
+            <ProductsSlider
+              products={department.products || []}
+              key={department.id}
+              titleSection={department.name}
+            />
+          ))}
+        </div>
+        <div className='container mx-auto mb-4'>
+          <MapSection data={mapData.data} />
+        </div>
+      </section>
+    </>
   );
 }

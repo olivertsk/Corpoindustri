@@ -19,7 +19,7 @@ function Main() {
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
     order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
-    isClent: true,
+    isClient: true,
   });
 
   const { data, isLoading } = useQuery({
@@ -49,7 +49,7 @@ function Main() {
   }, [searchParams, queryClient]);
 
   if (isLoading) {
-    return <Spinner spinnerColor={''} />;
+    return <Spinner />;
   }
 
   if (data)

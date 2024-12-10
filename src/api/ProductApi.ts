@@ -15,7 +15,7 @@ export type ProductFilters = {
   maxPrice?: string | null;
   order?: 'maxPrice' | 'minPrice';
   typeSearch?: string | null;
-  isClent?: boolean;
+  isClient?: boolean;
 };
 
 export const getProducts = async (
@@ -26,6 +26,7 @@ export const getProducts = async (
 }> => {
   try {
     const response = await makeGet('/products/all', params);
+    console.log('RESPONSE', response);
     return response;
   } catch (error) {
     throw error;

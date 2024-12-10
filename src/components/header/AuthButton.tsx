@@ -3,6 +3,7 @@ import { useAuthStore } from '@/src/store/authStore';
 import { menuBtnStyles, subStyles } from './HeaderButtons';
 import AuthProfileImg from './AuthProfileImg';
 import { userButtons } from '@/src/types/user';
+import { WrenchIcon } from '@heroicons/react/24/outline';
 
 type AuthButtonProps = {
   toggleMenu: () => void;
@@ -28,6 +29,16 @@ export default function AuthButton({
       </Link>
       {user !== null && (
         <div className='absolute top-[80%] -left-[100%] w-64 bg-white p-4 hidden user-options lg:group-hover:flex shadow-lg rounded-md text-black flex-col gap-2 text-sm'>
+          {user.rol.name === 'admin' && (
+            <Link
+              className='hover:text-gray-700 p-1 flex gap-2'
+              href='/admin'
+              onClick={toggleMenu}
+            >
+              <WrenchIcon className='h-5 w-5' />
+              Administrador
+            </Link>
+          )}
           {userButtons.map((button) => (
             <Link
               key={button.path}

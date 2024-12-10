@@ -1,5 +1,10 @@
 import { deleteFile, uploadFile } from '@/src/api/FileApi';
-import { apiUrl, inputStlyes, primaryBtn } from '@/src/lib/global';
+import {
+  apiUrl,
+  inputStlyes,
+  primaryBtn,
+  secondaryBtn,
+} from '@/src/lib/global';
 import { TMapCreate } from '@/src/types/map';
 import Image from 'next/image';
 import { ChangeEvent, useRef } from 'react';
@@ -10,6 +15,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import ErrorMessage from '../../ErrorMessage';
+import { useRouter } from 'next/navigation';
 
 type MapFormProps = {
   watch: UseFormWatch<TMapCreate>;
@@ -40,6 +46,7 @@ export default function MapForm({
       inputFileRef.current!.value = '';
     }
   };
+  const navigate = useRouter();
   return (
     <section className='grid grid-cols-2 gap-4'>
       <div className='col-span-2'>
@@ -56,6 +63,7 @@ export default function MapForm({
           Seleccionar Imagen
         </button>
         <input onChange={handleFile} type='file' hidden ref={inputFileRef} />
+        {errors.image && <ErrorMessage>{errors.image.message}</ErrorMessage>}
       </div>
       <div>
         <label>
@@ -125,6 +133,25 @@ export default function MapForm({
           />
         </label>
         {errors.map && <ErrorMessage>{errors.map.message}</ErrorMessage>}
+      </div>
+      <div className='col-span-2'>
+        <label>
+          Descripción
+          <textarea
+            {...register('description')}
+            className={`${inputStlyes} resize-none h-32`}
+          />
+        </label>
+      </div>
+      <div className='flex justify-center mt-8 gap-2 col-span-2'>
+        <button className={`${primaryBtn} `}>Guardar</button>
+        <button
+          onClick={() => navigate.push('/admin/maps')}
+          type='button'
+          className={secondaryBtn}
+        >
+          Cancelar
+        </button>
       </div>
     </section>
   );

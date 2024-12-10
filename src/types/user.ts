@@ -6,10 +6,14 @@ export const userSchema = z.object({
   password: z.string(),
   name: z.string(),
   passwordConfirmation: z.string(),
+  rol: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
 });
 
 export type User = z.infer<typeof userSchema>;
-export type TUser = Pick<User, 'email' | 'name' | 'avatar'>;
+export type TUser = Pick<User, 'email' | 'name' | 'avatar' | 'rol'>;
 export type UserFormLogin = Pick<User, 'email' | 'password'>;
 export type UserFormRegistration = Pick<
   User,

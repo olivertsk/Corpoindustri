@@ -1,6 +1,5 @@
 'use client';
-import { deleteBanner } from '@/src/api/BannerApi';
-import { getMaps } from '@/src/api/MapApi ';
+import { deleteMap, getMaps } from '@/src/api/MapApi ';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import {
@@ -50,11 +49,11 @@ export default function LocationPage() {
   };
 
   const { mutate } = useMutation({
-    mutationFn: deleteBanner,
+    mutationFn: deleteMap,
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: [queryKey] });
-        toast.success('Banner eliminado correctamente');
+        toast.success('Ubicación eliminado correctamente');
       }
     },
   });
@@ -68,7 +67,7 @@ export default function LocationPage() {
 
   const handleDeleteBtn = (id: IBanner['id']) => {
     if (typeof window !== 'undefined') {
-      if (window.confirm('¿Estás seguro de eliminar este banner?')) {
+      if (window.confirm('¿Estás seguro de eliminar esta ubicación?')) {
         mutate(id);
       }
     }
@@ -123,8 +122,8 @@ export default function LocationPage() {
                   <Image
                     src={`${apiUrl}/file/${banner.image}`}
                     alt={banner.description || 'description'}
-                    width={200}
-                    height={200}
+                    width={100}
+                    height={100}
                   />
                 </td>
                 <td className={`${tableBodyStyles} `}>{banner.email}</td>

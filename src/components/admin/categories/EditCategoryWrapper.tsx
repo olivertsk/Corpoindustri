@@ -29,6 +29,7 @@ export default function EditCategoryWrapper({
     formState: { errors },
     reset,
     getValues,
+    setError,
   } = useForm<TCategoryForm>({
     defaultValues: {
       icon: category.icon,
@@ -41,6 +42,7 @@ export default function EditCategoryWrapper({
   });
   const queryClient = useQueryClient();
   const { id } = useParams();
+
   const handleForm = async (formData: TCategoryForm) => {
     const response = await updateCategory({
       data: formData,
@@ -53,11 +55,17 @@ export default function EditCategoryWrapper({
       navigate.replace('/admin/categories');
       reset();
     } else {
-      response.message.forEach((item: { field: string }) => {
-        if (item.field === 'icon') {
-          toast.error('Debe subir una imagen para continuar');
+      response.message.forEach(
+        (item: { field: keyof TCategoryForm; message: string }) => {
+          if (item.field === 'icon') {
+            toast.error('Debe subir una imagen para continuar');
+          } else {
+            setError(item.field, {
+              message: item.message,
+            });
+          }
         }
-      });
+      );
     }
   };
   return (

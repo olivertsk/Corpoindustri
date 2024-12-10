@@ -65,14 +65,19 @@ export default function CategoryForm({
                 <ErrorMessage>{errors.name.message}</ErrorMessage>
               )}
             </div>
-            <label htmlFor=''>
-              Descripción
-              <input
-                className={inputStlyes}
-                type='text'
-                {...register('description')}
-              />
-            </label>
+            <div>
+              <label htmlFor=''>
+                Descripción
+                <input
+                  className={inputStlyes}
+                  type='text'
+                  {...register('description')}
+                />
+              </label>
+              {errors.description && (
+                <ErrorMessage>{errors.description.message}</ErrorMessage>
+              )}
+            </div>
             <div>
               <label htmlFor=''>
                 Estatus

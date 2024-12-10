@@ -56,7 +56,7 @@ export default function AdminLayout({
               {adminButtons.map((button) => (
                 <Link
                   className={`${
-                    pathname.includes(button.url)
+                    pathname.includes(button.url) && button.url !== '/'
                       ? 'bg-white shadow-lg'
                       : ' text-white'
                   } p-2 flex rounded-md  text-sm gap-2`}

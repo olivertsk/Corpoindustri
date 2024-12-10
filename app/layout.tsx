@@ -7,9 +7,9 @@ import TransitionWrapper from '@/src/components/TransitionWrapper';
 import RequestFavorites from '@/src/components/RequestFavorites';
 
 export const metadata: Metadata = {
-  title: 'Corpoindustri',
+  title: 'Corpoindustri | Mayorista de alimentos al alcance de tu mano',
   description:
-    'Somos una compañía mayorista de alimentos, brindamos servicios como delivery, combos personalizados, cotizaciones y atención personalizada, acá te anexo una imagen con información relativa a nuestra empresa.',
+    'Somos una compañía mayorista de alimentos, brindamos servicios como delivery, combos personalizados, cotizaciones y atención personalizada.',
 };
 
 export default function RootLayout({
@@ -17,9 +17,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log('aqui');
   return (
     <html lang='es'>
+      <head>
+        <link rel='icon' href='/favicon.png' sizes='any' />
+      </head>
       <body className='bg-gray-100 relative'>
         <RequestFavorites />
         <TransitionWrapper />

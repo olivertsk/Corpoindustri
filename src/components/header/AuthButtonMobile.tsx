@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { menuBtnStyles, subStyles } from './HeaderButtons';
 import AuthProfileImg from './AuthProfileImg';
 import { userButtons } from '@/src/types/user';
+import { WrenchIcon } from '@heroicons/react/24/outline';
 
 type AuthButtonMobileProps = {
   toggleMenu: () => void;
@@ -32,6 +33,16 @@ export default function AuthButtonMobile({
             </div>
           </AccordionSummary>
           <AccordionDetails className='space-y-3'>
+            {user.rol.name === 'admin' && (
+              <Link
+                className='text-white p-1 flex items-center gap-4'
+                href='/admin'
+                onClick={toggleMenu}
+              >
+                <WrenchIcon className='h-5 w-5' />
+                <sub className='bottom-0'>Administrador</sub>
+              </Link>
+            )}
             {userButtons.map((button) => (
               <Link
                 key={button.path}

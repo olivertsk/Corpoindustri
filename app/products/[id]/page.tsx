@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import { getProduct, getProducts } from '@/src/api/ProductApi';
 import BackBtn from '@/src/components/BackBtn';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
@@ -6,12 +8,28 @@ import AddProductToOrder from '@/src/components/products/AddProductToOrder';
 import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
+import { apiUrl } from '@/src/lib/global';
 
-export default async function ProductShowPage({
-  params,
-}: {
+type Props = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id, true);
+
+  return {
+    title: product.name,
+    description: product.longDescription || product.description || '',
+    openGraph: {
+      images: [`${apiUrl}/file/${product.coverImage}` || ''],
+      description: product.longDescription || product.description || '',
+      title: product.name,
+    },
+  };
+}
+
+export default async function ProductShowPage({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id, true);
   const relatedProducts = await getProducts({

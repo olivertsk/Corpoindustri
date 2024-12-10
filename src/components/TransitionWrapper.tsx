@@ -32,7 +32,7 @@ export default function TransitionWrapper() {
     >
       <div className='max-w-[200px] m-auto '>
         <Logo />
-        <Spinner spinnerColor='#fff' />
+        <Spinner />
       </div>
     </div>
   );

@@ -24,7 +24,9 @@ export const makeGet = async (url: string, parameters?: unknown) => {
     };
     headers['Authorization'] = token;
 
-    const response = await fetch(`${apiUrl}${url}${queryString}`, {
+    const path = `${apiUrl}${url}${queryString}`;
+    console.log(path);
+    const response = await fetch(`${path}`, {
       method: 'GET',
       headers: headers,
     });
