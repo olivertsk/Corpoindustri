@@ -9,7 +9,7 @@ export const userSchema = z.object({
   rol: z.object({
     id: z.string(),
     name: z.string(),
-  }),
+  }).optional(),
 });
 
 export type User = z.infer<typeof userSchema>;
