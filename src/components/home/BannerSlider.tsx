@@ -19,15 +19,21 @@ import { Autoplay, Navigation } from 'swiper/modules';
 type BannerSliderProps = {
   slides: IBanner[];
   showFadeOut?: boolean;
+  floatingBanner?: boolean;
 };
 
 export default function BannerSlider({
   showFadeOut,
   slides,
+  floatingBanner,
 }: BannerSliderProps) {
   return (
     <>
-      <div className='relative md:mt-8 md:rounded-xl md:shadow-2xl overflow-hidden'>
+      <div
+        className={`relative overflow-hidden ${
+          floatingBanner && ' sm:shadow-2xl sm:mt-8 sm:rounded-xl'
+        }`}
+      >
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
@@ -42,7 +48,7 @@ export default function BannerSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <div className='relative w-full h-96  '>
+              <div className='relative w-full h-[420px]  '>
                 <Image
                   src={`${apiUrl}/file/${slide.images}`}
                   alt={slide?.description || 'mercado'}
