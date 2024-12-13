@@ -1,5 +1,9 @@
 import { makePost } from '@/src/config/fetch';
-import { UserFormLogin, UserFormRegistration } from '../types/user';
+import {
+  TUpdateUser,
+  UserFormLogin,
+  UserFormRegistration,
+} from '../types/user';
 
 export const registerUser = async (body: UserFormRegistration) => {
   try {
@@ -14,6 +18,15 @@ export const registerUser = async (body: UserFormRegistration) => {
 export const authenticateUser = async (body: UserFormLogin) => {
   try {
     return await makePost('/auth/login', body);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateUser = async (body: TUpdateUser) => {
+  try {
+    return await makePost('/auth/update', body, 'PUT');
   } catch (error) {
     console.error(error);
     throw error;
