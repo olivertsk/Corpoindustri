@@ -37,7 +37,7 @@ export const MapSection = ({ data }: MapSeccionProps) => {
                       width={400}
                       height={250}
                       src={`${apiUrl}/file/${item.image}`}
-                      alt='Imagen del concesionario Dimca Toyota'
+                      alt='Tienda Corpoindustri'
                       style={{
                         aspectRatio: 16 / 9,
                         objectFit: 'cover',
