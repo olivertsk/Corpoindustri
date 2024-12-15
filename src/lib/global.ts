@@ -3,7 +3,8 @@ export const containerStyles = 'bg-white p-4 lg:p-16 rounded-xl shadow-sm';
 export const mainContainerStyles = 'container mx-auto py-8';
 export const inputStlyes =
   'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm';
-export const primaryBtn = 'bg-accent-100 font-bold px-4 py-2 rounded-md';
+export const primaryBtn =
+  'bg-accent-100 font-bold px-4 py-2 rounded-md hover:bg-accent-200 transition-colors';
 export const secondaryBtn =
   'border border-accent-100 font-bold px-4 py-2 rounded-md';
 

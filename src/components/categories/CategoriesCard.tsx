@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { ICategory } from '@/src/types/category';
 import Image from 'next/image';
-import { apiUrl } from '@/src/lib/global';
+import { apiUrl, primaryBtn } from '@/src/lib/global';
 
 type CategoriesCardProps = {
   titleSection?: string;
@@ -59,26 +59,28 @@ export default function CategoriesCard({
               <div className='bg-white shadow-md rounded-xl p-4 h-full flex flex-col justify-between'>
                 <div>
                   <h4 className='text-center font-bold'>{category.name}</h4>
-                  <div className='my-4'>
+                  <div className='my-2'>
                     <Image
-                      width={100}
-                      height={100}
+                      width={200}
+                      height={200}
+                      quality={50}
                       src={`${apiUrl}/file/${category.icon}`}
                       alt={category.name}
                       style={{
                         width: '100%',
                         aspectRatio: '1/1',
-                        height: '64px',
-                        maxHeight: '64px',
-                        objectFit: 'contain',
+                        height: '128px',
+                        maxHeight: '128px',
+                        objectFit: 'cover',
                       }}
+                      className='rounded-xl'
                     />
                   </div>
                   <p className='text-center mb-4 text-sm'>
                     {category.description}
                   </p>
                 </div>
-                <button className='bg-accent-100 w-full rounded-xl p-1 text-sm font-bold'>
+                <button className={`${primaryBtn} rounded-xl !p-1 text-sm`}>
                   Ver
                 </button>
               </div>

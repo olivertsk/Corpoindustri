@@ -76,6 +76,9 @@ export default async function Home() {
           </div>
         </div>
         <div className='container mx-auto mb-4'>
+          {secondaryBannerData && (
+            <BannerSlider floatingBanner={true} slides={secondaryBannerData} />
+          )}
           <MapSection data={mapData.data} />
         </div>
       </section>

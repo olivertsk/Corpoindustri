@@ -98,6 +98,9 @@ export default function BannerForm({
               <option value={EPositionBanner.HomeSecondary}>
                 Banner Secundario
               </option>
+              <option value={EPositionBanner.HomeTertiary}>
+                Banner Terciario
+              </option>
             </select>
           </label>
           {errors.position && (

@@ -32,9 +32,10 @@ export default function CartProductCard({
         >
           {normalizeAmounts(orderProduct.price)}
         </p>
-        {orderProduct.promotionalPrice && (
-          <p>{normalizeAmounts(orderProduct.promotionalPrice)}</p>
-        )}
+        {orderProduct.promotionalPrice !== null &&
+          orderProduct.promotionalPrice > 0 && (
+            <p>{normalizeAmounts(orderProduct.promotionalPrice)}</p>
+          )}
         <CartProductsQuantity orderProduct={orderProduct} />
       </div>
     </div>

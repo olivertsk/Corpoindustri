@@ -32,7 +32,7 @@ export default function CardProducts({
             width: '100%',
             height: '100%',
             aspectRatio: '1/1',
-            objectFit: 'contain',
+            objectFit: 'cover',
           }}
         />
         <h5 className='px-4 font-bold overflow-hidden text-ellipsis whitespace-nowrap'>
