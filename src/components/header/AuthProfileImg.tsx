@@ -6,7 +6,7 @@ export default function AuthProfileImg() {
   const user = useAuthStore((state) => state.user);
   return (
     <>
-      {user !== null && user.avatar ? (
+      {user && user.avatar ? (
         <Image
           className='rounded-full w-[24px] h-[24px]'
           src={`${apiUrl}/file/${user.avatar}`}

@@ -16,7 +16,7 @@ export default function AuthLayout({
   const user = useAuthStore((state) => state.user);
   const { handleTransition } = useAddTransition();
   useEffect(() => {
-    if (user !== null) {
+    if (user) {
       toast.success(`Bienvenido ${user.name}`);
       handleTransition('/');
     }

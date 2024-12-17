@@ -45,7 +45,7 @@ export const makeGet = async (url: string, parameters?: unknown) => {
 export const makePost = async (
   url: string,
   body: unknown,
-  method: 'POST' | 'DELETE' | 'PUT' = 'POST'
+  method: 'POST' | 'DELETE' | 'PATCH' | 'PUT' = 'POST'
 ) => {
   const token = await comprobeToken();
   try {

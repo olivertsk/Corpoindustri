@@ -1,6 +1,8 @@
 import { makePost } from '@/src/config/fetch';
 import {
   TUpdateUser,
+  TUser,
+  UserFormChangePassword,
   UserFormLogin,
   UserFormRegistration,
 } from '../types/user';
@@ -24,9 +26,24 @@ export const authenticateUser = async (body: UserFormLogin) => {
   }
 };
 
-export const updateUser = async (body: TUpdateUser) => {
+export const updateUser = async ({
+  body,
+  userId,
+}: {
+  body: TUpdateUser;
+  userId: TUser['id'];
+}) => {
   try {
-    return await makePost('/auth/update', body, 'PUT');
+    return await makePost(`/auth/update/${userId}`, body, 'PUT');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateUserPassword = async (body: UserFormChangePassword) => {
+  try {
+    return await makePost(`/auth/password`, body, 'PATCH');
   } catch (error) {
     console.error(error);
     throw error;

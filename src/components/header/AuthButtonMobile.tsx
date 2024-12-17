@@ -20,7 +20,7 @@ export default function AuthButtonMobile({
 
   return (
     <div className='block lg:hidden w-full'>
-      {user !== null ? (
+      {user ? (
         <Accordion className='!bg-transparent !shadow-none '>
           <AccordionSummary
             expandIcon={<ChevronDownIcon className='w-6 text-white' />}

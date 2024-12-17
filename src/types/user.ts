@@ -5,8 +5,11 @@ export const userSchema = z.object({
   email: z.string(),
   password: z.string(),
   name: z.string(),
-  dni: z.string(),
+  lastName: z.string(),
+  dni: z.number(),
+  dniType: z.enum(['V', 'E', 'J']),
   phoneNumber: z.string(),
+  location: z.string().max(255, { message: 'La dirección es muy larga' }),
   passwordConfirmation: z.string(),
   rol: z
     .object({
@@ -14,20 +17,45 @@ export const userSchema = z.object({
       name: z.string(),
     })
     .optional(),
+  id: z.string(),
 });
 
 export type User = z.infer<typeof userSchema>;
 
-export type TUpdateUser = Pick<User, 'avatar' | 'dni' | 'name' | 'phoneNumber'>;
+export type TUpdateUser = Pick<
+  User,
+  | 'avatar'
+  | 'dni'
+  | 'name'
+  | 'phoneNumber'
+  | 'dniType'
+  | 'location'
+  | 'lastName'
+>;
 export type TUser = Pick<
   User,
-  'email' | 'name' | 'avatar' | 'rol' | 'dni' | 'phoneNumber'
+  | 'email'
+  | 'name'
+  | 'avatar'
+  | 'rol'
+  | 'dni'
+  | 'phoneNumber'
+  | 'dniType'
+  | 'lastName'
+  | 'location'
+  | 'id'
 >;
 export type UserFormLogin = Pick<User, 'email' | 'password'>;
 export type UserFormRegistration = Pick<
   User,
   'email' | 'password' | 'name' | 'passwordConfirmation' | 'avatar'
 >;
+export type UserFormChangePassword = Pick<
+  User,
+  'password' | 'passwordConfirmation'
+> & {
+  oldPasword: string;
+};
 export type ForgotPasswordForm = Pick<User, 'email'>;
 
 export const userButtons: { path: string; label: string; icon: string }[] = [

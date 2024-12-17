@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 import AuthButton from './AuthButton';
 import AuthButtonMobile from './AuthButtonMobile';
+import { useRouter } from 'next/navigation';
 
 export const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
 export const subStyles = 'bottom-0 lg:-bottom-[5px]';
@@ -18,12 +19,14 @@ type HeaderButtonsProps = {
 
 export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
   /** IMPLEMENTING AUTH STORE */
+  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const orderProducts = useCartStore((state) => state.orderProducts);
   const favoriteProducts = useAppGlobalStore((state) => state.favorite);
 
   const handleLogout = () => {
     logout();
+    router.replace('/');
     toast.success('Sesión cerrada correctamente');
     toggleMenu();
   };

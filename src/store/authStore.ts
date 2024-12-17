@@ -4,8 +4,8 @@ import { TUser } from '../types/user';
 import { setCookie } from 'cookies-next';
 
 interface AuthState {
-  user: TUser | null;
-  token: string | null;
+  user: TUser | undefined | null;
+  token: string | undefined | null;
   setUser: (user: TUser, token: string) => void;
   logout: () => void;
 }
@@ -13,14 +13,14 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist<AuthState>(
     (set) => ({
-      user: null,
-      token: null,
+      user: undefined,
+      token: undefined,
       setUser: async (user, token) => {
         setCookie('token', token, { path: '/', maxAge: 60 * 60 * 24 * 30 });
         set({ user, token });
       },
       logout: async () => {
-        set({ user: null, token: null });
+        set({ user: undefined, token: undefined });
         setCookie('token', '', { path: '/', maxAge: 60 * 60 * 24 * 30 });
       },
     }),

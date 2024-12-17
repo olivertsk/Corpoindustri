@@ -19,9 +19,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <head>
-        <link rel='icon' href='/favicon.png' sizes='any' />
-      </head>
       <body className='bg-gray-100 relative'>
         <RequestFavorites />
         <TransitionWrapper />

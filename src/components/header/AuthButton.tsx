@@ -19,15 +19,13 @@ export default function AuthButton({
     <div className={`${menuBtnStyles} group relative hidden lg:inline-block`}>
       <Link
         className={`${menuBtnStyles} !p-0`}
-        href={user !== null ? '/profile' : '/auth/sign-in'}
+        href={user ? '/profile' : '/auth/sign-in'}
         onClick={toggleMenu}
       >
         <AuthProfileImg />
-        <sub className={subStyles}>
-          {user !== null ? user.name : 'Iniciar Sesión'}
-        </sub>
+        <sub className={subStyles}>{user ? user?.name : 'Iniciar Sesión'}</sub>
       </Link>
-      {user !== null && (
+      {user && (
         <div className='absolute top-[80%] -left-[100%] w-64 bg-white p-4 hidden user-options lg:group-hover:flex shadow-lg rounded-md text-black flex-col gap-2 text-sm'>
           {user?.rol?.name === 'admin' && (
             <Link
