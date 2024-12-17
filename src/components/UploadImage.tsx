@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import { ChangeEvent, useRef, useState } from 'react';
 import { apiUrl } from '../lib/global';

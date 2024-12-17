@@ -39,12 +39,11 @@ export default async function ProductShowPage({ params }: Props) {
 
   return (
     <>
-      <div className='container mx-auto my-4 space-y-4 p-4'>
-        <BackBtn />
-        <ProductBreadcrumb product={product} />
+      <div className='container mx-auto py-3 flex lg:flex-row flex-col'>
+        <BackBtn /> <ProductBreadcrumb product={product} />
       </div>
-      <main className='container mx-auto bg-white py-8 rounded-xl shadow-sm'>
-        <div className='grid grid-cols-3 px-8 gap-8 lg:gap-0'>
+      <main className='container mx-auto bg-white py-4 rounded-xl shadow-sm'>
+        <div className='grid grid-cols-3 gap-8 lg:gap-0'>
           <div className='col-span-3 lg:col-span-2'>
             <ImagePreview images={product.images} alt={product.name} />
             {product.longDescription && (
@@ -70,22 +69,25 @@ export default async function ProductShowPage({ params }: Props) {
               <h5
                 className={`text-3xl font-bold mb-3 ${
                   product.promotionalPrice &&
+                  product.promotionalPrice > 0 &&
                   'line-through text-slate-400 text-xl'
                 }`}
               >
                 {normalizeAmounts(product.price)}
               </h5>
-              {product.promotionalPrice && (
-                <h5 className='text-3xl font-bold mb-3'>
-                  {normalizeAmounts(product.promotionalPrice)}
-                </h5>
-              )}
+              {product.promotionalPrice !== null &&
+                product.promotionalPrice > 0 && (
+                  <h5 className='text-3xl font-bold mb-3'>
+                    {normalizeAmounts(product.promotionalPrice)}
+                  </h5>
+                )}
               <div
                 className='whitespace-pre-wrap'
                 dangerouslySetInnerHTML={{
                   __html: product.description || '',
                 }}
               ></div>
+
               <AddProductToOrder product={product} />
             </div>
           </aside>

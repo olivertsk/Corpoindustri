@@ -55,7 +55,7 @@ function Main() {
   if (data)
     return (
       <>
-        <main className='container mx-auto grid grid-cols-4  lg:gap-4 lg:py-8 p-4 gap-y-4'>
+        <main className='container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4'>
           <aside className='col-span-4 lg:col-span-1'>
             <Accordion filters={filters} setFilters={setFilters} />
           </aside>

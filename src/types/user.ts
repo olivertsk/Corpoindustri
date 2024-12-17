@@ -5,15 +5,24 @@ export const userSchema = z.object({
   email: z.string(),
   password: z.string(),
   name: z.string(),
+  dni: z.string(),
+  phoneNumber: z.string(),
   passwordConfirmation: z.string(),
-  rol: z.object({
-    id: z.string(),
-    name: z.string(),
-  }).optional(),
+  rol: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .optional(),
 });
 
 export type User = z.infer<typeof userSchema>;
-export type TUser = Pick<User, 'email' | 'name' | 'avatar' | 'rol'>;
+
+export type TUpdateUser = Pick<User, 'avatar' | 'dni' | 'name' | 'phoneNumber'>;
+export type TUser = Pick<
+  User,
+  'email' | 'name' | 'avatar' | 'rol' | 'dni' | 'phoneNumber'
+>;
 export type UserFormLogin = Pick<User, 'email' | 'password'>;
 export type UserFormRegistration = Pick<
   User,

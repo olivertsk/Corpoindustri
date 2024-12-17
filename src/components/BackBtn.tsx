@@ -7,12 +7,12 @@ export default function BackBtn() {
   return (
     <button
       onClick={() => router.back()}
-      className='flex gap-2 bg-accent-100 hover:bg-accent-200 transition-colors py-2 font-bold px-4 rounded-full'
+      className='flex gap-2 text-sm  transition-colors items-center font-bold px-4 rounded-full'
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        width='24'
-        height='24'
+        width='18'
+        height='18'
         viewBox='0 0 24 24'
       >
         <path

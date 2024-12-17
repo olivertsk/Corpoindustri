@@ -1,6 +1,8 @@
 'use client';
 
 import FavoriteCard from '@/src/components/favorites/FavoriteCard';
+import Heading from '@/src/components/Heading';
+import SubHeading from '@/src/components/SubHeading';
 import { containerStyles } from '@/src/lib/global';
 import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 import { Pagination } from '@mui/material';
@@ -13,11 +15,11 @@ export default function FavoritesPage() {
 
   return (
     <main className='container mx-auto my-8'>
-      <div className={`${containerStyles} !shadow-sm !rounded-xl`}>
-        <h4 className='font-bold text-slate-600 text-3xl'>Favoritos</h4>
-        <p>
+      <div className={containerStyles}>
+        <Heading>Favoritos</Heading>
+        <SubHeading>
           Aquí podrás ver todos los productos que has agregado a tus favoritos
-        </p>
+        </SubHeading>
         <section className='mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
           {favorites.map((product, index) => (
             <FavoriteCard key={index} favorite={product} />

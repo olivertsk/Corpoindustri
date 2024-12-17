@@ -11,6 +11,7 @@ export type IBannerFilter = {
 export enum EPositionBanner {
   HomePrincipal = 'homePrincipal',
   HomeSecondary = 'homeSecondary',
+  HomeTertiary = 'homeTertiary',
 }
 
 export const bannerSchema = z.object({
