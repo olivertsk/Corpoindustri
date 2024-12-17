@@ -10,7 +10,7 @@ const TermsPage: React.FC = () => {
     { title: 'Política de Privacidad', content: 'Nos comprometemos a proteger su privacidad y a utilizar su información personal solo para procesar su pedido y mejorar su experiencia de compra.' },
     { title: 'Condiciones de Uso', content: 'Al utilizar nuestro sitio web, usted acepta cumplir con nuestros términos y condiciones y con todas las leyes y regulaciones aplicables.' },
     { title: 'Política de Devoluciones', content: 'Aceptamos devoluciones dentro de los 30 días posteriores a la compra, siempre que los productos estén en su estado original y sin abrir.' },
-    { title: 'Métodos de Pago', content: 'Aceptamos pagos con tarjetas de crédito, débito y PayPal. Todos los pagos son seguros y están encriptados.' },
+    { title: 'Métodos de Pago', content: 'Aceptamos pagos con tarjetas de débito, pago móvil, divisas, zelle, binance. Todos los pagos son seguros y están encriptados.' },
     { title: 'Envíos y Entregas', content: 'Ofrecemos envíos a nivel nacional. Los tiempos de entrega varían según la ubicación y el método de envío seleccionado.' },
     { title: 'Precios y Disponibilidad', content: 'Todos los precios están sujetos a cambios sin previo aviso. La disponibilidad de los productos puede variar y no garantizamos la disponibilidad de ningún artículo en particular.' },
     { title: 'Promociones y Descuentos', content: 'Las promociones y descuentos son válidos por tiempo limitado y no pueden combinarse con otras ofertas.' },
