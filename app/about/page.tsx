@@ -26,12 +26,7 @@ export default function aboutUs() {
             Conocenos
           </h1>
           <p className='text-white md:w-[60%] w-full text-justify'>
-            Desde 1969 nuestro equipo de trabajo se esmera en conquistar cada
-            día el corazón de las familias venezolanas con experiencias de
-            compra únicas y diferenciadoras. Con sucursales en la Gran Caracas y
-            un canal de compra en línea, más de 3.000 mil trabajadores se dan
-            cita todos los días para servir con excelencia a la familia
-            venezolana.
+            Alimentos Corpoindustri nació en 2014 con la ambición de transformar la forma en que las empresas adquirían productos alimenticios. Impulsados por la necesidad de ofrecer un servicio personalizado y de alta calidad, los fundadores de Corpoindustri crearon una empresa enfocada en satisfacer las demandas específicas de sus clientes corporativos. Desde sus inicios, Corpoindustri se destacó por su amplio catálogo de productos, su compromiso con la excelencia y su atención al detalle. A lo largo de los años, la empresa ha experimentado un crecimiento constante, consolidándose como un referente en el sector y ampliando su alcance a nivel nacional. Hoy en día, Corpoindustri es mucho más que un simple proveedor de alimentos; es un socio estratégico que acompaña a sus clientes en el desarrollo de sus negocios.
           </p>
         </div>
       </div>
