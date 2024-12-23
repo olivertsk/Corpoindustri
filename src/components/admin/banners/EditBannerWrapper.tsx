@@ -27,6 +27,7 @@ export default function EditBannerWrapper({ banner }: EditBannerWrapperProps) {
       description: banner.description,
       status: banner.status,
       images: banner.images,
+      mobileImage: banner.mobileImage,
     },
   });
 

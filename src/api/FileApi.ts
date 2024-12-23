@@ -20,20 +20,19 @@ export const deleteFile = async (fileName: string) => {
     window.confirm('¿Estás seguro de que quieres eliminar esta imagen?')
   ) {
     try {
-      const res = await makePost(
+      await makePost(
         '/files/delete',
         { type: location.pathname.split('/')[2], fileName },
         'DELETE'
       );
 
-      if (res.success) {
-        return true;
-      }
+      return true;
     } catch (error) {
       console.error(error);
       throw new Error(String(error));
     }
   } else {
+    console.log('false');
     return false;
   }
 };

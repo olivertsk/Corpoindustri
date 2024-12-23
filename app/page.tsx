@@ -25,6 +25,10 @@ export default async function Home() {
     position: EPositionBanner.HomeSecondary,
     isClient: true,
   });
+  const tertiaryBannerData: IBanner[] = await fxAllBanner({
+    position: EPositionBanner.HomeTertiary,
+    isClient: true,
+  });
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
@@ -58,6 +62,7 @@ export default async function Home() {
               key={department.id}
               titleSection={department.name}
               products={department.products || []}
+              departmentId={department.id}
             />
           ))}
         </div>
@@ -71,13 +76,14 @@ export default async function Home() {
                 products={department.products || []}
                 key={department.id}
                 titleSection={department.name}
+                departmentId={department.id}
               />
             ))}
           </div>
         </div>
         <div className='container mx-auto mb-4'>
-          {secondaryBannerData && (
-            <BannerSlider floatingBanner={true} slides={secondaryBannerData} />
+          {tertiaryBannerData && (
+            <BannerSlider floatingBanner={true} slides={tertiaryBannerData} />
           )}
           <MapSection data={mapData.data} />
         </div>

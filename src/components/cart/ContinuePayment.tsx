@@ -1,0 +1,155 @@
+import { inputStlyes, primaryBtn } from '@/src/lib/global';
+import { useAuthStore } from '@/src/store/authStore';
+import { useCartStore } from '@/src/store/cartSlice';
+import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
+import { Dialog } from '@mui/material';
+import { Dispatch, SetStateAction, useMemo } from 'react';
+
+type ContinuePaymentProps = {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+};
+
+export default function ContinuePayment({
+  open,
+  setOpen,
+}: ContinuePaymentProps) {
+  const orderProducts = useCartStore((state) => state.orderProducts);
+  const user = useAuthStore((store) => store.user);
+
+  const total = useMemo(
+    () =>
+      orderProducts.reduce(
+        (init, item) =>
+          (init += item.quantity * (item.promotionalPrice || item.price)),
+        0
+      ),
+    [orderProducts]
+  );
+
+  return (
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      maxWidth='sm'
+      fullWidth={true}
+    >
+      <div className='p-8'>
+        <button
+          className='absolute top-2 right-2'
+          onClick={() => setOpen(false)}
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+          >
+            <path
+              fill='currentColor'
+              d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'
+            />
+          </svg>
+        </button>
+        <h2 className='text-2xl font-bold text-center mb-2 text-slate-800'>
+          Estás a un paso de finalizar tu compra
+        </h2>
+        <p className='text-center'>
+          Llena el siguiente formulario para continuar con el proceso de pago
+        </p>
+        <form action='' className='mt-4'>
+          <div className='mb-4'>
+            <label
+              htmlFor='nameClient'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Nombre del Cliente
+            </label>
+            <input
+              type='text'
+              name='nameClient'
+              id='nameClient'
+              className={inputStlyes}
+              defaultValue={user?.name + ' ' + user?.lastName}
+            />
+          </div>
+          <div className='mb-4'>
+            <label
+              htmlFor='phoneNumber'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Número de teléfono
+            </label>
+            <input
+              type='text'
+              name='phoneNumber'
+              id='phoneNumber'
+              className={inputStlyes}
+              defaultValue={user?.phoneNumber}
+            />
+          </div>
+          <div className='mb-4'>
+            <label
+              htmlFor='dni'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Cédula
+            </label>
+            <div className='flex gap-2'>
+              <select
+                className={`${inputStlyes} !w-fit`}
+                defaultValue={user?.dniType}
+              >
+                <option value='V'>V</option>
+                <option value='E'>E</option>
+                <option value='J'>J</option>
+              </select>
+              <input
+                defaultValue={user?.dni}
+                type='number'
+                className={inputStlyes}
+                id='dni'
+              />
+            </div>
+          </div>
+          <div className='mb-4'>
+            <label
+              htmlFor='observation'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Observación
+            </label>
+            <textarea
+              name='observation'
+              id='observation'
+              className={`${inputStlyes} resize-none min-h-32`}
+            />
+          </div>
+          <div className='mb-4'>
+            <label
+              htmlFor='date'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Fecha
+            </label>
+            <input
+              readOnly
+              type='text'
+              name='date'
+              id='date'
+              className={`${inputStlyes} read-only:bg-gray-200`}
+              defaultValue={new Date().toLocaleDateString()}
+            />
+          </div>
+          <input type='hidden' name='amount' defaultValue={total} />
+          <p className='text-slate-700 font-bold text-lg my-4'>
+            Monto a pagar: <b>{normalizeAmounts(total)}</b>
+          </p>
+          <button type='submit' className={`${primaryBtn} w-full`}>
+            Pagar
+          </button>
+        </form>
+      </div>
+    </Dialog>
+  );
+}

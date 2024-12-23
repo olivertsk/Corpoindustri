@@ -1,5 +1,6 @@
 import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
+import { ICategory } from '../types/category';
 import { Department } from '../types/department';
 import { Product, TProductForm } from '../types/product';
 
@@ -9,8 +10,8 @@ export type ProductFilters = {
   name?: string | null;
   departmentId?: string | null;
   departmentIds?: Department['id'][] | null;
+  categoriesIds?: ICategory['id'][] | null;
   categoryId?: string | null;
-  categoryIds?: string | null;
   minPrice?: string | null;
   maxPrice?: string | null;
   order?: 'maxPrice' | 'minPrice';

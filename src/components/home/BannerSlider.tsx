@@ -48,14 +48,24 @@ export default function BannerSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <div className='relative w-full h-[420px]  '>
+              <picture className='relative w-full h-[420px]'>
+                <source
+                  srcSet={`${apiUrl}/file/${slide.mobileImage}`}
+                  media='(max-width: 768px)'
+                />
                 <Image
                   src={`${apiUrl}/file/${slide.images}`}
                   alt={slide?.description || 'mercado'}
                   objectFit='cover'
-                  fill
+                  width={2048}
+                  height={1024}
+                  style={{
+                    width: '100%',
+                    height: '420px',
+                    objectFit: 'cover',
+                  }}
                 />
-              </div>
+              </picture>
             </SwiperSlide>
           ))}
         </Swiper>

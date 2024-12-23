@@ -5,30 +5,39 @@ import Accordion from '@/src/components/accordion/Accordion';
 import Paginator from '@/src/components/paginator/Paginator';
 import CardProducts from '@/src/components/products/CardProducts';
 import Spinner from '@/src/components/spinner/Spinner';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
 function Main() {
   const searchParams = useSearchParams();
 
+  const setArrayFilter = (name: string) =>
+    searchParams
+      .get(name)
+      ?.split(',')
+      ?.filter((item) => item) || [];
+
   const [filters, setFilters] = useState<ProductFilters>({
     pag: searchParams.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
     name: searchParams.get('name') || '',
-    departmentIds: searchParams.get('departmentIds')?.split(',') || [],
+    departmentIds: setArrayFilter('departmentIds'),
+    categoriesIds: setArrayFilter('categoriesIds'),
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
     order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
     isClient: true,
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['products'],
     queryFn: () => getProducts(filters),
     refetchOnWindowFocus: false,
   });
 
-  const handlePaginatino = (pag: number) => {
+  const handlePagination = (pag: number) => {
     setFilters({ ...filters, pag });
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -41,14 +50,36 @@ function Main() {
     setFilters((prev) => ({
       ...prev,
       name: searchParams.get('name') || '',
+      departmentIds: setArrayFilter('departmentIds'),
+      categoriesIds: setArrayFilter('categoriesIds'),
+      pag: searchParams.get('pag') ? +searchParams.get('pag')! : 1,
     }));
 
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     }, 100);
-  }, [searchParams, queryClient]);
+  }, [searchParams]);
 
-  if (isLoading) {
+  const navigate = useRouter();
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (Array.isArray(value)) {
+        params.append(key, value.toString());
+      } else {
+        if (key === 'pag') {
+          params.append(key, '1');
+        } else if (key === 'name') {
+          params.append(key, '');
+        } else {
+          params.append(key, value + '');
+        }
+      }
+    }
+    navigate.replace(`/search?${params.toString()}`);
+  };
+
+  if (isFetching) {
     return <Spinner />;
   }
 
@@ -57,6 +88,20 @@ function Main() {
       <>
         <main className='container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4'>
           <aside className='col-span-4 lg:col-span-1'>
+            {filters.name && (
+              <div className='flex items-center mb-4 gap-2'>
+                <p className='text-lg text-slate-500 '>
+                  Resultados para:{' '}
+                  <span className='font-bold'>{filters.name}</span>
+                </p>
+                <button
+                  className='border-2 border-red-600 rounded-sm'
+                  onClick={applyFilters}
+                >
+                  <XMarkIcon className='w-4 text-red-600' />
+                </button>
+              </div>
+            )}
             <Accordion filters={filters} setFilters={setFilters} />
           </aside>
           <div className='col-span-4 lg:col-span-3 grid grid-cols-4 gap-4 h-fit'>
@@ -78,7 +123,7 @@ function Main() {
           <div className='col-span-4 flex justify-center mt-4'>
             <Paginator
               count={data?.meta.totalPage || 1}
-              onChange={handlePaginatino}
+              onChange={handlePagination}
             />
           </div>
         </main>

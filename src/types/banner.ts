@@ -17,6 +17,7 @@ export enum EPositionBanner {
 export const bannerSchema = z.object({
   id: z.string(),
   images: z.string(),
+  mobileImage: z.string(),
   name: z.string(),
   description: z.string(),
   status: z.boolean(),

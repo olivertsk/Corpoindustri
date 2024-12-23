@@ -17,19 +17,22 @@ export const useCartStore = create<CartStore>()(
       orderProducts: [],
       addProduct: (product, quantity) => {
         if (!!get().orderProducts.find((p) => p.id === product.id)) {
+          const priceToPlus =
+            product.priceWithTax || product.promotionalPrice || product.price;
           set((state) => ({
             orderProducts: state.orderProducts.map((p) =>
               p.id === product.id
                 ? {
                     ...p,
                     quantity: p.quantity + quantity,
-                    subtotal:
-                      (p.promotionalPrice || p.price) * (p.quantity + quantity),
+                    subtotal: priceToPlus * (p.quantity + quantity),
                   }
                 : p
             ),
           }));
         } else {
+          const priceToPlus =
+            product.priceWithTax || product.promotionalPrice || product.price;
           set((state) => ({
             orderProducts: [
               ...state.orderProducts,
@@ -38,9 +41,11 @@ export const useCartStore = create<CartStore>()(
                 id: product.id,
                 name: product.name,
                 price: product.price,
-                quantity,
                 promotionalPrice: product.promotionalPrice,
-                subtotal: product.promotionalPrice || product.price,
+                priceWithTax: product.priceWithTax,
+                quantity,
+                subtotal: priceToPlus,
+                taxRate: product.taxRate,
               },
             ],
           }));
@@ -57,26 +62,30 @@ export const useCartStore = create<CartStore>()(
         });
       },
       addQuantity: (product) => {
+        const priceToPlus =
+          product.priceWithTax || product.promotionalPrice || product.price;
         set((state) => ({
           orderProducts: state.orderProducts.map((p) =>
             p.id === product.id
               ? {
                   ...p,
                   quantity: p.quantity + 1,
-                  subtotal: (p.promotionalPrice || p.price) * (p.quantity + 1),
+                  subtotal: priceToPlus * (p.quantity + 1),
                 }
               : p
           ),
         }));
       },
       subtractQuantity: (product) => {
+        const priceToPlus =
+          product.priceWithTax || product.promotionalPrice || product.price;
         set((state) => ({
           orderProducts: state.orderProducts.map((p) =>
             p.id === product.id
               ? {
                   ...p,
                   quantity: p.quantity - 1,
-                  subtotal: (p.promotionalPrice || p.price) * (p.quantity - 1),
+                  subtotal: priceToPlus * (p.quantity - 1),
                 }
               : p
           ),

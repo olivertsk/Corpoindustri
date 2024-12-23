@@ -7,6 +7,7 @@ import { Navigation } from 'swiper/modules';
 import { ICategory } from '@/src/types/category';
 import Image from 'next/image';
 import { apiUrl, primaryBtn } from '@/src/lib/global';
+import Link from 'next/link';
 
 type CategoriesCardProps = {
   titleSection?: string;
@@ -56,7 +57,7 @@ export default function CategoriesCard({
         >
           {categoryData.map((category) => (
             <SwiperSlide key={category.id} className='pb-8 lg:px-1 !h-auto'>
-              <div className='bg-white shadow-md rounded-xl p-4 h-full flex flex-col justify-between'>
+              <div className='bg-white shadow-sm rounded-xl p-4 h-full flex flex-col justify-between'>
                 <div>
                   <h4 className='text-center font-bold'>{category.name}</h4>
                   <div className='my-2'>
@@ -80,9 +81,12 @@ export default function CategoriesCard({
                     {category.description}
                   </p>
                 </div>
-                <button className={`${primaryBtn} rounded-xl !p-1 text-sm`}>
+                <Link
+                  href={`/search?departmentIds=${category.departmentId}&categoriesIds=${category.id}`}
+                  className={`${primaryBtn} rounded-xl !p-1 text-sm text-center`}
+                >
                   Ver
-                </button>
+                </Link>
               </div>
             </SwiperSlide>
           ))}

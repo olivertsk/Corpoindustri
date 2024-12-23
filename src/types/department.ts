@@ -1,3 +1,4 @@
+import { ICategory } from './category';
 import { Product } from './product';
 
 export type Department = {
@@ -10,7 +11,8 @@ export type Department = {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  products: Product[];
+  products?: Product[];
+  categories?: ICategory[];
 };
 
 export type TDepartmentForm = Pick<
@@ -25,4 +27,5 @@ export type DepartmentFilters = {
   isSalient?: boolean | null | string;
   product?: boolean;
   isClient?: boolean;
+  categories?: boolean;
 };

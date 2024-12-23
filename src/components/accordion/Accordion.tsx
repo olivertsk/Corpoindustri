@@ -13,10 +13,17 @@ import { getDepartments } from '@/src/api/DepartmentsApi';
 import { ProductFilters } from '@/src/api/ProductApi';
 import { useRouter } from 'next/navigation';
 import { inputStlyes, primaryBtn } from '@/src/lib/global';
+import { ICategory } from '@/src/types/category';
 
 type AccordionProps = {
   setFilters: Dispatch<SetStateAction<ProductFilters>>;
   filters: ProductFilters;
+};
+
+type FilteredCategories = {
+  departmentName: string;
+  departmentId: string;
+  categories: ICategory[];
 };
 
 export default function Accordion({ setFilters, filters }: AccordionProps) {
@@ -34,10 +41,16 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
 
   /** VALIDATE MATCH MEDIA TO SHOW THE FILTERS */
   const [isMobile, setIsMobile] = useState(false);
+  const [filteredCategories, setCategories] = useState<FilteredCategories[]>(
+    []
+  );
 
   const { data } = useQuery({
     queryKey: ['departments'],
-    queryFn: () => getDepartments(undefined),
+    queryFn: () =>
+      getDepartments({
+        categories: true,
+      }),
     refetchOnWindowFocus: false,
   });
 
@@ -49,29 +62,76 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   };
 
   const handleDepartmentsIds = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const department = data?.data.find(
+      (department) => department.id!.toString() === e.target.value.toString()
+    );
     if (filters.departmentIds?.includes(e.target.value)) {
+      const filteredDepartments = filters.departmentIds.filter(
+        (filter) => filter !== e.target.value
+      );
+      const categoriesIds: string[] = [];
+      setCategories(
+        filteredCategories.filter(
+          (category) => category.departmentId !== e.target.value
+        )
+      );
+      filters.categoriesIds?.forEach((categoryId) => {
+        if (
+          !department!.categories!.find(
+            (departmentCategoryId) => categoryId === departmentCategoryId.id!
+          )
+        ) {
+          categoriesIds.push(categoryId);
+        }
+      });
       setFilters({
         ...filters,
-        departmentIds: filters.departmentIds.filter(
-          (filter) => filter !== e.target.value
-        ),
+        departmentIds: filteredDepartments,
+        categoriesIds,
       });
     } else {
+      setCategories([
+        ...filteredCategories,
+        {
+          departmentName: department!.name!,
+          departmentId: department!.id!,
+          categories: department!.categories!,
+        },
+      ]);
       setFilters({
         ...filters,
         departmentIds: [...filters.departmentIds!, e.target.value],
       });
     }
   };
+  const handleCategoriesIds = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (filters.categoriesIds?.includes(e.target.value)) {
+      setFilters({
+        ...filters,
+        categoriesIds: filters.categoriesIds?.filter(
+          (categoryId) => categoryId !== e.target.value
+        ),
+      });
+    } else {
+      setFilters({
+        ...filters,
+        categoriesIds: [...filters.categoriesIds!, e.target.value],
+      });
+    }
+  };
+
   const navigate = useRouter();
   const applyFilters = () => {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
-      console.log(key, value);
       if (Array.isArray(value)) {
         params.append(key, value.toString());
       } else {
-        params.append(key, value + '');
+        if (key === 'pag') {
+          params.append(key, '1');
+        } else {
+          params.append(key, value + '');
+        }
       }
     }
     navigate.replace(`/search?${params.toString()}`);
@@ -90,6 +150,25 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      const filteredCategories: FilteredCategories[] = [];
+      filters.departmentIds?.forEach((departmentId) => {
+        const department = data.data.find(
+          (department) => department.id === departmentId
+        );
+        if (department) {
+          filteredCategories.push({
+            departmentName: department.name!,
+            departmentId: department.id!,
+            categories: department.categories!,
+          });
+        }
+      });
+      setCategories(filteredCategories);
+    }
+  }, [data]);
 
   return (
     <>
@@ -160,6 +239,9 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
               htmlFor='accordion-trigger-1'
             >
               Departamento
+              <span className='block text-xs font-normal'>
+                Departamentos seleccionadas ({filters.departmentIds?.length})
+              </span>
             </label>
             <section className='accordion-animation-wrapper'>
               <div className='accordion-animation'>
@@ -182,6 +264,67 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                           />
                           {department.name}
                         </label>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </section>
+          </div>
+          <div
+            className={`accordion-item ${
+              !filteredCategories.length && 'pointer-events-none opacity-40'
+            }`}
+          >
+            <input
+              id='accordion-trigger-2'
+              className='accordion-trigger-input'
+              type='checkbox'
+            ></input>
+            <label
+              className='accordion-trigger font-bold uppercase'
+              htmlFor='accordion-trigger-2'
+            >
+              Categorias
+              {!filters.departmentIds?.length ? (
+                <span className='block text-xs font-normal'>
+                  Debes seleccionar al menos un departamento
+                </span>
+              ) : (
+                <span className='block text-xs font-normal'>
+                  Categorias seleccionadas ({filters.categoriesIds?.length})
+                </span>
+              )}
+            </label>
+            <section className='accordion-animation-wrapper'>
+              <div className='accordion-animation'>
+                <div className='accordion-transform-wrapper'>
+                  {filteredCategories &&
+                    filteredCategories.map((category) => (
+                      <div
+                        key={category.departmentId}
+                        className='accordion-content py-2'
+                      >
+                        <label htmlFor='' className='px-4 font-bold'>
+                          {category.departmentName}
+                        </label>
+                        {category.categories.map((category) => (
+                          <label
+                            className='flex items-center gap-2 p-4 pl-8 hover:bg-primary/50 hover:text-white'
+                            key={category.id}
+                            htmlFor={`${category.name}${category.id}`}
+                          >
+                            <input
+                              type='checkbox'
+                              id={`${category.name}${category.id}`}
+                              onChange={handleCategoriesIds}
+                              value={category.id}
+                              checked={filters.categoriesIds?.includes(
+                                category.id
+                              )}
+                            />
+                            {category.name}
+                          </label>
+                        ))}
                       </div>
                     ))}
                 </div>

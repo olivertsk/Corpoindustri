@@ -91,6 +91,7 @@ export default function BannerPage() {
             <option value=''>Todos</option>
             <option value={EPositionBanner.HomePrincipal}>Principal</option>
             <option value={EPositionBanner.HomeSecondary}>Secundario</option>
+            <option value={EPositionBanner.HomeTertiary}>Terciario</option>
           </select>
           <input
             value={filters.name!}

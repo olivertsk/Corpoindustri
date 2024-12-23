@@ -39,6 +39,7 @@ export default function EditProductFormWrapper({
       taxRate: product.taxRate,
       images: product.images,
       promotionalPrice: product.promotionalPrice,
+      priceWithTax: product.priceWithTax,
       status: product.status,
       longDescription: product.longDescription,
     },

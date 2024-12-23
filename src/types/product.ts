@@ -25,7 +25,6 @@ export const productSchema = z.object({
   description: z.string().nullable(),
   name: z.string(),
   code: z.string(),
-  price: z.number(),
   images: z.array(
     z.object({
       id: z.string(),
@@ -38,7 +37,9 @@ export const productSchema = z.object({
   ),
   status: z.boolean().optional(),
   longDescription: z.string().nullable(),
+  price: z.number(),
   promotionalPrice: z.number().nullable(),
+  priceWithTax: z.number().nullable(),
   department: departmentSchema.optional(),
   category: categorySchema.optional(),
   stock: z.number(),
@@ -64,11 +65,12 @@ export type TProductForm = Pick<
   | 'name'
   | 'code'
   | 'price'
+  | 'promotionalPrice'
+  | 'priceWithTax'
   | 'longDescription'
   | 'taxRate'
   | 'brand'
   | 'stock'
-  | 'promotionalPrice'
   | 'status'
   | 'coverImage'
 > & {
@@ -78,7 +80,13 @@ export type TProductForm = Pick<
 };
 export type OrderProduct = Pick<
   Product,
-  'id' | 'name' | 'price' | 'promotionalPrice' | 'coverImage'
+  | 'id'
+  | 'name'
+  | 'price'
+  | 'promotionalPrice'
+  | 'coverImage'
+  | 'priceWithTax'
+  | 'taxRate'
 > & {
   quantity: number;
   subtotal: number;

@@ -222,6 +222,7 @@ export default function ProductForm({
               <input
                 {...register('price', {
                   required: 'Este campo es requerido',
+                  setValueAs: (value) => (value ? Number(value) : 0),
                 })}
                 type='number'
                 step='0.01'
@@ -236,7 +237,9 @@ export default function ProductForm({
             <label htmlFor=''>
               Precio Promocional
               <input
-                {...register('promotionalPrice')}
+                {...register('promotionalPrice', {
+                  setValueAs: (value) => (value ? Number(value) : 0),
+                })}
                 type='number'
                 step='0.01'
                 className={inputStlyes}
@@ -248,10 +251,27 @@ export default function ProductForm({
           </div>
           <div>
             <label htmlFor=''>
+              Precio con Tax
+              <input
+                {...register('priceWithTax', {
+                  setValueAs: (value) => (value ? Number(value) : 0),
+                })}
+                type='number'
+                step='0.01'
+                className={inputStlyes}
+              />
+            </label>
+            {errors.priceWithTax && (
+              <ErrorMessage>{errors.priceWithTax.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label htmlFor=''>
               Tax
               <input
                 {...register('taxRate', {
                   required: 'Este campo es requerido',
+                  setValueAs: (value) => (value ? Number(value) : 0),
                 })}
                 type='number'
                 className={inputStlyes}
@@ -282,6 +302,7 @@ export default function ProductForm({
               <input
                 {...register('stock', {
                   required: 'Este campo es requerido',
+                  setValueAs: (value) => (value ? Number(value) : 0),
                 })}
                 type='number'
                 className={inputStlyes}

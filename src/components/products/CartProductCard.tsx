@@ -4,6 +4,7 @@ import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import Image from 'next/image';
 import CartProductsQuantity from './CartProductsQuantity';
 import Link from 'next/link';
+import calcProductTax from '@/src/utils/calcProductTax';
 
 type CartProductCardProps = {
   orderProduct: OrderProduct;
@@ -30,12 +31,29 @@ export default function CartProductCard({
             'line-through text-slate-400 text-sm'
           }`}
         >
-          {normalizeAmounts(orderProduct.price)}
+          Ref. <b> {normalizeAmounts(orderProduct.price)}</b>
         </p>
         {orderProduct.promotionalPrice !== null &&
           orderProduct.promotionalPrice > 0 && (
-            <p>{normalizeAmounts(orderProduct.promotionalPrice)}</p>
+            <p>
+              Ref Promo.{' '}
+              <b> {normalizeAmounts(orderProduct.promotionalPrice)}</b>
+            </p>
           )}
+        <p>
+          IVA Ref. <b> {calcProductTax(orderProduct, orderProduct.taxRate)} </b>
+        </p>
+        <p>
+          Subtotal:{' '}
+          <b>
+            {normalizeAmounts(
+              orderProduct.quantity *
+                (orderProduct.priceWithTax ||
+                  orderProduct.promotionalPrice ||
+                  orderProduct.price)
+            )}
+          </b>
+        </p>
         <CartProductsQuantity orderProduct={orderProduct} />
       </div>
     </div>

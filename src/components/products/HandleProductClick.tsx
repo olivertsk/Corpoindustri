@@ -18,19 +18,20 @@ export default function HandleProductClick({
 
   return (
     <button
-      className='text-black hover:bg-accent-200 transition-colors bg-accent-100 p-2 rounded-md'
+      className='text-sm lg:text-base transition-colors flex items-center w-full justify-between lg:px-3 p-2 rounded-md bg-accent-100 border-yellow-400 border-2 text-slate-700 font-bold hover:bg-yellow-200'
       onClick={handleButtonClick}
       title='Agregar al carrito'
     >
+      Agregar al carrito
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        width='16'
-        height='16'
-        viewBox='0 0 512 512'
+        width='18'
+        height='18'
+        viewBox='0 0 42 42'
       >
         <path
           fill='currentColor'
-          d='M160 96.039v32h304v63.345l-35.5 112.655H149.932L109.932 16H16v32h66.068l40 288.039h329.9L496 196.306V96.039zm16.984 272.305a64.073 64.073 0 0 0-64 64a64 64 0 0 0 128 0a64.07 64.07 0 0 0-64-64m0 96a32 32 0 1 1 32-32a32.04 32.04 0 0 1-32 32m224-96a64.073 64.073 0 0 0-64 64a64 64 0 0 0 128 0a64.07 64.07 0 0 0-64-64m0 96a32 32 0 1 1 32-32a32.04 32.04 0 0 1-32 32'
+          d='M40.5 12.5c0-1.48-.311-2-1.872-2H11.726l-.801-5c-.109-1.46-.85-2-2.421-2H2.501C1.02 3.5.5 3.99.5 5.5v1c0 1.551.52 2 2.001 2h3.722l3.282 19c.35 1.04 1.311 1.95 3.001 2h22.012c1.75 0 2.57-.359 3.002-2zm-7.023 12H13.696l-1.471-9h22.951zm-19.97 12a4 4 0 0 0 4.002 4a4 4 0 1 0 0-8a4 4 0 0 0-4.002 4m13.007 0a4 4 0 0 0 4.002 4a4 4 0 1 0 0-8a4 4 0 0 0-4.002 4'
         />
       </svg>
     </button>

@@ -25,18 +25,31 @@ export default function BannerForm({
   setValue,
 }: BannerFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const inputMobileFileRef = useRef<HTMLInputElement>(null);
   const image = watch('images');
-  const handleFile = async (ev: ChangeEvent<HTMLInputElement>) => {
+  const mobileImage = watch('mobileImage');
+
+  const handleFile = async (
+    ev: ChangeEvent<HTMLInputElement>,
+    field: 'images' | 'mobileImage'
+  ) => {
     if (ev.target.files) {
-      if (image) {
-        if (!(await deleteFile(image))) {
+      if (
+        (field === 'images' && image) ||
+        (field === 'mobileImage' && mobileImage)
+      ) {
+        console.log('aqui');
+        const deleting = await deleteFile(image);
+        console.log(deleting);
+        if (!deleting) {
           inputFileRef.current!.value = '';
           return;
         }
       }
       const file = ev.target.files[0];
       const res = await uploadFile(file);
-      setValue('images', res.fileName[0]);
+      console.log(res);
+      setValue(field, res.fileName[0]);
       inputFileRef.current!.value = '';
     }
   };
@@ -44,7 +57,8 @@ export default function BannerForm({
   return (
     <>
       <section className='grid grid-cols-2 gap-4'>
-        <div className='col-span-2'>
+        <div>
+          <h4 className='text-center font-bold text-lg mb-4'>Imagen Web</h4>
           {image && (
             <div className='w-full aspect-video relative'>
               <Image src={`${apiUrl}/file/${image}`} fill alt='a' />
@@ -57,7 +71,33 @@ export default function BannerForm({
           >
             Seleccionar Imagen
           </button>
-          <input onChange={handleFile} type='file' hidden ref={inputFileRef} />
+          <input
+            onChange={(ev) => handleFile(ev, 'images')}
+            type='file'
+            hidden
+            ref={inputFileRef}
+          />
+        </div>
+        <div>
+          <h4 className='text-center font-bold text-lg mb-4'>Imagen Movil</h4>
+          {mobileImage && (
+            <div className='w-full aspect-video relative'>
+              <Image src={`${apiUrl}/file/${mobileImage}`} fill alt='a' />
+            </div>
+          )}
+          <button
+            onClick={() => inputMobileFileRef.current?.click()}
+            className={`${primaryBtn} mt-4`}
+            type='button'
+          >
+            Seleccionar Imagen
+          </button>
+          <input
+            onChange={(ev) => handleFile(ev, 'mobileImage')}
+            type='file'
+            hidden
+            ref={inputMobileFileRef}
+          />
         </div>
         <div>
           <label htmlFor=''>
