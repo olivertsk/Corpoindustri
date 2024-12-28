@@ -56,6 +56,13 @@ export type UserFormChangePassword = Pick<
 > & {
   oldPasword: string;
 };
+
+export type UserRecoveryPassword = Pick<
+  User,
+  'password' | 'passwordConfirmation'
+> & {
+  code: string;
+};
 export type ForgotPasswordForm = Pick<User, 'email'>;
 
 export const userButtons: { path: string; label: string; icon: string }[] = [

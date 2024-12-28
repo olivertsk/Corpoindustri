@@ -87,6 +87,7 @@ export type OrderProduct = Pick<
   | 'coverImage'
   | 'priceWithTax'
   | 'taxRate'
+  | 'code'
 > & {
   quantity: number;
   subtotal: number;

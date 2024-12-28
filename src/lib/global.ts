@@ -18,3 +18,5 @@ export const editBtn =
   'border border-accent-100 bg-accent-100 px-4 py-1 rounded-md';
 export const deleteBtn =
   'border border-red-600 text-red-600 px-4 py-1 rounded-md ml-2';
+
+export const thClass = 'text-center bg-primary py-2 text-white';

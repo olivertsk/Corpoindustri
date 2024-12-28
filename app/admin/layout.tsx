@@ -24,11 +24,11 @@ export default function AdminLayout({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(min-width: 1023px)');
-      setSizes(mediaQuery.matches ? [100, '40%'] : [0, '100%']);
+      setSizes(mediaQuery.matches ? [100, '50%'] : [0, '100%']);
 
       mediaQuery.addEventListener('change', (ev) => {
         if (ev.matches) {
-          setSizes([100, '40%']);
+          setSizes([100, '50%']);
         } else {
           setSizes([0, '100%']);
         }
@@ -50,7 +50,7 @@ export default function AdminLayout({
         >
           <Pane minSize={50} className='transition-all'>
             <div className='min-h-screen bg-primary space-y-4 p-2'>
-              <div className='max-w-[150px] mx-auto my-4 mb-7'>
+              <div className='max-w-[120px] mx-auto my-4 mb-7'>
                 <Logo />
               </div>
               {adminButtons.map((button) => (

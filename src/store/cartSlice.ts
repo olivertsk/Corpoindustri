@@ -46,6 +46,7 @@ export const useCartStore = create<CartStore>()(
                 quantity,
                 subtotal: priceToPlus,
                 taxRate: product.taxRate,
+                code: product.code,
               },
             ],
           }));

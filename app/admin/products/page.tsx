@@ -7,15 +7,13 @@ import {
 } from '@/src/api/ProductApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { deleteBtn, editBtn, tableBodyStyles } from '@/src/lib/global';
+import { deleteBtn, editBtn, tableBodyStyles, thClass } from '@/src/lib/global';
 import { Product } from '@/src/types/product';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const thClass = 'text-center bg-primary py-2 text-white';
 
 export default function ProductsPage() {
   useBreadcrumb('Productos', 'Todos los productos');

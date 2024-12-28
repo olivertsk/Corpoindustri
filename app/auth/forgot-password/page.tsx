@@ -1,10 +1,15 @@
 'use client';
+import { forgotPassword } from '@/src/api/AuthApi';
 import ErrorMessage from '@/src/components/ErrorMessage';
+import Spinner from '@/src/components/spinner/Spinner';
 import { ForgotPasswordForm } from '@/src/types/user';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function ForgotPassword() {
+  const [loading, setLoading] = useState(false);
   const initialValues: ForgotPasswordForm = {
     email: '',
   };
@@ -16,9 +21,21 @@ export default function ForgotPassword() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  const handleForgotPassword = (formData: ForgotPasswordForm) => {
-    console.log(formData);
-    reset();
+  const handleForgotPassword = async (formData: ForgotPasswordForm) => {
+    setLoading(true);
+    try {
+      const res = await forgotPassword(formData);
+      if (res.success) {
+        toast.success(res.message);
+        reset();
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -58,11 +75,15 @@ export default function ForgotPassword() {
           {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
 
-        <input
-          type='submit'
-          value='Enviar Instrucciones'
-          className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3   font-black  text-xl cursor-pointer'
-        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <input
+            type='submit'
+            value='Enviar Instrucciones'
+            className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3   font-black  text-xl cursor-pointer'
+          />
+        )}
       </form>
 
       <nav className='mt-10 flex flex-col space-y-4'>
