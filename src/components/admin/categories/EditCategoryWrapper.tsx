@@ -10,8 +10,6 @@ import { ICategory, TCategoryForm } from '@/src/types/category';
 import CategoryForm from './CategoryForm';
 import { updateCategory } from '@/src/api/CategoriesApi';
 
-const queryKey = 'category';
-
 type EditCategoryWrapperProps = {
   category: ICategory;
 };
@@ -38,6 +36,7 @@ export default function EditCategoryWrapper({
       status: category.status,
       isSalient: category.isSalient,
       departmentId: category.departmentId,
+      code: category.code,
     },
   });
   const queryClient = useQueryClient();
@@ -49,11 +48,15 @@ export default function EditCategoryWrapper({
       id: id as string,
     });
     if (response.success) {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
-      queryClient.invalidateQueries({ queryKey: [queryKey, id] });
-      toast.success('Categoria actualizada correctamente');
-      navigate.replace('/admin/categories');
       reset();
+      queryClient.invalidateQueries({ queryKey: ['category', id] });
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      navigate.push('/admin/categories');
+      setTimeout(() => {
+        toast.success('Categoria actualizada correctamente', {
+          toastId: 'update-category',
+        });
+      }, 1000);
     } else {
       response.message.forEach(
         (item: { field: keyof TCategoryForm; message: string }) => {

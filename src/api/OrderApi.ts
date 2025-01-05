@@ -4,6 +4,7 @@ import { Order } from '../types/order';
 
 export type OrderParams = {
   pag: number;
+  isClient: boolean;
 };
 
 export const createOrder = async (order: Order) => {
@@ -32,6 +33,26 @@ export const getOrder = async (
 ): Promise<Order | undefined> => {
   try {
     return await makeGet(`/orders/show/${orderId}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateOrderStatus = async ({
+  orderId,
+  status,
+  reason,
+}: {
+  orderId: Order['id'];
+  status: Order['status'];
+  reason: string;
+}) => {
+  try {
+    return await makePost(
+      `/orders/updateStatus/${orderId}`,
+      { status, reason },
+      'PUT'
+    );
   } catch (error) {
     throw error;
   }

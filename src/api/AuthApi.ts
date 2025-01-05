@@ -69,3 +69,12 @@ export const resetPassword = async (body: UserRecoveryPassword) => {
     throw error;
   }
 };
+
+export const updatePushToken = async (body: { tokenPush: string }) => {
+  try {
+    return await makePost(`/auth/updateTokenPush`, body, 'PATCH');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

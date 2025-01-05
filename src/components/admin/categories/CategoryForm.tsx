@@ -80,6 +80,16 @@ export default function CategoryForm({
             </div>
             <div>
               <label htmlFor=''>
+                Código
+                <input
+                  className={inputStlyes}
+                  type='text'
+                  {...register('code')}
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor=''>
                 Estatus
                 <select
                   className={inputStlyes}

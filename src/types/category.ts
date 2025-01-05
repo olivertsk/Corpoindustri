@@ -14,6 +14,7 @@ export const categorySchema = z.object({
   icon: z.string(),
   name: z.string(),
   description: z.string(),
+  code: z.string(),
   status: z.boolean(),
   departmentId: z.string(),
   isSalient: z.boolean(),
@@ -22,5 +23,11 @@ export const categorySchema = z.object({
 export type ICategory = z.infer<typeof categorySchema>;
 export type TCategoryForm = Pick<
   ICategory,
-  'icon' | 'name' | 'description' | 'status' | 'departmentId' | 'isSalient'
+  | 'icon'
+  | 'name'
+  | 'description'
+  | 'status'
+  | 'departmentId'
+  | 'isSalient'
+  | 'code'
 >;

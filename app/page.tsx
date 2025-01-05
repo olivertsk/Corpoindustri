@@ -4,8 +4,10 @@ import { getDepartments } from '@/src/api/DepartmentsApi';
 import { getMaps } from '@/src/api/MapApi ';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
+import InstagramSection from '@/src/components/home/InstagramSection';
 import { MapSection } from '@/src/components/home/MapSection';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
+import TiktokSection from '@/src/components/home/TiktokSection';
 import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
@@ -81,10 +83,14 @@ export default async function Home() {
             ))}
           </div>
         </div>
-        <div className='container mx-auto mb-4'>
+        <div className='container mx-auto mb-4 p-4'>
           {tertiaryBannerData && (
             <BannerSlider floatingBanner={true} slides={tertiaryBannerData} />
           )}
+          <div className='space-y-8'>
+            <TiktokSection />
+            <InstagramSection />
+          </div>
           <MapSection data={mapData.data} />
         </div>
       </section>

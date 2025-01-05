@@ -57,6 +57,10 @@ export default function DepartmentForm({
               {...register('description')}
             />
           </label>
+          <label htmlFor=''>
+            Código
+            <input className={inputStlyes} type='text' {...register('code')} />
+          </label>
           <div>
             <label htmlFor=''>
               Estatus

@@ -7,6 +7,7 @@ import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { Dialog } from '@mui/material';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { toast } from 'react-toastify';
+import SelectPaymentMethod from './SelectPaymentMethod';
 
 type ContinuePaymentProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -77,6 +78,8 @@ export default function ContinuePayment({
         (payload as Record<string, any>)[key] = value.toString();
       }
     });
+
+    console.log(payload);
 
     const response = await createOrder(payload);
     if (response.success) {
@@ -223,6 +226,7 @@ export default function ContinuePayment({
               defaultValue={user?.location}
             />
           </div>
+
           <div className='mb-4'>
             <label
               htmlFor='date'
@@ -241,6 +245,8 @@ export default function ContinuePayment({
           </div>
 
           <input type='hidden' name='amount' defaultValue={total} />
+
+          <SelectPaymentMethod />
           <p className='text-slate-700 font-bold text-lg my-4'>
             Monto a pagar: <b>{normalizeAmounts(total)}</b>
           </p>

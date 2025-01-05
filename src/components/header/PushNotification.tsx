@@ -1,3 +1,4 @@
+import { updatePushToken } from '@/src/api/AuthApi';
 import {
   messaging,
   onMessageFb,
@@ -14,9 +15,10 @@ export default function PushNotification() {
     getTokenFb(messaging, {
       vapidKey,
     })
-      .then((currentToken) => {
+      .then(async (currentToken) => {
         if (currentToken) {
-          console.log('Token:', currentToken);
+          console.log(currentToken);
+          await updatePushToken({ tokenPush: currentToken });
         }
       })
       .catch((err) => {

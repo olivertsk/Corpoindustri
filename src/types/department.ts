@@ -7,6 +7,7 @@ export type Department = {
   name: string;
   description?: string | null;
   status: boolean;
+  code: string;
   isSalient: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -17,7 +18,7 @@ export type Department = {
 
 export type TDepartmentForm = Pick<
   Department,
-  'icon' | 'name' | 'description' | 'status' | 'isSalient'
+  'icon' | 'name' | 'description' | 'status' | 'isSalient' | 'code'
 >;
 
 export type DepartmentFilters = {

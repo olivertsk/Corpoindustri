@@ -14,6 +14,8 @@ export default function EditDepartment() {
     refetchOnWindowFocus: false,
   });
 
+  console.log(data);
+
   if (isLoading) {
     return <Spinner />;
   }

@@ -32,6 +32,7 @@ export default function EditDepartmentWrapper({
       description: department.description,
       status: department.status,
       isSalient: department.isSalient,
+      code: department.code,
     },
   });
   const queryClient = useQueryClient();

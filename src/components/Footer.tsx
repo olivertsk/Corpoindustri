@@ -16,7 +16,7 @@ export default function Footer() {
               <Logo></Logo>
             </div>
             <p className='text-center text-white text-xs mt-4'>
-              2024. Capitalindustri
+              Inversiones corpoindustri 2014, c.a.
             </p>
             <p className='text-center text-white text-xs font-bold'>
               Todos los derechos reservados
