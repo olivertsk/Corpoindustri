@@ -24,6 +24,7 @@ export default function PushNotification() {
       .catch((err) => {
         console.log('An error occurred while retrieving token. ', err);
       });
+
     onMessageFb(messaging, (payload) => {
       console.log('Message received. ', payload);
     });
