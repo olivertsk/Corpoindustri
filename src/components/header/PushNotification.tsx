@@ -1,36 +1,42 @@
+'use client';
 import { updatePushToken } from '@/src/api/AuthApi';
-import {
-  messaging,
-  onMessageFb,
-  getTokenFb,
-  vapidKey,
-} from '@/src/lib/firebase';
+import { firebaseConfig } from '@/src/lib/firebase';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, onMessage, getToken } from 'firebase/messaging';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 export const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
 export const subStyles = 'bottom-0 lg:-bottom-[5px]';
 
+const vapidKey =
+  'BLKmHa2MYsF5UMwTLpCphBmO35lzUJ1TATLOousQ_SGjEs2_fbxz7tUqDC7ZDh-eZ-VF88rzUsjRjB35EhBRc04';
+
 export default function PushNotification() {
   useEffect(() => {
-    getTokenFb(messaging, {
-      vapidKey,
-    })
-      .then(async (currentToken) => {
-        if (currentToken) {
-          console.log(currentToken);
-          await updatePushToken({ tokenPush: currentToken });
-        }
-      })
-      .catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-      });
+    if (typeof window !== 'undefined') {
+      initializeApp(firebaseConfig);
+      const messaging = getMessaging();
 
-    onMessageFb(messaging, (payload) => {
-      console.log('Message received. ', payload);
-    });
+      getToken(messaging, {
+        vapidKey,
+      })
+        .then(async (currentToken) => {
+          if (currentToken) {
+            await updatePushToken({ tokenPush: currentToken });
+          }
+        })
+        .catch((err) => {
+          console.error('An error occurred while retrieving token. ', err);
+        });
+
+      onMessage(messaging, (payload) => {
+        console.log('Message received. ', payload);
+      });
+    }
   }, []);
   return (
-    <div className={menuBtnStyles}>
+    <Link href='/profile/notifications' className={menuBtnStyles}>
       <svg
         xmlns='http://www.w3.org/2000/svg'
         width='24'
@@ -43,6 +49,6 @@ export default function PushNotification() {
         />
       </svg>
       <sub className={subStyles}>Notificaciones</sub>
-    </div>
+    </Link>
   );
 }

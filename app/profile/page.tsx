@@ -60,7 +60,6 @@ export default function ProfilePage() {
   const { mutate } = useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => {
-      console.log(data);
       if (data.success) {
         setUser(data.item, token!);
         toast.success('Usuario actualizado correctamente');

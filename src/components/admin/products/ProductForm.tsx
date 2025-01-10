@@ -46,7 +46,6 @@ export default function ProductForm({
   });
 
   const departmentId = watch('departmentId');
-  console.log('departmentId :>> ', departmentId);
   const { data: categories, isLoading: isLoadingCategories } = useQuery({
     queryKey: [`allCategories${departmentId}`],
     queryFn: () =>

@@ -24,7 +24,6 @@ export const createFavoriteSlice: StateCreator<
       pag: get().page,
       isClient: true,
     });
-    console.log('products :>> ', products);
     set({
       favorite: products?.data || [],
       totalPages: products?.meta?.totalPage || 1,

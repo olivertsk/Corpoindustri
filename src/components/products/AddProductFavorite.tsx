@@ -39,7 +39,6 @@ export default function AddProductFavorite({
       getFavorites();
       setIsFavorite(!isFavorite);
     } catch {
-      console.log('caitog aqui');
       toast.error('Ha ocurrido un error');
     }
   };

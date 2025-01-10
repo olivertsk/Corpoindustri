@@ -15,7 +15,7 @@ export default function HeaderSearchbar() {
       <div className='flex flex-1 max-w-2xl justify-between bg-white rounded-full overflow-hidden items-center shadow-header'>
         <input
           type='text'
-          className='p-2.5 px-8 w-full outline-none'
+          className='p-2.5 px-8 pr-2 lg:pr-8 w-full outline-none'
           placeholder='Buscar Productos...'
           onKeyDown={(e) => e.key === 'Enter' && onSearch()}
           value={search}

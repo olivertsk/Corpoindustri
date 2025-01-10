@@ -31,7 +31,6 @@ export default function ChangePassword({ open, setOpen }: ChangePasswordProps) {
   const { mutate } = useMutation({
     mutationFn: updateUserPassword,
     onSuccess: (data) => {
-      console.log(data);
       if (!data.success) {
         if (typeof data.message === 'string') {
           return toast.error(data.message);
@@ -43,7 +42,6 @@ export default function ChangePassword({ open, setOpen }: ChangePasswordProps) {
         );
         return;
       }
-      console.log(data);
       toast.success('Contraseña actualizada');
       reset();
       setOpen(false);

@@ -33,8 +33,6 @@ export default function DepartmentPage() {
     refetchOnWindowFocus: false,
   });
 
-  console.log('data :>> ', data);
-
   const changePage = (page: number) => {
     setFilters({ ...filters, pag: page });
     setTimeout(() => {

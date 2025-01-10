@@ -32,7 +32,7 @@ export default function ForgotPassword() {
         toast.error(res.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }

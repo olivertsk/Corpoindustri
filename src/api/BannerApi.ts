@@ -54,7 +54,7 @@ export const createBanner = async (data: IBannerCreate) => {
   try {
     return await makePost('/banners/create', data);
   } catch (error) {
-    console.log('error :>> ', error);
+    console.error('error :>> ', error);
     throw error;
   }
 };

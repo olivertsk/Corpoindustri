@@ -79,8 +79,6 @@ export default function ContinuePayment({
       }
     });
 
-    console.log(payload);
-
     const response = await createOrder(payload);
     if (response.success) {
       setOpen(false);
@@ -97,7 +95,6 @@ export default function ContinuePayment({
         }
       });
     }
-    console.log(response);
   };
 
   return (

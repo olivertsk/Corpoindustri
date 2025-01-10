@@ -26,8 +26,6 @@ export default function OrderTable({ isClient = false }: OrderTableProps) {
     refetchOnWindowFocus: false,
   });
 
-  console.log(data);
-
   const changePage = (page: number) => {
     setFilters({ ...filters, pag: page });
     setTimeout(() => {

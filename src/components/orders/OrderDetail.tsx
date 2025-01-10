@@ -38,8 +38,6 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
   }, [data]);
   const returnLink = isClient ? `/profile/orders` : `/admin/orders`;
 
-  console.log(data);
-
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: updateOrderStatus,
@@ -140,12 +138,12 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                           : '-'}
                       </b>
                     </li>
-                    <li className='text-slate-600'>
-                      Estatus actual:
-                      <b> {translationsOrder[data!.status]}</b>
-                    </li>
                   </>
                 )}
+                <li className='text-slate-600'>
+                  Estatus actual:
+                  <b> {translationsOrder[data!.status]}</b>
+                </li>
                 {data.status === EStatusOrder.Decline && (
                   <li className='text-slate-600'>
                     Razón de rechazo:

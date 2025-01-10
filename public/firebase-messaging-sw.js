@@ -1,7 +1,7 @@
 'use strict';
 
 self.addEventListener('notificationclick', function (event) {
-  const urlToRedirect = event.notification.data?.FCM_MSG.data.url;
+  const urlToRedirect = event?.data.url;
   event.notification.close();
   event.waitUntil(self.clients.openWindow(urlToRedirect));
 });
@@ -26,21 +26,17 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-messaging.onMessage((payload) => {
-  console.log('Message received. ', payload);
-  // ...
-});
+// messaging.onMessage((payload) => {
+//   console.log('Message received. ', payload);
+//   // ...
+// });
 
 messaging.onBackgroundMessage((payload) => {
-  console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    payload
-  );
-  // Customize notification here
-  // const notificationTitle = 'Background Message Title';
+  console.log('Received background message ', payload);
+
+  // const notificationTitle = payload.notification.title;
   // const notificationOptions = {
-  //   body: 'Background Message body.',
-  //   icon: '/firebase-logo.png'
+  //   body: payload.notification.body,
   // };
 
   // self.registration.showNotification(notificationTitle, notificationOptions);

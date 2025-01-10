@@ -41,12 +41,10 @@ export default function NewMethod() {
           toast.success('Método de pago creado correctamente');
         }, 1000);
       }
-      console.log(data);
     },
   });
 
   const handleForm = async (data: PaymentMethodForm) => {
-    console.log(data);
     mutate(data);
   };
 

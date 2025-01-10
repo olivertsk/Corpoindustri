@@ -43,8 +43,6 @@ export default function PaymentMethods() {
     refetchOnWindowFocus: false,
   });
 
-  console.log('data :>> ', data);
-
   const changePage = (page: number) => {
     setFilters({ ...filters, pag: page });
     setTimeout(() => {
@@ -55,7 +53,6 @@ export default function PaymentMethods() {
   const { mutate } = useMutation({
     mutationFn: deleteMethod,
     onSuccess: (data) => {
-      console.log(data);
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: [queryKey] });
         toast.success('Método de Pago eliminado correctamente');

@@ -32,7 +32,6 @@ export const deleteFile = async (fileName: string) => {
       throw new Error(String(error));
     }
   } else {
-    console.log('false');
     return false;
   }
 };

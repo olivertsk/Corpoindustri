@@ -36,7 +36,6 @@ export default function RegisterPage() {
   const handleForm = async (formData: UserFormRegistration) => {
     try {
       const response = await registerUser(formData);
-      console.log('response :>> ', response);
       if (!response.success) {
         response.message.forEach(
           (item: { field: keyof UserFormRegistration; message: string }) => {
@@ -47,7 +46,7 @@ export default function RegisterPage() {
       }
       setUser(response.user, response.token);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

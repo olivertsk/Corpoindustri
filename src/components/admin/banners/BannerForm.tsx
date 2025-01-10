@@ -38,9 +38,7 @@ export default function BannerForm({
         (field === 'images' && image) ||
         (field === 'mobileImage' && mobileImage)
       ) {
-        console.log('aqui');
         const deleting = await deleteFile(image);
-        console.log(deleting);
         if (!deleting) {
           inputFileRef.current!.value = '';
           return;
@@ -48,7 +46,6 @@ export default function BannerForm({
       }
       const file = ev.target.files[0];
       const res = await uploadFile(file);
-      console.log(res);
       setValue(field, res.fileName[0]);
       inputFileRef.current!.value = '';
     }

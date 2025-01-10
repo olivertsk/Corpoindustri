@@ -33,11 +33,13 @@ export default function ResetPassword() {
       });
       return;
     }
-    formData.code = window.location.search.split('=')[1];
+    if (typeof window !== 'undefined') {
+      formData.code = window.location.search.split('=')[1];
+    }
+
     setLoading(true);
     try {
       const res = await resetPassword(formData);
-      console.log(res);
       if (res.success) {
         toast.success('Contraseña actualizada correctamente');
         route.push('/auth/sign-in');
@@ -57,7 +59,7 @@ export default function ResetPassword() {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }

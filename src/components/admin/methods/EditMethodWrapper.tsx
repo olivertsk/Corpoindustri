@@ -52,7 +52,6 @@ export default function EditMethodWrapper({ method }: EditMethodWrapperProps) {
           toast.success('Método de pago actualizado correctamente');
         }, 1000);
       }
-      console.log(data);
     },
   });
 
