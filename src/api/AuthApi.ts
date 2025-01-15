@@ -42,6 +42,15 @@ export const updateUser = async ({
   }
 };
 
+export const deleteUser = async () => {
+  try {
+    return await makePost(`/auth/deleted`, {}, 'DELETE');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const updateUserPassword = async (body: UserFormChangePassword) => {
   try {
     return await makePost(`/auth/password`, body, 'PATCH');

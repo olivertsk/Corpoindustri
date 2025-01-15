@@ -7,8 +7,10 @@ import { INotificationAttributes } from '../types/notification';
 
 export type NotificationSlice = {
   notifications: INotificationAttributes[];
+  totalNotifications: number;
   notificationPag: number;
   notificationTotalPages: number;
+  getAllNotifications: () => void;
   getNotifications: () => void;
   markNotificationAsSeen: (id: INotificationAttributes['id']) => void;
   setPage: (page: number) => void;
@@ -23,6 +25,16 @@ export const createNotificationSlice: StateCreator<
 > = (set, get) => ({
   notifications: [],
   loading: true,
+  totalNotifications: 0,
+  getAllNotifications: async () => {
+    const notifications = await getNotifications({
+      isView: false,
+    });
+    set({
+      totalNotifications: notifications.data.length,
+    });
+    console.log('notifications :>> ', notifications);
+  },
   getNotifications: async () => {
     set({
       loading: true,
@@ -35,7 +47,6 @@ export const createNotificationSlice: StateCreator<
       notificationTotalPages: notifications.meta.totalPage,
       loading: false,
     });
-    console.log(notifications);
   },
   markNotificationAsSeen: async (id) => {
     await markNotificationAsSeen(id);

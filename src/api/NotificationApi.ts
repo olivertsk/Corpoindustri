@@ -3,8 +3,9 @@ import { Meta } from '../types';
 import { INotificationAttributes } from '../types/notification';
 
 export type notificationParams = {
-  pag: number;
+  pag?: number;
   limit?: number;
+  isView?: boolean;
 };
 
 type NotificationResponse = {
@@ -13,7 +14,7 @@ type NotificationResponse = {
 };
 
 export const getNotifications = async (
-  params: notificationParams
+  params?: notificationParams
 ): Promise<NotificationResponse> => {
   try {
     console.log('params :>> ', params);

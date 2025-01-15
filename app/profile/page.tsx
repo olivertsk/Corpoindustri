@@ -2,6 +2,7 @@
 
 import { updateUser } from '@/src/api/AuthApi';
 import ChangePassword from '@/src/components/auth/ChangePassword';
+import ConfirmDeleteAccount from '@/src/components/auth/ConfirmDeleteAccount';
 import ErrorMessage from '@/src/components/ErrorMessage';
 import Heading from '@/src/components/Heading';
 import SubHeading from '@/src/components/SubHeading';
@@ -24,6 +25,7 @@ const labelStyle = 'col-span-2 lg:col-span-1';
 
 export default function ProfilePage() {
   const [open, setOpen] = useState(false);
+  const [deleteAccountModal, setDeleteAccountModal] = useState(false);
 
   const token = useAuthStore((store) => store.token);
   const user = useAuthStore((store) => store.user);
@@ -44,6 +46,7 @@ export default function ProfilePage() {
       name: user?.name || '',
       phoneNumber: user?.phoneNumber || '',
       location: user?.location || '',
+      receiveNotification: user?.receiveNotification || false,
     },
   });
 
@@ -174,6 +177,15 @@ export default function ProfilePage() {
             <ErrorMessage>{errors.location.message}</ErrorMessage>
           )}
         </label>
+        <label htmlFor='notif'>
+          <input
+            type='checkbox'
+            id='notif'
+            className='mr-2'
+            {...register('receiveNotification')}
+          />
+          Recibir Notificaciones
+        </label>
         <div className='col-span-2 flex justify-center mt-8'>
           <button
             type='button'
@@ -187,6 +199,19 @@ export default function ProfilePage() {
           <button className={`${primaryBtn} !rounded-full`}>Guardar</button>
         </div>
       </form>
+      <div className='col-span-2 flex justify-center mt-8'>
+        <button
+          type='button'
+          onClick={() => setDeleteAccountModal(true)}
+          className={`${secondaryBtn} bg-red-100 text-red-700 border-red-700 !rounded-full`}
+        >
+          Eliminar Cuenta
+        </button>
+      </div>
+      <ConfirmDeleteAccount
+        open={deleteAccountModal}
+        setOpen={setDeleteAccountModal}
+      />
       <ChangePassword open={open} setOpen={setOpen} />
     </main>
   );

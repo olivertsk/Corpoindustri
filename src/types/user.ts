@@ -8,6 +8,7 @@ export const userSchema = z.object({
   lastName: z.string(),
   dni: z.number(),
   dniType: z.enum(['V', 'E', 'J']),
+  receiveNotification: z.boolean(),
   phoneNumber: z.string(),
   location: z.string().max(255, { message: 'La dirección es muy larga' }),
   passwordConfirmation: z.string(),
@@ -31,6 +32,7 @@ export type TUpdateUser = Pick<
   | 'dniType'
   | 'location'
   | 'lastName'
+  | 'receiveNotification'
 >;
 export type TUser = Pick<
   User,
@@ -44,6 +46,7 @@ export type TUser = Pick<
   | 'lastName'
   | 'location'
   | 'id'
+  | 'receiveNotification'
 >;
 export type UserFormLogin = Pick<User, 'email' | 'password'>;
 export type UserFormRegistration = Pick<
