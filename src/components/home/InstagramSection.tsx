@@ -1,3 +1,4 @@
+'use client';
 export default function InstagramSection() {
   return (
     <div className='container mx-auto grid grid-cols-3 gap-8'>

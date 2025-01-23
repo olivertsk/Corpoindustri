@@ -13,6 +13,8 @@ export default function FavoritesPage() {
   const setPage = useAppGlobalStore((store) => store.setPage);
   const favorites = useAppGlobalStore((store) => store.favorite);
 
+  console.log('favorites :>> ', favorites);
+
   return (
     <main className='container mx-auto my-8'>
       <div className={containerStyles}>
@@ -21,9 +23,10 @@ export default function FavoritesPage() {
           Aquí podrás ver todos los productos que has agregado a tus favoritos
         </SubHeading>
         <section className='mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
-          {favorites.map((product, index) => (
-            <FavoriteCard key={index} favorite={product} />
-          ))}
+          {favorites.length > 0 &&
+            favorites.map((product, index) => (
+              <FavoriteCard key={index} favorite={product} />
+            ))}
           {!favorites.length && (
             <h4 className='text-center col-span-4 font-bold text-2xl text-slate-500'>
               Aún no hay favoritos agregados.

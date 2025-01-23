@@ -51,6 +51,7 @@ export default async function Home() {
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);
 
+  console.log('principalBannerData :>> ', principalBannerData);
   return (
     <>
       <section>
@@ -83,11 +84,13 @@ export default async function Home() {
             ))}
           </div>
         </div>
-        <div className='container mx-auto mb-4 p-4'>
+        <div className='container mx-auto mt-4 mb-4 p-4'>
           {tertiaryBannerData && (
-            <BannerSlider floatingBanner={true} slides={tertiaryBannerData} />
+            <div className='mb-24'>
+              <BannerSlider floatingBanner={true} slides={tertiaryBannerData} />
+            </div>
           )}
-          <div className='space-y-8'>
+          <div className='space-y-8 '>
             <TiktokSection />
             <InstagramSection />
           </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { apiUrl } from '@/src/lib/global';
 import { IBanner } from '@/src/types/banner';
@@ -48,15 +47,16 @@ export default function BannerSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
+              <p>{`${apiUrl}/file/${slide.images}`}</p>
+              <p>{`${apiUrl}/file/${slide.mobileImage}`}</p>
               <picture className='relative w-full h-[420px]'>
                 <source
                   srcSet={`${apiUrl}/file/${slide.mobileImage}`}
                   media='(max-width: 768px)'
                 />
-                <Image
+                <img
                   src={`${apiUrl}/file/${slide.images}`}
                   alt={slide?.description || 'mercado'}
-                  objectFit='cover'
                   width={2048}
                   height={1024}
                   style={{

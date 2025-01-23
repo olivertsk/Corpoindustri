@@ -1,3 +1,4 @@
+'use client';
 export default function TiktokSection() {
   return (
     <div className='container mx-auto grid grid-cols-3'>
@@ -30,15 +31,14 @@ export default function TiktokSection() {
         style={{ maxWidth: '780px', minWidth: '288px' }}
       >
         <section>
-          {' '}
           <a
             target='_blank'
             href='https://www.tiktok.com/@corpoindustri?refer=creator_embed'
           >
             @corpoindustri
-          </a>{' '}
-        </section>{' '}
-      </blockquote>{' '}
+          </a>
+        </section>
+      </blockquote>
       <script async src='https://www.tiktok.com/embed.js'></script>
     </div>
   );

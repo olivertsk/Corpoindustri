@@ -33,7 +33,6 @@ export const createNotificationSlice: StateCreator<
     set({
       totalNotifications: notifications.data.length,
     });
-    console.log('notifications :>> ', notifications);
   },
   getNotifications: async () => {
     set({
