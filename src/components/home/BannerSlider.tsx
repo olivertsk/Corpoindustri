@@ -47,8 +47,6 @@ export default function BannerSlider({
         >
           {slides.map((slide) => (
             <SwiperSlide key={slide.id}>
-              <p>{`${apiUrl}/file/${slide.images}`}</p>
-              <p>{`${apiUrl}/file/${slide.mobileImage}`}</p>
               <picture className='relative w-full h-[420px]'>
                 <source
                   srcSet={`${apiUrl}/file/${slide.mobileImage}`}
