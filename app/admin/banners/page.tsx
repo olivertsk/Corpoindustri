@@ -138,7 +138,9 @@ export default function BannerPage() {
                 <td className={`${tableBodyStyles} `}>
                   {banner.position === EPositionBanner.HomePrincipal
                     ? 'Principal'
-                    : 'Secundario'}
+                    : banner.position === EPositionBanner.HomeSecondary
+                    ? 'Secundario'
+                    : 'Terciario'}
                 </td>
                 <td className={`${tableBodyStyles} `}>
                   <div className='flex gap-4 justify-center'>

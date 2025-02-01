@@ -25,6 +25,7 @@ export type Order = {
   userId: User['id'];
   dni: User['dni'];
   dniType: string;
+  code: number;
   observation?: string;
   reason?: string;
   admin?: User;

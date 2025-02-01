@@ -29,6 +29,8 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     enabled: orderId !== null,
   });
 
+  console.log('data :>> ', data);
+
   const total = useMemo(() => {
     if (!data) return 0;
     return data.products.reduce(
@@ -162,30 +164,33 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.products.map((product) => (
-                      <tr key={product.productId} className='divide-y'>
-                        <td className='py-2 px-4 border-b'>
-                          {product.product.name}
-                        </td>
-                        <td className='py-2 px-4'>{product.quantity}</td>
-                        <td className='py-2 px-4'>
-                          <b>
-                            {normalizeAmounts(
-                              product.product.priceWithTax ||
-                                product.product.promotionalPrice ||
-                                product.product.price
-                            )}
-                          </b>
-                        </td>
-                        <td className='py-2 px-4'>
-                          <b>
-                            {normalizeAmounts(
-                              product.salePrice * product.quantity
-                            )}
-                          </b>
-                        </td>
-                      </tr>
-                    ))}
+                    {data?.products.map(
+                      (product) =>
+                        product.product && (
+                          <tr key={product.productId} className='divide-y'>
+                            <td className='py-2 px-4 border-b'>
+                              {product.product.name}
+                            </td>
+                            <td className='py-2 px-4'>{product.quantity}</td>
+                            <td className='py-2 px-4'>
+                              <b>
+                                {normalizeAmounts(
+                                  product.product.priceWithTax ||
+                                    product.product.promotionalPrice ||
+                                    product.product.price
+                                )}
+                              </b>
+                            </td>
+                            <td className='py-2 px-4'>
+                              <b>
+                                {normalizeAmounts(
+                                  product.salePrice * product.quantity
+                                )}
+                              </b>
+                            </td>
+                          </tr>
+                        )
+                    )}
                   </tbody>
                 </table>
               </div>
