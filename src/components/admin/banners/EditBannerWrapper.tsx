@@ -41,7 +41,9 @@ export default function EditBannerWrapper({ banner }: EditBannerWrapperProps) {
         queryClient.invalidateQueries({ queryKey: ['banner', id] });
 
         navigate.push('/admin/banners');
-        toast.success('Banner actualizado correctamente');
+        setTimeout(() => {
+          toast.success('Banner actualizado correctamente');
+        }, 1000);
       }
     },
     onError: (error) => {

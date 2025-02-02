@@ -46,9 +46,11 @@ export default function EditDepartmentWrapper({
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       queryClient.invalidateQueries({ queryKey: ['allDepartments'] });
       queryClient.invalidateQueries({ queryKey: ['department', id] });
-      toast.success('Departamento editado correctamente');
       navigate.replace('/admin/departments');
       reset();
+      setTimeout(() => {
+        toast.success('Departamento editado correctamente');
+      }, 1000);
     } else {
       toast.error('Ha ocurrido un error');
     }

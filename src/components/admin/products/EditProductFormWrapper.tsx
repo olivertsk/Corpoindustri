@@ -55,9 +55,11 @@ export default function EditProductFormWrapper({
     if (response.success) {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
-      toast.success('Producto editado correctamente');
       navigate.replace('/admin/products');
       reset();
+      setTimeout(() => {
+        toast.success('Producto editado correctamente');
+      }, 1000);
     } else {
       response.message.forEach((item: { field: string }) => {
         if (item.field === 'categoryId') {

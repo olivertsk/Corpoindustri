@@ -37,10 +37,11 @@ export default function NewCategory() {
     const response = await createCategory(formData);
     if (response.success) {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
-
-      toast.success('Categoria creada correctamente');
       navigate.replace('/admin/categories');
       reset();
+      setTimeout(() => {
+        toast.success('Categoria creada correctamente');
+      }, 1000);
     } else {
       response.message.forEach((item: { field: string }) => {
         if (item.field === 'icon') {

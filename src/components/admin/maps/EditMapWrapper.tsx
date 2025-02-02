@@ -32,7 +32,9 @@ export default function EditMapWrapper({ map }: EditMapWrapperProps) {
       queryClient.invalidateQueries({ queryKey: ['maps'] });
       queryClient.invalidateQueries({ queryKey: ['map', id] });
       navigate.replace('/admin/maps');
-      toast.success('Mapa actualizado con éxito');
+      setTimeout(() => {
+        toast.success('Mapa actualizado con éxito');
+      }, 1000);
     },
     onError: (error) => {
       toast.error(error.message);

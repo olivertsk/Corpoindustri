@@ -44,8 +44,10 @@ export default function NewProductPage() {
     mutationFn: createProduct,
     onSuccess: (data) => {
       if (data.success) {
-        toast.success('Producto creado exitosamente');
         navigate.push('/admin/products');
+        setTimeout(() => {
+          toast.success('Producto creado exitosamente');
+        }, 1000);
       } else {
         data.message.forEach((item: { field: string }) => {
           if (item.field === 'categoryId') {

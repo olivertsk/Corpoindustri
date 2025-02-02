@@ -35,8 +35,10 @@ export default function NewMapPage() {
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: ['maps'] });
-        toast.success('Mapa guardado con éxito');
         navigate.replace('/admin/maps');
+        setTimeout(() => {
+          toast.success('Mapa guardado con éxito');
+        }, 1000);
       }
     },
     onError: (error) => {

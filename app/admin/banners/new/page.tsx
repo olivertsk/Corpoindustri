@@ -36,7 +36,9 @@ export default function NewBannerPage() {
       if (data.success) {
         navigate.push('/admin/banners');
         queryClient.invalidateQueries({ queryKey: ['banners'] });
-        toast.success('Banner creado correctamente');
+        setTimeout(() => {
+          toast.success('Banner creado correctamente');
+        }, 1000);
       } else {
         data.message.forEach((item: { field: string }) => {
           if (item.field === 'images') {

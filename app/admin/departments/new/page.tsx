@@ -35,10 +35,11 @@ export default function NewDepartment() {
     if (response.success) {
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       queryClient.invalidateQueries({ queryKey: ['allDepartments'] });
-
-      toast.success('Departamento creado correctamente');
       navigate.replace('/admin/departments');
       reset();
+      setTimeout(() => {
+        toast.success('Departamento creado correctamente');
+      }, 1000);
     }
   };
 
