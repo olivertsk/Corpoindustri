@@ -48,7 +48,7 @@ export default function AdminLayout({
           onChange={setSizes}
           allowResize={false}
         >
-          <Pane minSize={50} className='transition-all'>
+          <Pane minSize={50} className='transition-all !overflow-auto'>
             <div className='min-h-screen bg-primary space-y-4 p-2'>
               <div className='max-w-[120px] mx-auto my-4 mb-7'>
                 <Logo />

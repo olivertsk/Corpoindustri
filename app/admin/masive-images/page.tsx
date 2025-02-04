@@ -1,9 +1,10 @@
 'use client';
-import { masiveImagesApi } from '@/src/api/MasiveImagesApi';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import ProgressBar from '@ramonak/react-progress-bar';
+import { apiUrl } from '@/src/lib/global';
 
 export default function MasiveImagesPage() {
   useBreadcrumb('Carga Masiva');
@@ -11,6 +12,7 @@ export default function MasiveImagesPage() {
   const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [uploadedSuccess, setUploadedSuccess] = useState<string>('');
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -24,27 +26,53 @@ export default function MasiveImagesPage() {
       const formData = new FormData();
       if (file) {
         formData.append('file', file);
-        const res = await masiveImagesApi(formData);
-        console.log(res);
-        if (res.message) {
-          toast.error(res.message);
-        }
-        if (res.data) {
-          if (res.data.errors) {
-            setErrors(
-              res.data.errors.map((error: { msg: string }) => error.msg)
-            );
+        const request = new XMLHttpRequest();
+        request.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const progress = Math.round((event.loaded * 100) / event.total);
+            setUploadProgress(progress);
           }
-          if (res.data.result) {
-            setUploadedSuccess(
-              `${res.data.result.file} ${res.data.result.msg}`
-            );
+        };
+
+        request.open('POST', `${apiUrl}/A2/upload`);
+        request.send(formData);
+
+        request.onload = () => {
+          if (request.status === 200) {
+            const res = JSON.parse(request.responseText);
+            if (res.data) {
+              if (res.data.errors) {
+                setErrors(
+                  res.data.errors.map((error: { msg: string }) => error.msg)
+                );
+              }
+              if (res.data.result) {
+                setUploadedSuccess(
+                  `${res.data.result.file} ${res.data.result.msg}`
+                );
+              }
+              toast.success('Archivo subido correctamente.');
+            }
+            setUploadProgress(0);
+          } else {
+            console.error('Error al subir el archivo:', request.statusText);
           }
-        }
+        };
+
+        request.onerror = (error) => {
+          console.log(error);
+          console.error('Error de red al subir el archivo.');
+        };
       }
     } catch (error) {
       console.log('error :>> ', error);
     }
+  };
+
+  const uploadNewFile = () => {
+    setFile(null);
+    setErrors([]);
+    setUploadedSuccess('');
   };
 
   return (
@@ -54,17 +82,29 @@ export default function MasiveImagesPage() {
           <div className='w-full shadow-md p-6 bg-white rounded-md'>
             <div className='flex justify-between items-center'>
               <p className='font-bold'>{file.name}</p>
-              <button onClick={() => setFile(null)}>
-                <XMarkIcon className='w-6' />
-              </button>
+              {!uploadProgress && (
+                <button onClick={uploadNewFile}>
+                  <XMarkIcon className='w-6' />
+                </button>
+              )}
             </div>
-            <div className='flex justify-center items-center mt-8'>
-              <button
-                onClick={sendFile}
-                className='bg-primary py-2 px-8 text-white mt-8 rounded-md font-bold uppercase w-full'
-              >
-                Enviar archivo
-              </button>
+            <div className='flex justify-center items-center mt-8 flex-wrap'>
+              <div className='w-full'>
+                {uploadProgress > 0 && (
+                  <ProgressBar
+                    labelAlignment='center'
+                    completed={uploadProgress}
+                  />
+                )}
+              </div>
+              {!uploadProgress && (
+                <button
+                  onClick={sendFile}
+                  className='bg-primary py-2 px-8 text-white mt-8 rounded-md font-bold uppercase w-full'
+                >
+                  Enviar archivo
+                </button>
+              )}
             </div>
             <div className='mt-4 space-y-3'>
               {uploadedSuccess && (
