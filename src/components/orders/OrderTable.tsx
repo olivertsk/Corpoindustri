@@ -46,8 +46,8 @@ export default function OrderTable({ isClient = false }: OrderTableProps) {
           </div>
         ) : (
           <>
-            <section>
-              <div>
+            <section className='overflow-hidden'>
+              <div className='overflow-auto'>
                 <table className='w-full rounded-md overflow-hidden bg-white'>
                   <thead>
                     <tr>

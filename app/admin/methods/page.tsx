@@ -83,7 +83,7 @@ export default function PaymentMethods() {
     return (
       <section>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2'>
+        <div className='mb-4 flex gap-2 flex-wrap'>
           <select
             onChange={handleChange}
             value={filters.type + ''}
@@ -137,7 +137,9 @@ export default function PaymentMethods() {
                 <td className={tableBodyStyles}>
                   {methodEnumTranslation[item.type]}
                 </td>
-                <td className={tableBodyStyles}>
+                <td
+                  className={`${tableBodyStyles} flex items-center justify-center gap-4 flex-wrap`}
+                >
                   <Link href={`methods/${item.id}`} className={editBtn}>
                     Editar
                   </Link>

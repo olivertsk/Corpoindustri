@@ -87,9 +87,9 @@ export default function UsersPage() {
 
   if (data && rolsData)
     return (
-      <section>
+      <section className='overflow-hidden'>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2'>
+        <div className='mb-4 flex gap-2 flex-wrap'>
           <input
             value={filters.name!}
             onChange={handleChange}
@@ -105,54 +105,60 @@ export default function UsersPage() {
             Filtrar
           </button>
         </div>
-        <table className='w-full rounded-md overflow-hidden bg-white'>
-          <thead>
-            <tr>
-              <th className={thClass}>Avatar</th>
-              <th className={thClass}>Nombre</th>
-              <th className={thClass}>Email</th>
-              <th className={thClass}>Teléfono</th>
-              <th className={thClass}>C.I</th>
-              <th className={thClass}>Rol</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((item) => (
-              <tr key={item.id}>
-                <td className={`${tableBodyStyles} text-center`}>
-                  <Image
-                    width={80}
-                    height={80}
-                    src={`${apiUrl}/file/${item.avatar}`}
-                    alt={item.name}
-                    className='m-auto'
-                  />
-                </td>
-                <td className={tableBodyStyles}>{item.name}</td>
-                <td className={tableBodyStyles}>{item.email}</td>
-                <td className={tableBodyStyles}>{item.phoneNumber}</td>
-                <td className={tableBodyStyles}>
-                  {item.dniType}
-                  {item.dni}
-                </td>
-                <td className={tableBodyStyles}>
-                  <select
-                    defaultValue={item.rol?.id}
-                    name='rol'
-                    onChange={(ev) => handleRolChange(ev, item.id)}
-                    className={`${inputStlyes} max-w-40`}
-                  >
-                    {rolsData?.data.map((rol) => (
-                      <option key={rol.id} value={rol.id}>
-                        {rolDictionary[rol.name as keyof typeof rolDictionary]}
-                      </option>
-                    ))}
-                  </select>
-                </td>
+        <div className='overflow-auto'>
+          <table className='w-full rounded-md overflow-hidden bg-white'>
+            <thead>
+              <tr>
+                <th className={thClass}>Avatar</th>
+                <th className={thClass}>Nombre</th>
+                <th className={thClass}>Email</th>
+                <th className={thClass}>Teléfono</th>
+                <th className={thClass}>C.I</th>
+                <th className={thClass}>Rol</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.data.map((item) => (
+                <tr key={item.id}>
+                  <td className={`${tableBodyStyles} text-center`}>
+                    <Image
+                      width={80}
+                      height={80}
+                      src={`${apiUrl}/file/${item.avatar}`}
+                      alt={item.name}
+                      className='m-auto'
+                    />
+                  </td>
+                  <td className={tableBodyStyles}>{item.name}</td>
+                  <td className={tableBodyStyles}>{item.email}</td>
+                  <td className={tableBodyStyles}>{item.phoneNumber}</td>
+                  <td className={tableBodyStyles}>
+                    {item.dniType}
+                    {item.dni}
+                  </td>
+                  <td className={tableBodyStyles}>
+                    <select
+                      defaultValue={item.rol?.id}
+                      name='rol'
+                      onChange={(ev) => handleRolChange(ev, item.id)}
+                      className={`${inputStlyes} min-w-40 max-w-40`}
+                    >
+                      {rolsData?.data.map((rol) => (
+                        <option key={rol.id} value={rol.id}>
+                          {
+                            rolDictionary[
+                              rol.name as keyof typeof rolDictionary
+                            ]
+                          }
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className='flex justify-center mt-8'>
           <Pagination
             count={data.meta.totalPage}

@@ -73,7 +73,7 @@ export default function DepartmentPage() {
     return (
       <section>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2'>
+        <div className='mb-4 flex gap-2 flex-wrap'>
           <select
             onChange={handleChange}
             value={filters.isSalient + ''}

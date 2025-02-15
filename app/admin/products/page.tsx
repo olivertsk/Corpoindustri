@@ -73,9 +73,9 @@ export default function ProductsPage() {
 
   if (data)
     return (
-      <section>
+      <section className='overflow-hidden'>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2'>
+        <div className='mb-4 flex gap-2 flex-wrap'>
           <input
             value={filters.name!}
             onChange={handleChange}
@@ -97,44 +97,48 @@ export default function ProductsPage() {
             Nuevo Producto
           </Link>
         </div>
-        <table className='w-full rounded-md overflow-hidden bg-white'>
-          <thead>
-            <tr>
-              <th className={thClass}>Nombre</th>
-              <th className={thClass}>Código</th>
-              <th className={thClass}>Precio</th>
-              <th className={thClass}>Precio Promocional</th>
-              <th className={thClass}>Stock</th>
-              <th className={thClass}>Departamento</th>
-              <th className={thClass}>Categoría</th>
-              <th className={thClass}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((item) => (
-              <tr key={item.id}>
-                <td className={tableBodyStyles}>{item.name}</td>
-                <td className={tableBodyStyles}>{item.code}</td>
-                <td className={tableBodyStyles}>{item.price}</td>
-                <td className={tableBodyStyles}>{item.promotionalPrice}</td>
-                <td className={tableBodyStyles}>{item.stock}</td>
-                <td className={tableBodyStyles}>{item.department?.name}</td>
-                <td className={tableBodyStyles}>{item.category?.name}</td>
-                <td className={tableBodyStyles}>
-                  <Link href={`products/${item.id}`} className={editBtn}>
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDeleteBtn(item.id)}
-                    className={deleteBtn}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className='overflow-auto'>
+          <table className='w-full rounded-md overflow-auto bg-white'>
+            <thead>
+              <tr>
+                <th className={thClass}>Nombre</th>
+                <th className={thClass}>Código</th>
+                <th className={thClass}>Precio</th>
+                <th className={thClass}>Precio Promocional</th>
+                <th className={thClass}>Stock</th>
+                <th className={thClass}>Departamento</th>
+                <th className={thClass}>Categoría</th>
+                <th className={thClass}>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.data.map((item) => (
+                <tr key={item.id}>
+                  <td className={tableBodyStyles}>{item.name}</td>
+                  <td className={tableBodyStyles}>{item.code}</td>
+                  <td className={tableBodyStyles}>{item.price}</td>
+                  <td className={tableBodyStyles}>{item.promotionalPrice}</td>
+                  <td className={tableBodyStyles}>{item.stock}</td>
+                  <td className={tableBodyStyles}>{item.department?.name}</td>
+                  <td className={tableBodyStyles}>{item.category?.name}</td>
+                  <td
+                    className={`${tableBodyStyles} flex justify-center items-center flex-wrap gap-4`}
+                  >
+                    <Link href={`products/${item.id}`} className={editBtn}>
+                      Editar
+                    </Link>
+                    <button
+                      onClick={() => handleDeleteBtn(item.id)}
+                      className={deleteBtn}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className='flex justify-center mt-8'>
           <Pagination
             count={data.meta.totalPage}

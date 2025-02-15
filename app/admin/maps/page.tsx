@@ -79,9 +79,9 @@ export default function LocationPage() {
 
   if (data)
     return (
-      <>
+      <section className='overflow-hidden'>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2'>
+        <div className='mb-4 flex gap-2 flex-wrap'>
           <input
             value={filters.name!}
             onChange={handleChange}
@@ -103,49 +103,55 @@ export default function LocationPage() {
             Nueva Ubicación
           </Link>
         </div>
-        <table className={tableStyles}>
-          <thead>
-            <tr>
-              <th className={tableHeadStyles}>Nombre</th>
-              <th className={tableHeadStyles}>Imagen</th>
-              <th className={tableHeadStyles}>Email</th>
-              <th className={tableHeadStyles}>Numero de Telefono</th>
-              <th className={tableHeadStyles}>Descripción</th>
-              <th className={tableHeadStyles}>Estatus</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.data.map((banner: TMap) => (
-              <tr key={banner.id}>
-                <td className={tableBodyStyles}>{banner.name}</td>
-                <td className={`${tableBodyStyles} flex justify-center`}>
-                  <Image
-                    src={`${apiUrl}/file/${banner.image}`}
-                    alt={banner.description || 'description'}
-                    width={100}
-                    height={100}
-                  />
-                </td>
-                <td className={`${tableBodyStyles} `}>{banner.email}</td>
-                <td className={`${tableBodyStyles} `}>{banner.phoneNumber}</td>
-                <td className={`${tableBodyStyles} `}>{banner.description}</td>
-                <td className={`${tableBodyStyles} `}>
-                  <div className='flex gap-4 justify-center'>
-                    <Link href={`maps/${banner.id}`} className={editBtn}>
-                      Editar
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteBtn(banner.id)}
-                      className={deleteBtn}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </td>
+        <div className='overflow-auto'>
+          <table className={tableStyles}>
+            <thead>
+              <tr>
+                <th className={tableHeadStyles}>Nombre</th>
+                <th className={tableHeadStyles}>Imagen</th>
+                <th className={tableHeadStyles}>Email</th>
+                <th className={tableHeadStyles}>Numero de Telefono</th>
+                <th className={tableHeadStyles}>Descripción</th>
+                <th className={tableHeadStyles}>Estatus</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data?.data.map((banner: TMap) => (
+                <tr key={banner.id}>
+                  <td className={tableBodyStyles}>{banner.name}</td>
+                  <td className={`${tableBodyStyles} flex justify-center`}>
+                    <Image
+                      src={`${apiUrl}/file/${banner.image}`}
+                      alt={banner.description || 'description'}
+                      width={100}
+                      height={100}
+                    />
+                  </td>
+                  <td className={`${tableBodyStyles} `}>{banner.email}</td>
+                  <td className={`${tableBodyStyles} `}>
+                    {banner.phoneNumber}
+                  </td>
+                  <td className={`${tableBodyStyles} `}>
+                    {banner.description}
+                  </td>
+                  <td className={`${tableBodyStyles} `}>
+                    <div className='flex gap-4 justify-center'>
+                      <Link href={`maps/${banner.id}`} className={editBtn}>
+                        Editar
+                      </Link>
+                      <button
+                        onClick={() => handleDeleteBtn(banner.id)}
+                        className={deleteBtn}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className='flex justify-center mt-8'>
           <Pagination
             count={data.meta.totalPage}
@@ -155,6 +161,6 @@ export default function LocationPage() {
             showLastButton
           />
         </div>
-      </>
+      </section>
     );
 }
