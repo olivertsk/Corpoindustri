@@ -31,6 +31,7 @@ export const makeGet = async (url: string, parameters?: unknown) => {
     });
     if (response.ok) {
       const respJSON = await response.json();
+
       return respJSON.data;
     } else {
       console.log(response);

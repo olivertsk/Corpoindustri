@@ -14,7 +14,11 @@ export const subStyles = 'bottom-0 lg:-bottom-[5px]';
 const vapidKey =
   'BLKmHa2MYsF5UMwTLpCphBmO35lzUJ1TATLOousQ_SGjEs2_fbxz7tUqDC7ZDh-eZ-VF88rzUsjRjB35EhBRc04';
 
-export default function PushNotification() {
+export default function PushNotification({
+  toggleMenu,
+}: {
+  toggleMenu: () => void;
+}) {
   const user = useAuthStore((store) => store.user);
   const totalNotifications = useAppGlobalStore(
     (store) => store.totalNotifications
@@ -49,7 +53,11 @@ export default function PushNotification() {
   if (!user) return '';
   if (user)
     return (
-      <Link href='/profile/notifications' className={menuBtnStyles}>
+      <Link
+        href='/profile/notifications'
+        className={menuBtnStyles}
+        onClick={toggleMenu}
+      >
         <div className='relative'>
           <svg
             xmlns='http://www.w3.org/2000/svg'

@@ -106,7 +106,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
         </div>
         <sub className={subStyles}>Favoritos</sub>
       </Link>
-      <PushNotification />
+      <PushNotification toggleMenu={toggleMenu} />
       <button
         onClick={handleLogout}
         className={`${menuBtnStyles} block lg:hidden`}

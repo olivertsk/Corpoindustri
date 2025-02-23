@@ -153,7 +153,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   </li>
                 )}
               </ul>
-              <div className='rounded-md overflow-hidden border mt-8'>
+              <div className='rounded-md  border mt-8 overflow-auto'>
                 <table className='w-full'>
                   <thead>
                     <tr>

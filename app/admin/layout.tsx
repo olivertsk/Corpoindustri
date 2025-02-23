@@ -7,7 +7,6 @@ import { adminButtons } from '@/src/config/adminPages';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 import SplitPane, { Pane } from 'split-pane-react';
 import 'split-pane-react/esm/themes/default.css';
 import { ISplitProps } from 'split-pane-react/esm/types';
@@ -20,6 +19,7 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [loaded, setLoaded] = useState(false);
   const [mQuery, setMQuery] = useState<{ matches: boolean }>({
     matches: false,
   });
@@ -29,15 +29,19 @@ export default function AdminLayout({
     mQuery.matches ? '40%' : '100%',
   ]);
 
+  console.log('sizes :>> ', sizes);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(min-width: 1023px)');
+      console.log(mediaQuery.matches);
       setSizes(mediaQuery.matches ? [100, '40%'] : [0, '100%']);
-
+      setLoaded(true);
       mediaQuery.addEventListener('change', (ev) => {
         if (ev.matches) {
           setSizes([100, '40%']);
         } else {
+          console.log('aqui');
           setSizes([0, '100%']);
         }
       });
@@ -46,7 +50,8 @@ export default function AdminLayout({
 
   const pathname = usePathname();
   useEffect(() => {
-    if (!mQuery.matches) {
+    if (!mQuery.matches && loaded) {
+      console.log('aqui 2');
       setSizes([0, '100%']);
     }
   }, [pathname]);
@@ -139,7 +144,6 @@ export default function AdminLayout({
             <section className='p-4'>{children}</section>
           </Pane>
         </SplitPane>
-        <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
       </main>
     </QueryClientProvider>
   );

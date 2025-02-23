@@ -115,9 +115,9 @@ export default function ProductForm({
               />
             </label>
           </div>
-          <div className='flex flex-wrap col-span-2'>
+          <div className='flex flex-wrap col-span-2 gap-4'>
             {handleImageArray.fields.map((item, index) => (
-              <div key={item.file} className='relative group'>
+              <div key={item.file} className='relative group '>
                 <Image
                   width={150}
                   height={150}
