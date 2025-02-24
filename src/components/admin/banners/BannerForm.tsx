@@ -26,6 +26,7 @@ export default function BannerForm({
 }: BannerFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const inputMobileFileRef = useRef<HTMLInputElement>(null);
+
   const image = watch('images');
   const mobileImage = watch('mobileImage');
 
@@ -38,7 +39,8 @@ export default function BannerForm({
         (field === 'images' && image) ||
         (field === 'mobileImage' && mobileImage)
       ) {
-        const deleting = await deleteFile(image);
+        const deleteItem = field === 'images' ? image : mobileImage;
+        const deleting = await deleteFile(deleteItem);
         if (!deleting) {
           inputFileRef.current!.value = '';
           return;
