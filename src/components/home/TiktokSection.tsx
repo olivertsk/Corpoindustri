@@ -1,5 +1,7 @@
 'use client';
 export default function TiktokSection() {
+  if (typeof window === 'undefined') return null;
+
   return (
     <div className='container mx-auto grid grid-cols-3'>
       <div className='hidden md:flex justify-center items-center bg-gradient-to-b from-primary to-secondary rounded-md'>
