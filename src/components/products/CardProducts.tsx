@@ -28,7 +28,11 @@ export default function CardProducts({
           width={1024}
           height={1024}
           alt='Harina Pan'
-          src={`${apiUrl}/file/${product.coverImage}` || ''}
+          src={
+            `${apiUrl}/file/${
+              product?.coverImage || product?.images[0]?.file
+            }` || ''
+          }
           style={{
             width: '100%',
             height: '100%',

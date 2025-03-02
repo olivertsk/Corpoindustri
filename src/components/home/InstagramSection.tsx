@@ -1,5 +1,7 @@
 'use client';
 export default function InstagramSection() {
+  if (typeof window === 'undefined') return null;
+
   return (
     <div className='container mx-auto grid grid-cols-3 gap-8'>
       <div className=' bg-white rounded-md col-span-3 md:col-span-2'>

@@ -105,7 +105,7 @@ export default function ProductsPage() {
                 <th className={thClass}>Código</th>
                 <th className={thClass}>Precio</th>
                 <th className={thClass}>Precio Promocional</th>
-                <th className={thClass}>Stock</th>
+                <th className={thClass}>Inventario</th>
                 <th className={thClass}>Departamento</th>
                 <th className={thClass}>Categoría</th>
                 <th className={thClass}>Acciones</th>
