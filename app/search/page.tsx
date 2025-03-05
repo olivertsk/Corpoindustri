@@ -38,6 +38,7 @@ function Main() {
   });
 
   const handlePagination = (pag: number) => {
+    window.scrollTo(0, 0);
     setFilters({ ...filters, pag });
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -79,56 +80,62 @@ function Main() {
     navigate.replace(`/search?${params.toString()}`);
   };
 
-  if (isFetching) {
-    return <Spinner />;
-  }
-
-  if (data)
-    return (
-      <>
-        <main className='container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4'>
-          <aside className='col-span-4 lg:col-span-1'>
-            {filters.name && (
-              <div className='flex items-center mb-4 gap-2'>
-                <p className='text-lg text-slate-500 '>
-                  Resultados para:{' '}
-                  <span className='font-bold'>{filters.name}</span>
-                </p>
-                <button
-                  className='border-2 border-red-600 rounded-sm'
-                  onClick={applyFilters}
-                >
-                  <XMarkIcon className='w-4 text-red-600' />
-                </button>
-              </div>
-            )}
-            <Accordion filters={filters} setFilters={setFilters} />
-          </aside>
-          <div className='col-span-4 lg:col-span-3 grid grid-cols-4 gap-4 h-fit'>
-            {data?.data.map((product) => (
-              <CardProducts
-                className='col-span-2 lg:col-span-1'
-                key={product.id}
-                product={product}
-              />
-            ))}
-            {!data.data.length && (
-              <div className='col-span-4 flex justify-center items-center h-[300px]'>
-                <p className='font-bold text-slate-500 text-lg'>
-                  No hay resultados para tu busqueda
-                </p>
-              </div>
-            )}
+  return (
+    <>
+      <main
+        className={`container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4  `}
+      >
+        <aside className='col-span-4 lg:col-span-1'>
+          {filters.name && (
+            <div className='flex items-center mb-4 gap-2'>
+              <p className='text-lg text-slate-500 '>
+                Resultados para:{' '}
+                <span className='font-bold'>{filters.name}</span>
+              </p>
+              <button
+                className='border-2 border-red-600 rounded-sm'
+                onClick={applyFilters}
+              >
+                <XMarkIcon className='w-4 text-red-600' />
+              </button>
+            </div>
+          )}
+          <Accordion filters={filters} setFilters={setFilters} />
+        </aside>
+        {isFetching && (
+          <div className='col-span-4 lg:col-span-3 h-[300px] flex justify-center items-center'>
+            <Spinner />
           </div>
-          <div className='col-span-4 flex justify-center mt-4'>
-            <Paginator
-              count={data?.meta.totalPage || 1}
-              onChange={handlePagination}
-            />
-          </div>
-        </main>
-      </>
-    );
+        )}
+        {data && !isFetching && (
+          <>
+            <div className='col-span-4 lg:col-span-3 grid grid-cols-4 gap-4 h-fit'>
+              {data?.data.map((product) => (
+                <CardProducts
+                  className='col-span-2 lg:col-span-1'
+                  key={product.id}
+                  product={product}
+                />
+              ))}
+              {!data.data.length && (
+                <div className='col-span-4 flex justify-center items-center h-[300px]'>
+                  <p className='font-bold text-slate-500 text-lg'>
+                    No hay resultados para tu busqueda
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+        <div className='col-span-4 flex justify-center mt-4'>
+          <Paginator
+            count={data?.meta.totalPage || 1}
+            onChange={handlePagination}
+          />
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default function SearchPage() {
