@@ -41,19 +41,35 @@ export default function ImagePreview({
         ))}
       </aside>
       <div className='order-1 lg:order-2  flex px-4 lg:px-0  flex-1 lg:border rounded-xl '>
-        <Image
-          width={2048}
-          height={0}
-          src={`${apiUrl}/file/${selectedImage}`}
-          alt={alt}
-          style={{
-            width: '100%',
-            height: '450px',
-            objectFit: 'contain',
-            aspectRatio: '1/1',
-          }}
-          className='rounded-xl overflow-hidden '
-        />
+        {selectedImage ? (
+          <Image
+            width={2048}
+            height={0}
+            src={`${apiUrl}/file/${selectedImage}`}
+            alt={alt}
+            style={{
+              width: '100%',
+              height: '450px',
+              objectFit: 'contain',
+              aspectRatio: '1/1',
+            }}
+            className='rounded-xl overflow-hidden '
+          />
+        ) : (
+          <Image
+            width={2048}
+            height={0}
+            src={`/logo.png`}
+            alt={alt}
+            style={{
+              width: '100%',
+              height: '450px',
+              objectFit: 'contain',
+              aspectRatio: '1/1',
+            }}
+            className='rounded-xl overflow-hidden '
+          />
+        )}
       </div>
     </div>
   );

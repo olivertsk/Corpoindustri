@@ -16,10 +16,15 @@ export default function CartProductCard({
   return (
     <div className='grid grid-cols-3 border rounded-lg p-2 overflow-hidden'>
       <Image
-        src={`${apiUrl}/file/${orderProduct.coverImage}`}
+        src={
+          orderProduct.coverImage
+            ? `${apiUrl}/file/${orderProduct.coverImage}`
+            : '/logo.png'
+        }
         alt={orderProduct.name}
         width={100}
         height={100}
+        className='rounded-md'
       />
       <div className='col-span-2'>
         <Link href={`/products/${orderProduct.id}`} className='font-bold'>

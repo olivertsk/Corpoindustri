@@ -51,7 +51,8 @@ export default async function Home() {
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);
 
-  console.log('principalBannerData :>> ', principalBannerData);
+  console.log('firstHalf', firstHalf);
+
   return (
     <>
       <section>

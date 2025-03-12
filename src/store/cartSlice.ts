@@ -37,7 +37,7 @@ export const useCartStore = create<CartStore>()(
             orderProducts: [
               ...state.orderProducts,
               {
-                coverImage: product.coverImage,
+                coverImage: product.coverImage || product?.images[0]?.file,
                 id: product.id,
                 name: product.name,
                 price: product.price,

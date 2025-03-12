@@ -29,15 +29,20 @@ export default function CardProducts({
           height={1024}
           alt='Harina Pan'
           src={
-            `${apiUrl}/file/${
-              product?.coverImage || product?.images[0]?.file
-            }` || ''
+            product?.coverImage || (product?.images && product?.images[0])
+              ? `${apiUrl}/file/${
+                  product?.coverImage || product?.images[0]?.file
+                }`
+              : '/logo.png'
           }
           style={{
             width: '100%',
             height: '100%',
             aspectRatio: '1/1',
-            objectFit: 'cover',
+            objectFit:
+              product?.coverImage || (product?.images && product?.images[0])
+                ? 'cover'
+                : 'contain',
           }}
         />
         <h4 className='px-4 overflow-hidden text-ellipsis text-sm mt-3 text-slate-400'>
