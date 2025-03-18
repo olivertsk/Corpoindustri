@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getProduct, getProducts } from '@/src/api/ProductApi';
+import { getProduct } from '@/src/api/ProductApi';
 import BackBtn from '@/src/components/BackBtn';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import AddProductFavorite from '@/src/components/products/AddProductFavorite';
@@ -33,10 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductShowPage({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id, true);
-  const relatedProducts = await getProducts({
-    pag: 1,
-    categoryId: product.category?.id,
-  });
 
   return (
     <>
@@ -109,7 +105,7 @@ export default async function ProductShowPage({ params }: Props) {
       </main>
       <div className='container mx-auto mt-10'>
         <ProductsSlider
-          products={relatedProducts.data}
+          products={product.relations}
           titleSection='Productos Relacionados'
         />
       </div>

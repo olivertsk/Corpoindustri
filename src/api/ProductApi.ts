@@ -2,7 +2,7 @@ import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
 import { ICategory } from '../types/category';
 import { Department } from '../types/department';
-import { Product, TProductForm } from '../types/product';
+import { Product, ProductDetail, TProductForm } from '../types/product';
 
 export type ProductFilters = {
   pag?: number;
@@ -26,6 +26,7 @@ export const getProducts = async (
   meta: Meta;
 }> => {
   try {
+    console.log('params :>> ', params);
     const response = await makeGet('/products/all', params);
     return response;
   } catch (error) {
@@ -52,7 +53,7 @@ export const deleteProduct = async (id: Product['id']) => {
 export const getProduct = async (
   id: string,
   isClient: boolean = false
-): Promise<Product> => {
+): Promise<ProductDetail> => {
   try {
     return await makeGet(`/products/show/${id}`, {
       isClient,

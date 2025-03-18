@@ -19,7 +19,7 @@ export default function ProductBreadcrumb({ product }: { product: Product }) {
           className='!text-sm'
           underline='hover'
           color='inherit'
-          href={`/search?departmentIds=${product.department?.id}&categoryIds=${product.category?.id}`}
+          href={`/search?departmentIds=${product.department?.id}&categoriesIds=${product.category?.id}`}
         >
           {product.category?.name}
         </Link>

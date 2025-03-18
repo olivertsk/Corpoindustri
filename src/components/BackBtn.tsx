@@ -1,12 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import {} from 'next/navigation';
 
 export default function BackBtn() {
-  const router = useRouter();
   return (
     <button
-      onClick={() => router.back()}
+      onClick={() => window.history.back()}
       className='flex gap-2 text-sm  transition-colors items-center font-bold px-4 rounded-full'
     >
       <svg

@@ -39,7 +39,9 @@ export default function EditProductFormWrapper({
       taxRate: product.taxRate,
       images: product.images,
       promotionalPrice: product.promotionalPrice,
-      priceWithTax: product.priceWithTax,
+      priceWithTax: product.priceWithTax
+        ? +product.priceWithTax?.toFixed(2)
+        : 0,
       status: product.status,
       longDescription: product.longDescription,
     },
@@ -61,11 +63,13 @@ export default function EditProductFormWrapper({
         toast.success('Producto editado correctamente');
       }, 1000);
     } else {
-      response.message.forEach((item: { field: string }) => {
+      response.message.forEach((item: { field: string; message: string }) => {
         if (item.field === 'categoryId') {
           toast.error('Debe seleccionar una categoría para continuar');
         } else if (item.field === 'code') {
           toast.error('El código de producto ya existe');
+        } else {
+          toast.error(`${item.field} ${item.message}`);
         }
       });
     }

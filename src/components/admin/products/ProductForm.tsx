@@ -284,9 +284,7 @@ export default function ProductForm({
             <label htmlFor=''>
               Marca
               <input
-                {...register('brand', {
-                  required: 'Este campo es requerido',
-                })}
+                {...register('brand')}
                 type='text'
                 className={inputStlyes}
               />
@@ -333,9 +331,7 @@ export default function ProductForm({
             <label htmlFor=''>
               Descripción corta
               <textarea
-                {...register('description', {
-                  required: 'Este campo es requerido',
-                })}
+                {...register('description')}
                 className={`${inputStlyes} resize-none min-h-[150px]`}
               />
             </label>

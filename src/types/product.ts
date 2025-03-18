@@ -56,7 +56,12 @@ export const productSchema = z.object({
   deletedAt: z.string().optional(),
 });
 
+export const productDetailSchema = productSchema.extend({
+  relations: z.array(productSchema),
+});
+
 export type Product = z.infer<typeof productSchema>;
+export type ProductDetail = z.infer<typeof productDetailSchema>;
 export type TProductForm = Pick<
   Product,
   | 'departmentId'
