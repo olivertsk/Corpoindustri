@@ -208,7 +208,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
         <div
           className={`accordion relative ${
             isMobile && isOpen ? 'w-[75%]' : !isMobile ? 'w-[100%]' : 'w-[0%]'
-          }  h-full lg:w-full border-r-primary shadow-md overflow-hidden divide-y-2 border-r-8  lg:border-none transition-all bg-white lg:rounded-md rounded-r-xl `}
+          }  h-full lg:w-full border-r-primary shadow-md overflow-auto lg:overflow-hidden divide-y-2 border-r-8  lg:border-none transition-all bg-white lg:rounded-md rounded-r-xl `}
         >
           {isMobile && (
             <button
