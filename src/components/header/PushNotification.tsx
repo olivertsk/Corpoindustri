@@ -28,24 +28,26 @@ export default function PushNotification({
   );
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      initializeApp(firebaseConfig);
-      const messaging = getMessaging();
+      if (!navigator.userAgent.includes('Instagram')) {
+        initializeApp(firebaseConfig);
+        const messaging = getMessaging();
 
-      getToken(messaging, {
-        vapidKey,
-      })
-        .then(async (currentToken) => {
-          if (currentToken) {
-            await updatePushToken({ tokenPush: currentToken });
-          }
+        getToken(messaging, {
+          vapidKey,
         })
-        .catch((err) => {
-          console.error('An error occurred while retrieving token. ', err);
-        });
+          .then(async (currentToken) => {
+            if (currentToken) {
+              await updatePushToken({ tokenPush: currentToken });
+            }
+          })
+          .catch((err) => {
+            console.error('An error occurred while retrieving token. ', err);
+          });
 
-      onMessage(messaging, (payload) => {
-        console.log('Message received. ', payload);
-      });
+        onMessage(messaging, (payload) => {
+          console.log('Message received. ', payload);
+        });
+      }
     }
     getAllNotifications();
   }, []);

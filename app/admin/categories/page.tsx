@@ -98,6 +98,7 @@ export default function CategoriesPage() {
             name='name'
             placeholder='Buscar Categorias'
             className='h-full py-2 rounded-md flex-1 px-4'
+            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
           />
           <button
             onClick={handleFilterBtn}

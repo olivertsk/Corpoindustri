@@ -19,7 +19,6 @@ export default function ConfirmDeleteAccount({
   const logout = useAuthStore((state) => state.logout);
   const handleDeleteAccount = async () => {
     const response = await deleteUser();
-    console.log(response);
     if (response.success) {
       handleLogout();
     }

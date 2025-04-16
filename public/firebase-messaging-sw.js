@@ -26,13 +26,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// messaging.onMessage((payload) => {
-//   console.log('Message received. ', payload);
-//   // ...
-// });
-
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message ', payload);
+  console.error('Received background message ', payload);
 
   // const notificationTitle = payload.notification.title;
   // const notificationOptions = {

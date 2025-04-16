@@ -92,6 +92,7 @@ export default function DepartmentPage() {
             name='name'
             placeholder='Buscar Departamentos'
             className='h-full py-2 rounded-md flex-1 px-4'
+            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
           />
           <button
             onClick={handleFilterBtn}

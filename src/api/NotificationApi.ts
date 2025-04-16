@@ -17,7 +17,6 @@ export const getNotifications = async (
   params?: notificationParams
 ): Promise<NotificationResponse> => {
   try {
-    console.log('params :>> ', params);
     return await makeGet(`/notifications/all/`, params);
   } catch (error) {
     throw error;

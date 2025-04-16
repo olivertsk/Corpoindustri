@@ -15,8 +15,6 @@ export default function EditProductPage() {
     getProduct(id).then((product) => setData(product));
   }, []);
 
-  console.log('product', data);
-
   if (!data) {
     return <Spinner />;
   }

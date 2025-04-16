@@ -29,19 +29,15 @@ export default function AdminLayout({
     mQuery.matches ? '40%' : '100%',
   ]);
 
-  console.log('sizes :>> ', sizes);
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(min-width: 1023px)');
-      console.log(mediaQuery.matches);
       setSizes(mediaQuery.matches ? [100, '40%'] : [0, '100%']);
       setLoaded(true);
       mediaQuery.addEventListener('change', (ev) => {
         if (ev.matches) {
           setSizes([100, '40%']);
         } else {
-          console.log('aqui');
           setSizes([0, '100%']);
         }
       });
@@ -51,7 +47,6 @@ export default function AdminLayout({
   const pathname = usePathname();
   useEffect(() => {
     if (!mQuery.matches && loaded) {
-      console.log('aqui 2');
       setSizes([0, '100%']);
     }
   }, [pathname]);

@@ -1,4 +1,6 @@
 import { PaymentMethod } from '@/src/types/method';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 type MethodOptionProps = {
   method: PaymentMethod;
@@ -8,6 +10,11 @@ export default function MethodOption({
   method,
   isAdmin = false,
 }: MethodOptionProps) {
+  const copyText = (text?: string) => {
+    navigator.clipboard.writeText(text || '');
+    toast.success('Texto copiado al portapapeles');
+  };
+
   return (
     <label
       className={`flex items-center gap-2 p-4 border cursor-pointer hover:bg-gray-100 transition-colors rounded-md mb-3 ${
@@ -23,22 +30,61 @@ export default function MethodOption({
           value={method.id}
         />
       )}
-      <div className='flex flex-col'>
+      <div className='flex flex-col break-all gap-1'>
         <span className='font-bold text-sm'>{method.name}</span>
         {method.dni && (
-          <span className='text-slate-600 text-sm'>
-            Cédula de Identidad: <b>{method.dni}</b>
-          </span>
+          <div className='flex items-center lg:gap-2 flex-wrap'>
+            <span className='text-slate-600 text-sm'>Cédula de Identidad:</span>
+            <div className='flex gap-4 items-center'>
+              <span className='text-slate-600 text-sm'>
+                <b> {method.dni}</b>
+              </span>
+              <button
+                onClick={() => copyText(method.dni)}
+                type='button'
+                className='border rounded-full text-xs p-1 px-2 flex items-center justify-center hover:bg-gray-300'
+              >
+                <DocumentDuplicateIcon className='w-4' />
+                Copiar
+              </button>
+            </div>
+          </div>
         )}
         {method.numberAccount && (
-          <span className='text-slate-600 text-sm'>
-            Número de cuenta: <b>{method.numberAccount}</b>
-          </span>
+          <div className='flex items-center lg:gap-2 flex-wrap'>
+            <span className='text-slate-600 text-sm'>Número de cuenta:</span>
+            <div className='flex gap-4 items-center'>
+              <span className='text-slate-600 text-sm'>
+                <b> {method.numberAccount}</b>
+              </span>
+              <button
+                onClick={() => copyText(method.numberAccount)}
+                type='button'
+                className='border rounded-full text-xs p-1 px-2 flex items-center justify-center hover:bg-gray-300'
+              >
+                <DocumentDuplicateIcon className='w-4' />
+                Copiar
+              </button>
+            </div>
+          </div>
         )}
         {method.phoneNumber && (
-          <span className='text-slate-600 text-sm'>
-            Número de teléfono: <b> {method.phoneNumber}</b>
-          </span>
+          <div className='flex items-center lg:gap-2 flex-wrap'>
+            <span className='text-slate-600 text-sm'>Número de teléfono:</span>
+            <div className='flex gap-4 items-center'>
+              <span className='text-slate-600 text-sm'>
+                <b> {method.phoneNumber}</b>
+              </span>
+              <button
+                onClick={() => copyText(method.phoneNumber)}
+                type='button'
+                className='border rounded-full text-xs p-1 px-2 flex items-center justify-center hover:bg-gray-300'
+              >
+                <DocumentDuplicateIcon className='w-4' />
+                Copiar
+              </button>
+            </div>
+          </div>
         )}
         {method.accountType && (
           <span className='text-slate-600 text-sm'>
@@ -46,9 +92,22 @@ export default function MethodOption({
           </span>
         )}
         {method.email && (
-          <span className='text-slate-600 text-sm'>
-            Correo Electrónico: <b> {method.email}</b>
-          </span>
+          <div className='flex items-center lg:gap-2 flex-wrap'>
+            <span className='text-slate-600 text-sm'>Correo Electrónico:</span>
+            <div className='flex gap-4 items-center'>
+              <span className='text-slate-600 text-sm'>
+                <b> {method.email}</b>
+              </span>
+              <button
+                onClick={() => copyText(method.email)}
+                type='button'
+                className='border rounded-full text-xs p-1 px-2 flex items-center justify-center hover:bg-gray-300'
+              >
+                <DocumentDuplicateIcon className='w-4' />
+                Copiar
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </label>

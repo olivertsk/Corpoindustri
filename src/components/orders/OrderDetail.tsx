@@ -29,8 +29,6 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     enabled: orderId !== null,
   });
 
-  console.log('data :>> ', data);
-
   const total = useMemo(() => {
     if (!data) return 0;
     return data.products.reduce(

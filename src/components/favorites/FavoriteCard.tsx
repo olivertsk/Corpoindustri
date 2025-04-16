@@ -13,7 +13,6 @@ type FavoriteCardProps = {
 export default function FavoriteCard({
   favorite: { product },
 }: FavoriteCardProps) {
-  console.log('product', product);
   return (
     product && (
       <Link

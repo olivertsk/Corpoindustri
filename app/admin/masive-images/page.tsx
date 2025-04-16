@@ -60,12 +60,12 @@ export default function MasiveImagesPage() {
         };
 
         request.onerror = (error) => {
-          console.log(error);
+          console.error(error);
           console.error('Error de red al subir el archivo.');
         };
       }
     } catch (error) {
-      console.log('error :>> ', error);
+      console.error('error :>> ', error);
     }
   };
 

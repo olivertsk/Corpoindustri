@@ -5,7 +5,7 @@ import { useCartStore } from '@/src/store/cartSlice';
 import { Order } from '@/src/types/order';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { Dialog } from '@mui/material';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
 import { toast } from 'react-toastify';
 import SelectPaymentMethod from './SelectPaymentMethod';
 
@@ -66,34 +66,82 @@ export default function ContinuePayment({
     [orderProducts]
   );
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   const paymentAction = async (formData: FormData) => {
-    const payload: Order = {} as Order;
+    try {
+      const payload: Order = {} as Order;
 
-    formData.forEach((value, key) => {
-      if (key === 'products') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (payload as Record<string, any>)[key] = JSON.parse(value.toString());
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (payload as Record<string, any>)[key] = value.toString();
-      }
-    });
-
-    const response = await createOrder(payload);
-    if (response.success) {
-      setOpen(false);
-      toast.success(
-        'Le enviaremos una notificacion cuando su pedido haya sido confirmado'
-      );
-      clearCart();
-      return;
-    }
-    if (!response.success) {
-      response.message.forEach((item: { field: string }) => {
-        if (item.field === 'dni') {
-          toast.error('La Cédula de Identidad es requerida');
+      formData.forEach((value, key) => {
+        if (key === 'products') {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (payload as Record<string, any>)[key] = JSON.parse(value.toString());
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (payload as Record<string, any>)[key] = value.toString();
         }
       });
+
+      const nameClient = formData.get('nameClient');
+      const phoneNumber = formData.get('phoneNumber');
+      const dni = formData.get('dni');
+
+      if (!nameClient) {
+        toast.error('Verifica que el nombre esté lleno');
+        throw new Error('');
+      }
+
+      if (!phoneNumber) {
+        toast.error('Verifica que el número de teléfono esté lleno');
+        throw new Error('');
+      }
+
+      if (!dni) {
+        toast.error('Verifica que la cédula esté llena');
+        throw new Error('');
+      }
+
+      if (!formData.get('paymentMethodId')) {
+        toast.error('Tienes que seleccionar una opción de pago');
+        throw new Error('');
+      }
+
+      const response = await createOrder(payload);
+      if (response.success) {
+        setOpen(false);
+        toast.success(
+          'Le enviaremos una notificacion cuando su pedido haya sido confirmado'
+        );
+        clearCart();
+        return;
+      }
+      if (!response.success) {
+        response.message.forEach((item: { field: string }) => {
+          if (item.field === 'dni') {
+            toast.error('La Cédula de Identidad es requerida');
+          }
+        });
+      }
+    } catch {
+      setTimeout(() => {
+        for (const [key, value] of formData.entries()) {
+          if (key === 'typePayment') {
+            const input = formRef.current!.querySelector(
+              `[value="${value}"]`
+            ) as HTMLInputElement;
+            if (input) {
+              input.checked = true; // Populate the field
+            }
+          } else {
+            const input = formRef.current!.querySelector(
+              `[name="${key}"]`
+            ) as HTMLInputElement;
+            if (input) {
+              input.value = value as string; // Populate the field
+            }
+          }
+        }
+      }, 200);
     }
   };
 
@@ -127,7 +175,7 @@ export default function ContinuePayment({
         <p className='text-center'>
           Llena el siguiente formulario para continuar con el proceso de pago
         </p>
-        <form action={paymentAction} className='mt-4'>
+        <form ref={formRef} action={paymentAction} className='mt-4'>
           <input type='hidden' name='userId' value={user?.id} />
           <input
             type='hidden'
@@ -152,7 +200,12 @@ export default function ContinuePayment({
               name='nameClient'
               id='nameClient'
               className={inputStlyes}
-              defaultValue={user?.name + ' ' + user?.lastName}
+              defaultValue={
+                user?.name
+                  ? (user?.name || '') + ' ' + (user?.lastName || '')
+                  : ''
+              }
+              required
             />
           </div>
           <div className='mb-4'>
@@ -168,6 +221,7 @@ export default function ContinuePayment({
               id='phoneNumber'
               className={inputStlyes}
               defaultValue={user?.phoneNumber}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -182,6 +236,7 @@ export default function ContinuePayment({
                 className={`${inputStlyes} !w-fit`}
                 defaultValue={user?.dniType}
                 name='dniType'
+                required
               >
                 <option value='V'>V</option>
                 <option value='E'>E</option>
@@ -193,6 +248,7 @@ export default function ContinuePayment({
                 className={inputStlyes}
                 id='dni'
                 name='dni'
+                required
               />
             </div>
           </div>
@@ -248,7 +304,7 @@ export default function ContinuePayment({
             Monto a pagar: <b>{normalizeAmounts(total)}</b>
           </p>
           <button type='submit' className={`${primaryBtn} w-full`}>
-            Pagar
+            Solicitud de Compra
           </button>
         </form>
       </div>

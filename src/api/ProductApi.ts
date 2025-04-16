@@ -26,7 +26,6 @@ export const getProducts = async (
   meta: Meta;
 }> => {
   try {
-    console.log('params :>> ', params);
     const response = await makeGet('/products/all', params);
     return response;
   } catch (error) {

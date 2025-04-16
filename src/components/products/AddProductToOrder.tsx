@@ -22,6 +22,14 @@ export default function AddProductToOrder({ product }: AddProductToOrderProps) {
     toast.success('Producto agregado al carrito');
   };
 
+  if (!product.status) {
+    return (
+      <div className='bg-red-100 p-4 rounded-xl text-red-700'>
+        Producto no disponible
+      </div>
+    );
+  }
+
   return (
     <>
       <div className='flex gap-4 mt-4 '>

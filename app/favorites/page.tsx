@@ -13,8 +13,6 @@ export default function FavoritesPage() {
   const setPage = useAppGlobalStore((store) => store.setPage);
   const favorites = useAppGlobalStore((store) => store.favorite);
 
-  console.log('favorites :>> ', favorites);
-
   return (
     <main className='container mx-auto my-8'>
       <div className={containerStyles}>

@@ -4,13 +4,24 @@ import Heading from '@/src/components/Heading';
 import CartProductCard from '@/src/components/products/CartProductCard';
 import SubHeading from '@/src/components/SubHeading';
 import { containerStyles, primaryBtn } from '@/src/lib/global';
+import { useAuthStore } from '@/src/store/authStore';
 import { useCartStore } from '@/src/store/cartSlice';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function CartPage() {
   const orderProducts = useCartStore((state) => state.orderProducts);
   const [open, setOpen] = useState(false);
+  const user = useAuthStore((store) => store.user);
+
+  const handleOpen = () => {
+    if (!user) {
+      toast.error('Debes iniciar sesión para continuar con la compra');
+      return;
+    }
+    setOpen(true);
+  };
 
   const total = useMemo(
     () =>
@@ -49,7 +60,7 @@ export default function CartPage() {
             </h4>
             <div className='mt-8 flex justify-center'>
               <button
-                onClick={() => setOpen(true)}
+                onClick={handleOpen}
                 className={`${primaryBtn} !rounded-full`}
               >
                 {' '}

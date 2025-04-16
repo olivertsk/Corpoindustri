@@ -83,6 +83,7 @@ export default function ProductsPage() {
             name='name'
             placeholder='Buscar Productos'
             className='h-full py-2 rounded-md flex-1 px-4'
+            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
           />
           <button
             onClick={handleFilterBtn}
@@ -106,6 +107,7 @@ export default function ProductsPage() {
                 <th className={thClass}>Precio</th>
                 <th className={thClass}>Precio Promocional</th>
                 <th className={thClass}>Inventario</th>
+                <th className={thClass}>Estatus</th>
                 <th className={thClass}>Departamento</th>
                 <th className={thClass}>Categoría</th>
                 <th className={thClass}>Acciones</th>
@@ -119,6 +121,9 @@ export default function ProductsPage() {
                   <td className={tableBodyStyles}>{item.price}</td>
                   <td className={tableBodyStyles}>{item.promotionalPrice}</td>
                   <td className={tableBodyStyles}>{item.stock}</td>
+                  <td className={tableBodyStyles}>
+                    {item.status ? 'Activo' : 'Inactivo'}
+                  </td>
                   <td className={tableBodyStyles}>{item.department?.name}</td>
                   <td className={tableBodyStyles}>{item.category?.name}</td>
                   <td
