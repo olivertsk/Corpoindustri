@@ -124,7 +124,7 @@ export default function AdminLayout({
                     pathname.includes(button.url) && button.url !== '/'
                       ? 'bg-white shadow-lg'
                       : ' text-white'
-                  } p-2 flex rounded-md  text-sm gap-2`}
+                  } p-2 flex rounded-md  text-sm gap-2 hover:bg-white/20 transition-colors`}
                   key={button.url}
                   href={button.url}
                 >

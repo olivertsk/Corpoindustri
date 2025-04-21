@@ -17,6 +17,6 @@ export const tableBodyStyles = `text-center border-b-[1px] py-3`;
 export const editBtn =
   'border border-accent-100 bg-accent-100 px-4 py-1 rounded-md';
 export const deleteBtn =
-  'border border-red-600 text-red-600 px-4 py-1 rounded-md ml-2';
+  'border border-red-600 text-red-600 px-4 py-1 rounded-md ml-2 hover:bg-red-200 transition-colors';
 
 export const thClass = 'text-center bg-primary py-2 text-white px-4';
