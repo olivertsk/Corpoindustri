@@ -1,9 +1,4 @@
-import {
-  deleteBtn,
-  inputStlyes,
-  primaryBtn,
-  secondaryBtn,
-} from '@/src/lib/global';
+import { inputStlyes, primaryBtn, secondaryBtn } from '@/src/lib/global';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import ErrorMessage from '../../ErrorMessage';
 import { useRouter } from 'next/navigation';
@@ -21,6 +16,8 @@ import {
   useState,
 } from 'react';
 import { ESurveyQuestionType, TSurveyQuestion } from '@/src/types/question';
+import { deleteSurveyQuestion } from '@/src/api/SurveyQuestionApi';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 type NewSurveyFormProps = {
   register: UseFormRegister<TSurveyForm>;
@@ -53,8 +50,12 @@ export const SurveyForm = forwardRef<NewSurveyRef, NewSurveyFormProps>(
       ]);
     };
 
-    const handleRemoveQuestion = () => {
-      setQuestions((prev) => prev.slice(0, -1));
+    const handleRemoveQuestion = async (idx: number) => {
+      if (questions[idx].id) {
+        const res = await deleteSurveyQuestion(questions[idx].id);
+        console.log('res :>> ', res);
+      }
+      setQuestions((prev) => prev.filter((_, index) => index !== idx));
     };
 
     const surveyQuestionsRefs = useRef<{
@@ -121,21 +122,40 @@ export const SurveyForm = forwardRef<NewSurveyRef, NewSurveyFormProps>(
           </div>
         </div>
         <div className=''>
-          <h2 className='text-2xl font-bold mt-8'>Preguntas</h2>
+          <h2 className='text-2xl font-bold mt-8 mb-4'>Preguntas</h2>
           <div>
-            <p className='text-sm text-gray-500'>Pregunta 1</p>
-            {questions.map((question, idx) => {
-              if (!surveyQuestionsRefs.current[idx]) {
-                surveyQuestionsRefs.current[idx] = createRef<NewQuestionRef>();
-              }
-              return (
-                <NewQuestion
-                  ref={surveyQuestionsRefs.current[idx]}
-                  surveyQuestion={question}
-                  key={idx}
-                />
-              );
-            })}
+            <div className='space-y-4'>
+              {questions.map((question, idx) => {
+                if (!surveyQuestionsRefs.current[idx]) {
+                  surveyQuestionsRefs.current[idx] =
+                    createRef<NewQuestionRef>();
+                }
+                return (
+                  <div
+                    key={idx}
+                    className='border border-gray-300 rounded-md p-4'
+                  >
+                    <div className='flex justify-between items-center'>
+                      <p className=' text-gray-500'>Pregunta {idx + 1}</p>
+                      <button
+                        onClick={() => handleRemoveQuestion(idx)}
+                        type='button'
+                        hidden={questions.length <= 1 || idx === 0}
+                        className={`hover:bg-red-600 transition-colors rounded-md px-4 py-2 bg-red-500 text-white mt-4  gap-2 items-center`}
+                      >
+                        <TrashIcon className='h-4 w-4 inline-block mr-2 -mt-1' />
+                        Remover Pregunta
+                      </button>
+                    </div>
+                    <NewQuestion
+                      ref={surveyQuestionsRefs.current[idx]}
+                      surveyQuestion={question}
+                      key={idx}
+                    />
+                  </div>
+                );
+              })}
+            </div>
             <div className='flex justify-end gap-4'>
               <button
                 onClick={handleAddQuestion}
@@ -143,15 +163,6 @@ export const SurveyForm = forwardRef<NewSurveyRef, NewSurveyFormProps>(
                 className={`${primaryBtn} mt-4`}
               >
                 Añadir Pregunta
-              </button>
-              <button
-                onClick={handleRemoveQuestion}
-                type='button'
-                className={`${deleteBtn} mt-4 ${
-                  questions.length <= 1 && 'hidden'
-                }`}
-              >
-                Remover Pregunta
               </button>
             </div>
           </div>

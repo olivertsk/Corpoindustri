@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 
 export default function RegisterPage() {
   const setUser = useAuthStore((state) => state.setUser);
+  const setFrom = useAuthStore((state) => state.setFrom);
   const [avatar, setAvatar] = useState('/User-avatar.svg.png');
   const inputFileRef = useRef<HTMLInputElement>(null);
   const {
@@ -44,6 +45,7 @@ export default function RegisterPage() {
         );
         return;
       }
+      setFrom('register');
       setUser(response.user, response.token);
     } catch (error) {
       console.error(error);

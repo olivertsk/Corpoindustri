@@ -5,9 +5,12 @@ import { useCartStore } from '@/src/store/cartSlice';
 import { Order } from '@/src/types/order';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { Dialog } from '@mui/material';
-import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
+import { Dispatch, SetStateAction, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import SelectPaymentMethod from './SelectPaymentMethod';
+import { getClientSurvey } from '@/src/api/SurveyApi';
+import { ESurveyType, TSurvey } from '@/src/types/survey';
+import SurveyWrapper from '../survey/SurveyWrapper';
 
 type ContinuePaymentProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -67,6 +70,7 @@ export default function ContinuePayment({
   );
 
   const formRef = useRef<HTMLFormElement>(null);
+  const [surveyId, setSurveyId] = useState<TSurvey['id']>(undefined);
 
   const paymentAction = async (formData: FormData) => {
     try {
@@ -113,6 +117,8 @@ export default function ContinuePayment({
           'Le enviaremos una notificacion cuando su pedido haya sido confirmado'
         );
         clearCart();
+        const surveyId = await getClientSurvey(ESurveyType.FIRSTPURCHASE);
+        setSurveyId(surveyId);
         return;
       }
       if (!response.success) {
@@ -146,168 +152,171 @@ export default function ContinuePayment({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={() => setOpen(false)}
-      maxWidth='sm'
-      fullWidth={true}
-    >
-      <div className='p-8'>
-        <button
-          className='absolute top-2 right-2'
-          onClick={() => setOpen(false)}
-        >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            width='24'
-            height='24'
-            viewBox='0 0 24 24'
+    <>
+      <SurveyWrapper surveyId={surveyId} setSurveyId={setSurveyId} />;
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth='sm'
+        fullWidth={true}
+      >
+        <div className='p-8'>
+          <button
+            className='absolute top-2 right-2'
+            onClick={() => setOpen(false)}
           >
-            <path
-              fill='currentColor'
-              d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'
-            />
-          </svg>
-        </button>
-        <h2 className='text-2xl font-bold text-center mb-2 text-slate-800'>
-          Estás a un paso de finalizar tu compra
-        </h2>
-        <p className='text-center'>
-          Llena el siguiente formulario para continuar con el proceso de pago
-        </p>
-        <form ref={formRef} action={paymentAction} className='mt-4'>
-          <input type='hidden' name='userId' value={user?.id} />
-          <input
-            type='hidden'
-            name='products'
-            value={JSON.stringify(parsedOrderProducts)}
-          />
-          <input
-            type='hidden'
-            name='amountWithoutTax'
-            value={totalWithoutTax}
-          />
-          <input type='hidden' name='valueTax' value={totalTax} />
-          <div className='mb-4'>
-            <label
-              htmlFor='nameClient'
-              className='block text-sm font-medium text-gray-700'
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
             >
-              Nombre del Cliente
-            </label>
+              <path
+                fill='currentColor'
+                d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'
+              />
+            </svg>
+          </button>
+          <h2 className='text-2xl font-bold text-center mb-2 text-slate-800'>
+            Estás a un paso de finalizar tu compra
+          </h2>
+          <p className='text-center'>
+            Llena el siguiente formulario para continuar con el proceso de pago
+          </p>
+          <form ref={formRef} action={paymentAction} className='mt-4'>
+            <input type='hidden' name='userId' value={user?.id} />
             <input
-              type='text'
-              name='nameClient'
-              id='nameClient'
-              className={inputStlyes}
-              defaultValue={
-                user?.name
-                  ? (user?.name || '') + ' ' + (user?.lastName || '')
-                  : ''
-              }
-              required
+              type='hidden'
+              name='products'
+              value={JSON.stringify(parsedOrderProducts)}
             />
-          </div>
-          <div className='mb-4'>
-            <label
-              htmlFor='phoneNumber'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Número de teléfono
-            </label>
             <input
-              type='text'
-              name='phoneNumber'
-              id='phoneNumber'
-              className={inputStlyes}
-              defaultValue={user?.phoneNumber}
-              required
+              type='hidden'
+              name='amountWithoutTax'
+              value={totalWithoutTax}
             />
-          </div>
-          <div className='mb-4'>
-            <label
-              htmlFor='dni'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Cédula
-            </label>
-            <div className='flex gap-2'>
-              <select
-                className={`${inputStlyes} !w-fit`}
-                defaultValue={user?.dniType}
-                name='dniType'
-                required
+            <input type='hidden' name='valueTax' value={totalTax} />
+            <div className='mb-4'>
+              <label
+                htmlFor='nameClient'
+                className='block text-sm font-medium text-gray-700'
               >
-                <option value='V'>V</option>
-                <option value='E'>E</option>
-                <option value='J'>J</option>
-              </select>
+                Nombre del Cliente
+              </label>
               <input
-                defaultValue={user?.dni}
-                type='number'
+                type='text'
+                name='nameClient'
+                id='nameClient'
                 className={inputStlyes}
-                id='dni'
-                name='dni'
+                defaultValue={
+                  user?.name
+                    ? (user?.name || '') + ' ' + (user?.lastName || '')
+                    : ''
+                }
                 required
               />
             </div>
-          </div>
-          <div className='mb-4'>
-            <label
-              htmlFor='observation'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Observación
-            </label>
-            <textarea
-              name='observation'
-              id='observation'
-              className={`${inputStlyes} resize-none min-h-32`}
-            />
-          </div>
-          <div className='mb-4'>
-            <label
-              htmlFor='location'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Ubicación
-            </label>
-            <textarea
-              name='location'
-              id='location'
-              className={`${inputStlyes} resize-none min-h-32`}
-              defaultValue={user?.location}
-            />
-          </div>
+            <div className='mb-4'>
+              <label
+                htmlFor='phoneNumber'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Número de teléfono
+              </label>
+              <input
+                type='text'
+                name='phoneNumber'
+                id='phoneNumber'
+                className={inputStlyes}
+                defaultValue={user?.phoneNumber}
+                required
+              />
+            </div>
+            <div className='mb-4'>
+              <label
+                htmlFor='dni'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Cédula
+              </label>
+              <div className='flex gap-2'>
+                <select
+                  className={`${inputStlyes} !w-fit`}
+                  defaultValue={user?.dniType}
+                  name='dniType'
+                  required
+                >
+                  <option value='V'>V</option>
+                  <option value='E'>E</option>
+                  <option value='J'>J</option>
+                </select>
+                <input
+                  defaultValue={user?.dni}
+                  type='number'
+                  className={inputStlyes}
+                  id='dni'
+                  name='dni'
+                  required
+                />
+              </div>
+            </div>
+            <div className='mb-4'>
+              <label
+                htmlFor='observation'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Observación
+              </label>
+              <textarea
+                name='observation'
+                id='observation'
+                className={`${inputStlyes} resize-none min-h-32`}
+              />
+            </div>
+            <div className='mb-4'>
+              <label
+                htmlFor='location'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Ubicación
+              </label>
+              <textarea
+                name='location'
+                id='location'
+                className={`${inputStlyes} resize-none min-h-32`}
+                defaultValue={user?.location}
+              />
+            </div>
 
-          <div className='mb-4'>
-            <label
-              htmlFor='date'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Fecha
-            </label>
-            <input
-              readOnly
-              type='text'
-              name='date'
-              id='date'
-              className={`${inputStlyes} read-only:bg-gray-200`}
-              defaultValue={new Date().toLocaleDateString()}
-            />
-          </div>
+            <div className='mb-4'>
+              <label
+                htmlFor='date'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Fecha
+              </label>
+              <input
+                readOnly
+                type='text'
+                name='date'
+                id='date'
+                className={`${inputStlyes} read-only:bg-gray-200`}
+                defaultValue={new Date().toLocaleDateString()}
+              />
+            </div>
 
-          <input type='hidden' name='amount' defaultValue={total} />
+            <input type='hidden' name='amount' defaultValue={total} />
 
-          <SelectPaymentMethod />
-          <p className='text-slate-700 font-bold text-lg my-4'>
-            Monto a pagar: <b>{normalizeAmounts(total)}</b>
-          </p>
-          <button type='submit' className={`${primaryBtn} w-full`}>
-            Solicitud de Compra
-          </button>
-        </form>
-      </div>
-    </Dialog>
+            <SelectPaymentMethod />
+            <p className='text-slate-700 font-bold text-lg my-4'>
+              Monto a pagar: <b>{normalizeAmounts(total)}</b>
+            </p>
+            <button type='submit' className={`${primaryBtn} w-full`}>
+              Solicitud de Compra
+            </button>
+          </form>
+        </div>
+      </Dialog>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import InstagramSection from '@/src/components/home/InstagramSection';
 import { MapSection } from '@/src/components/home/MapSection';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import TiktokSection from '@/src/components/home/TiktokSection';
+import ShowClientSurvey from '@/src/components/survey/ShowClientSurvey';
 import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
@@ -54,6 +55,7 @@ export default async function Home() {
   return (
     <>
       <section>
+        <ShowClientSurvey />
         {principalBannerData && (
           <BannerSlider slides={principalBannerData} showFadeOut={true} />
         )}

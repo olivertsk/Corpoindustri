@@ -1,5 +1,10 @@
 import { makeGet, makePost } from '@/src/config/fetch';
-import { TSurvey, TSurveyFilter, TSurveyForm } from '../types/survey';
+import {
+  ESurveyType,
+  TSurvey,
+  TSurveyFilter,
+  TSurveyForm,
+} from '../types/survey';
 import { Meta } from '../types';
 
 export const fxAllSurvey = async (parameters?: TSurveyFilter) => {
@@ -62,5 +67,51 @@ export const updateSurvey = async ({
     return await makePost(`/surveys/update/${id}`, data, 'PUT');
   } catch (error) {
     throw error;
+  }
+};
+
+export const getSurveyByType = async (type: TSurvey['type']) => {
+  try {
+    return await makeGet(`/surveys/leftSurvey`, {
+      type,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ENVIAR RESPUESTAS
+
+export type TAnswers = {
+  surveyId: string;
+  questionId: string;
+  answerOptionId?: string;
+  text?: string;
+};
+
+export type AnswerQuestion = {
+  answers: TAnswers[];
+};
+
+export type AnswerBody = {
+  surveyId: string;
+  email?: string;
+  name?: string;
+  phone?: string;
+  responses: TAnswers[];
+};
+
+export const sendAnswers = async (data: AnswerBody) => {
+  try {
+    return await makePost('/surveyResponses/create', data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getClientSurvey = async (type: ESurveyType) => {
+  const res: { data: { id: string }[] } = await getSurveyByType(type);
+  if (res.data[0]) {
+    return res.data[0].id;
   }
 };

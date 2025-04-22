@@ -1,4 +1,4 @@
-import { deleteBtn, inputStlyes, primaryBtn } from '@/src/lib/global';
+import { inputStlyes, primaryBtn } from '@/src/lib/global';
 import { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import {
   ESurveyQuestionType,
@@ -16,6 +16,8 @@ import {
   useState,
 } from 'react';
 import { TAnswerOption } from '@/src/types/surveyOptions';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { deleteSurveyAnswerOption } from '@/src/api/SurveyQuestionOptions';
 
 type SurveyQuestionFormProps = {
   register: UseFormRegister<TSurveyQuestionForm>;
@@ -50,8 +52,11 @@ export const SurveyQuestionForm = forwardRef<
     ]);
   };
 
-  const handleRemoveOption = () => {
-    setOptions((prev) => prev.slice(0, -1));
+  const handleRemoveOption = async (idx: number) => {
+    if (options[idx].id) {
+      await deleteSurveyAnswerOption(options[idx].id);
+    }
+    setOptions((prev) => prev.filter((_, index) => index !== idx));
   };
 
   const surveyOptionsRefs = useRef<{
@@ -117,11 +122,21 @@ export const SurveyQuestionForm = forwardRef<
               surveyOptionsRefs.current[idx] = createRef<NewOptionRef>();
             }
             return (
-              <div key={idx}>
+              <div key={idx} className='flex gap-2 items-end'>
                 <NewOption
                   answerOption={answerOption}
                   ref={surveyOptionsRefs.current[idx]}
                 />
+                <button
+                  className={`bg-red-500 hover:bg-red-600 p-2 rounded-full flex text-white items-center gap-2 ${
+                    idx === 0 && '!hidden'
+                  }`}
+                  type='button'
+                  onClick={() => handleRemoveOption(idx)}
+                >
+                  <TrashIcon className='w-5 h-5 text-white' />
+                  Remover
+                </button>
               </div>
             );
           })}
@@ -132,13 +147,6 @@ export const SurveyQuestionForm = forwardRef<
               onClick={handleAddOption}
             >
               Agregar Opción
-            </button>
-            <button
-              className={`${deleteBtn} ${options.length <= 1 && 'hidden'}`}
-              type='button'
-              onClick={handleRemoveOption}
-            >
-              Remover Opción
             </button>
           </div>
         </>
