@@ -71,7 +71,7 @@ export default function SurveyModal({
     mutate({
       email: user?.email,
       name: user?.name,
-      phone: user?.phoneNumber.toString(),
+      phone: user?.phoneNumber?.toString(),
       surveyId: surveyId!,
       responses: formData.answers,
     });

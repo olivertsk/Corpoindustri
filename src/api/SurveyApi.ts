@@ -6,6 +6,9 @@ import {
   TSurveyForm,
 } from '../types/survey';
 import { Meta } from '../types';
+import { User } from '../types/user';
+import { TSurveyQuestion } from '../types/question';
+import { TAnswerOption } from '../types/surveyOptions';
 
 export const fxAllSurvey = async (parameters?: TSurveyFilter) => {
   try {
@@ -113,5 +116,44 @@ export const getClientSurvey = async (type: ESurveyType) => {
   const res: { data: { id: string }[] } = await getSurveyByType(type);
   if (res.data[0]) {
     return res.data[0].id;
+  }
+};
+
+export type TSurveyListParams = {
+  pag: number;
+  title: string;
+};
+
+export type TSurveyList = {
+  id: string;
+  survey: TSurvey;
+  user: User;
+  responses: TSurveyResponse[];
+};
+
+export type TSurveyResponse = {
+  id: string;
+  questionId?: string;
+  question?: TSurveyQuestion;
+  text: string;
+  answerOptionId?: string;
+  answerOption?: TAnswerOption;
+};
+
+export const getSurveyList = async (
+  params: TSurveyListParams
+): Promise<{ data: TSurveyList[]; meta: Meta }> => {
+  try {
+    return await makeGet('/surveyResponses/all', params);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getSurveyResponse = async (id: string): Promise<TSurveyList> => {
+  try {
+    return await makeGet(`/surveyResponses/show/${id}`);
+  } catch (error) {
+    throw error;
   }
 };
