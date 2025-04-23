@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
 import { TSurveyQuestion, TSurveyQuestionForm } from '@/src/types/question';
-import SurveyQuestionForm from './SurveyQuestionForm';
+import { SurveyQuestionForm } from './SurveyQuestionForm';
 import { updateSurveyQuestion } from '@/src/api/SurveyQuestionApi';
 
 type EditCategoryWrapperProps = {
@@ -25,6 +25,7 @@ export default function EditSurveyQuestionWrapper({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<TSurveyQuestionForm>({
     defaultValues: surveyQuestion,
   });
@@ -33,7 +34,7 @@ export default function EditSurveyQuestionWrapper({
 
   const handleForm = async (formData: TSurveyQuestionForm) => {
     const response = await updateSurveyQuestion({
-      data: formData,
+      data: { ...formData, id: id as string },
       id: id as string,
     });
     if (response.success) {
@@ -55,7 +56,7 @@ export default function EditSurveyQuestionWrapper({
       onSubmit={handleSubmit(handleForm)}
       className='bg-white p-4 lg:p-16 rounded-md shadow-lg'
     >
-      <SurveyQuestionForm register={register} errors={errors} />
+      <SurveyQuestionForm watch={watch} register={register} errors={errors} />
     </form>
   );
 }

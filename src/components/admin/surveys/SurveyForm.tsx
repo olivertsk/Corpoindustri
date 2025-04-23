@@ -4,10 +4,6 @@ import ErrorMessage from '../../ErrorMessage';
 import { useRouter } from 'next/navigation';
 import { ESurveyType, TSurvey, TSurveyForm } from '@/src/types/survey';
 import {
-  NewQuestion,
-  NewQuestionRef,
-} from '@/app/admin/survey/questions/new/page';
-import {
   createRef,
   forwardRef,
   RefObject,
@@ -18,6 +14,7 @@ import {
 import { ESurveyQuestionType, TSurveyQuestion } from '@/src/types/question';
 import { deleteSurveyQuestion } from '@/src/api/SurveyQuestionApi';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { NewQuestion, NewQuestionRef } from '../survey/questions/NewQuestion';
 
 type NewSurveyFormProps = {
   register: UseFormRegister<TSurveyForm>;
@@ -130,6 +127,7 @@ export const SurveyForm = forwardRef<NewSurveyRef, NewSurveyFormProps>(
                   surveyQuestionsRefs.current[idx] =
                     createRef<NewQuestionRef>();
                 }
+
                 return (
                   <div
                     key={idx}
@@ -147,6 +145,7 @@ export const SurveyForm = forwardRef<NewSurveyRef, NewSurveyFormProps>(
                         Remover Pregunta
                       </button>
                     </div>
+
                     <NewQuestion
                       ref={surveyQuestionsRefs.current[idx]}
                       surveyQuestion={question}
