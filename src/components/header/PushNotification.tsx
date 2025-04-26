@@ -1,6 +1,6 @@
 'use client';
 import { updatePushToken } from '@/src/api/AuthApi';
-import { firebaseConfig } from '@/src/lib/firebase';
+import { firebaseConfig, vapidKey } from '@/src/lib/firebase';
 import { useAuthStore } from '@/src/store/authStore';
 import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 import { initializeApp } from 'firebase/app';
@@ -10,9 +10,6 @@ import { useEffect } from 'react';
 
 export const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
 export const subStyles = 'bottom-0 lg:-bottom-[5px]';
-
-const vapidKey =
-  'BLKmHa2MYsF5UMwTLpCphBmO35lzUJ1TATLOousQ_SGjEs2_fbxz7tUqDC7ZDh-eZ-VF88rzUsjRjB35EhBRc04';
 
 export default function PushNotification({
   toggleMenu,

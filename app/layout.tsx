@@ -5,6 +5,7 @@ import Footer from '@/src/components/Footer';
 import ToastWrapper from '@/src/components/ToastWrapper';
 import TransitionWrapper from '@/src/components/TransitionWrapper';
 import RequestFavorites from '@/src/components/RequestFavorites';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: 'Corpoindustri | Mayorista de alimentos al alcance de tu mano',
@@ -27,6 +28,7 @@ export default function RootLayout({
         {children}
         <Footer />
       </body>
+      <GoogleAnalytics gaId='G-DCPK0TYTBP' />
     </html>
   );
 }

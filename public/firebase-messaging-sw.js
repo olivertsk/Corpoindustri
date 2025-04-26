@@ -14,13 +14,13 @@ importScripts(
 );
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAkwo_-u8Uk8v1fnbwc4kUXMoRJSCgmfUM',
-  authDomain: 'duque-portafolio.firebaseapp.com',
-  projectId: 'duque-portafolio',
-  storageBucket: 'duque-portafolio.firebasestorage.app',
-  messagingSenderId: '8065693035',
-  appId: '1:8065693035:web:04d04fdb4d70788643482e',
-  measurementId: 'G-45KQGQLQEC',
+  apiKey: 'AIzaSyAP85QzGsuktR0EJqP-7JXFm45-y_s3V8A',
+  authDomain: 'corpoindustri-5b46c.firebaseapp.com',
+  projectId: 'corpoindustri-5b46c',
+  storageBucket: 'corpoindustri-5b46c.firebasestorage.app',
+  messagingSenderId: '490704821305',
+  appId: '1:490704821305:web:3ed99a938fee89ba0541e8',
+  measurementId: 'G-DCPK0TYTBP',
 };
 
 firebase.initializeApp(firebaseConfig);
