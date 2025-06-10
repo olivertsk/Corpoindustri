@@ -14,6 +14,7 @@ import {
   primaryBtn,
   secondaryBtn,
 } from '@/src/lib/global';
+import { cities, states } from '@/src/lib/location-ve';
 import { useAuthStore } from '@/src/store/authStore';
 import { TUpdateUser } from '@/src/types/user';
 import { useMutation } from '@tanstack/react-query';
@@ -37,6 +38,7 @@ export default function ProfilePage() {
     formState: { errors },
     setValue,
     getValues,
+    watch,
   } = useForm<TUpdateUser>({
     defaultValues: {
       avatar: user?.avatar,
@@ -47,6 +49,10 @@ export default function ProfilePage() {
       phoneNumber: user?.phoneNumber || '',
       location: user?.location || '',
       receiveNotification: user?.receiveNotification || false,
+      state: user?.state || 'amazonas',
+      city: user?.city || 'caracas',
+      zone: user?.zone || '',
+      gender: user?.gender,
     },
   });
 
@@ -72,6 +78,7 @@ export default function ProfilePage() {
     },
   });
 
+  const state = watch('state');
   const handleForm = (formData: TUpdateUser) =>
     mutate({ body: formData, userId: user!.id });
 
@@ -114,6 +121,67 @@ export default function ProfilePage() {
             id='name'
           />
           {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+        </label>
+        <label htmlFor='dob' className='block '>
+          Fecha de Nacimiento
+          <input
+            {...register('dob')}
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            type='date'
+            id='dob'
+          />
+        </label>
+
+        <label htmlFor='state' className='block '>
+          Estado
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='state'
+            {...register('state')}
+          >
+            {states.map((state) => (
+              <option key={state.value} value={state.value}>
+                {state.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor='city' className='block '>
+          Ciudad
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='city'
+            {...register('city')}
+          >
+            {cities[state as keyof typeof cities]?.map((city) => (
+              <option key={city.value} value={city.value}>
+                {city.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label htmlFor='zone' className='block '>
+          Zona
+          <input
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            type='text'
+            id='zone'
+            placeholder='Zona de residencia'
+            {...register('zone')}
+          />
+        </label>
+        <label htmlFor='gender' className='block '>
+          Genero
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='gender'
+            {...register('gender')}
+          >
+            <option value='M'>Masculino</option>
+            <option value='F'>Femenino</option>
+            <option value='O'>Otro</option>
+          </select>
         </label>
         <label htmlFor='name' className={labelStyle}>
           Email

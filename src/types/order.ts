@@ -23,6 +23,7 @@ export const translationsOrderColor = {
 export type Order = {
   id: string;
   userId: User['id'];
+  user?: User;
   dni: User['dni'];
   dniType: string;
   code: number;

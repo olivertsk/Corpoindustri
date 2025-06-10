@@ -10,8 +10,10 @@ import {
   tableBodyStyles,
   thClass,
 } from '@/src/lib/global';
+import { findCity, findState } from '@/src/lib/location-ve';
 import { rolDictionary } from '@/src/types/rol';
 import { User } from '@/src/types/user';
+import { getUserGender } from '@/src/utils/userGenderType';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -115,6 +117,10 @@ export default function UsersPage() {
                 <th className={thClass}>Email</th>
                 <th className={thClass}>Teléfono</th>
                 <th className={thClass}>C.I</th>
+                <th className={thClass}>Genero</th>
+                <th className={thClass}>Estado</th>
+                <th className={thClass}>Ciudad</th>
+                <th className={thClass}>Zona</th>
                 <th className={thClass}>Rol</th>
               </tr>
             </thead>
@@ -130,13 +136,23 @@ export default function UsersPage() {
                       className='m-auto'
                     />
                   </td>
-                  <td className={tableBodyStyles}>{item.name}</td>
-                  <td className={tableBodyStyles}>{item.email}</td>
-                  <td className={tableBodyStyles}>{item.phoneNumber}</td>
+                  <td className={tableBodyStyles}>{item.name || 'N/A'}</td>
+                  <td className={tableBodyStyles}>{item.email || 'N/A'}</td>
                   <td className={tableBodyStyles}>
-                    {item.dniType}
-                    {item.dni}
+                    {item.phoneNumber || 'N/A'}
                   </td>
+                  <td className={tableBodyStyles}>
+                    {item.dniType || 'N/A'}
+                    {item.dni || '- N/A'}
+                  </td>
+                  <td className={tableBodyStyles}>
+                    {getUserGender(item.gender)}
+                  </td>
+                  <td className={tableBodyStyles}>{findState(item.state)}</td>
+                  <td className={tableBodyStyles}>
+                    {findCity(item.state, item.city)}
+                  </td>
+                  <td className={tableBodyStyles}>{item.zone || 'N/A'}</td>
                   <td className={tableBodyStyles}>
                     <select
                       defaultValue={item.rol?.id}

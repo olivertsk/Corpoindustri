@@ -12,6 +12,7 @@ import { useMemo, useState } from 'react';
 import { normalizeDate } from '@/src/utils/normalizeDate';
 import { methodEnumTranslation } from '@/src/types/method';
 import MethodOption from '../cart/MethodOption';
+import { findCity, findState } from '@/src/lib/location-ve';
 
 type OrderDetailProps = {
   isClient: boolean;
@@ -60,6 +61,8 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     });
   };
 
+  console.log('data', data);
+
   return (
     <>
       <Dialog
@@ -95,6 +98,24 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   Teléfono:
                   <b> {data?.phoneNumber}</b>
                 </li>
+                {data?.user?.state && (
+                  <li className='text-slate-600'>
+                    Estado:
+                    <b> {findState(data?.user?.state)}</b>
+                  </li>
+                )}
+                {data?.user?.city && (
+                  <li className='text-slate-600'>
+                    Ciudad:
+                    <b> {findCity(data?.user?.state, data?.user?.city)}</b>
+                  </li>
+                )}
+                {data?.user?.zone && (
+                  <li className='text-slate-600'>
+                    Zona:
+                    <b> {data?.user?.zone}</b>
+                  </li>
+                )}
                 <li className='text-slate-600'>
                   Ubicación:
                   <b> {data?.location}</b>

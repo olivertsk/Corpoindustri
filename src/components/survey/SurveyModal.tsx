@@ -101,9 +101,7 @@ export default function SurveyModal({
                   <div>
                     <textarea
                       className={`${inputStlyes} text-sm resize-none h-32`}
-                      {...register(`answers.${idx}.text`, {
-                        required: true,
-                      })}
+                      {...register(`answers.${idx}.text`)}
                     />
                     {errors.answers?.[idx]?.text && (
                       <ErrorMessage>Este campo es requerido</ErrorMessage>
@@ -119,9 +117,7 @@ export default function SurveyModal({
                             type='radio'
                             id={`option-${option.id}`}
                             value={option.id}
-                            {...register(`answers.${idx}.answerOptionId`, {
-                              required: true,
-                            })}
+                            {...register(`answers.${idx}.answerOptionId`)}
                           />
                           <label
                             htmlFor={`option-${option.id}`}

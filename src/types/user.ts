@@ -12,6 +12,12 @@ export const userSchema = z.object({
   phoneNumber: z.string(),
   location: z.string().max(255, { message: 'La dirección es muy larga' }),
   passwordConfirmation: z.string(),
+
+  gender: z.enum(['M', 'F', 'O']).optional(),
+  zone: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  dob: z.string().optional(),
   rol: z
     .object({
       id: z.string(),
@@ -33,6 +39,11 @@ export type TUpdateUser = Pick<
   | 'location'
   | 'lastName'
   | 'receiveNotification'
+  | 'dob'
+  | 'state'
+  | 'city'
+  | 'zone'
+  | 'gender'
 >;
 export type TUser = Pick<
   User,
@@ -47,12 +58,28 @@ export type TUser = Pick<
   | 'location'
   | 'id'
   | 'receiveNotification'
+  | 'dob'
+  | 'state'
+  | 'city'
+  | 'zone'
+  | 'gender'
 >;
 export type UserFormLogin = Pick<User, 'email' | 'password'>;
 export type UserFormRegistration = Pick<
   User,
-  'email' | 'password' | 'name' | 'passwordConfirmation' | 'avatar'
->;
+  | 'email'
+  | 'password'
+  | 'name'
+  | 'passwordConfirmation'
+  | 'avatar'
+  | 'dob'
+  | 'state'
+  | 'city'
+  | 'zone'
+  | 'gender'
+> & {
+  uid?: string;
+};
 export type UserFormChangePassword = Pick<
   User,
   'password' | 'passwordConfirmation'

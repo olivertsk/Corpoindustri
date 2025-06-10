@@ -4,6 +4,7 @@ import { registerUser } from '@/src/api/AuthApi';
 import { uploadFile } from '@/src/api/FileApi';
 import ErrorMessage from '@/src/components/ErrorMessage';
 import { apiUrl } from '@/src/lib/global';
+import { cities, states } from '@/src/lib/location-ve';
 import { useAuthStore } from '@/src/store/authStore';
 import { UserFormRegistration } from '@/src/types/user';
 import Image from 'next/image';
@@ -30,23 +31,31 @@ export default function RegisterPage() {
       name: '',
       password: '',
       passwordConfirmation: '',
+      state: 'amazonas',
     },
   });
 
   const password = watch('password');
   const handleForm = async (formData: UserFormRegistration) => {
     try {
-      const response = await registerUser(formData);
-      if (!response.success) {
-        response.message.forEach(
-          (item: { field: keyof UserFormRegistration; message: string }) => {
-            setError(item.field, { message: item.message });
-          }
+      window.grecaptcha.enterprise.ready(async () => {
+        const token = await window.grecaptcha.enterprise.execute(
+          '6Lek1kUrAAAAAJbq8i-BupfcyP1WaN3ZV9_t-8-3',
+          { action: 'LOGIN' }
         );
-        return;
-      }
-      setFrom('register');
-      setUser(response.user, response.token);
+        console.log('token :>> ', token);
+        const response = await registerUser(formData);
+        if (!response.success) {
+          response.message.forEach(
+            (item: { field: keyof UserFormRegistration; message: string }) => {
+              setError(item.field, { message: item.message });
+            }
+          );
+          return;
+        }
+        setFrom('register');
+        setUser(response.user, response.token);
+      });
     } catch (error) {
       console.error(error);
     }
@@ -61,6 +70,8 @@ export default function RegisterPage() {
       setValue('avatar', res.fileName[0]);
     }
   };
+
+  const state = watch('state');
 
   return (
     <div className='bg-gradient-to-b from-primary to-primaryHover p-8 rounded-xl shadow-2xl w-full max-w-2xl'>
@@ -120,6 +131,68 @@ export default function RegisterPage() {
           />
         </label>
         {errors.name && <ErrorMessage> {errors.name.message} </ErrorMessage>}
+        <label htmlFor='dob' className='block text-white'>
+          Fecha de Nacimiento
+          <input
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            type='date'
+            {...register('dob')}
+            id='dob'
+            max={new Date().toISOString().split('T')[0]}
+          />
+        </label>
+
+        <label htmlFor='state' className='block text-white'>
+          Estado
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='state'
+            {...register('state')}
+          >
+            {states.map((state) => (
+              <option key={state.value} value={state.value}>
+                {state.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor='city' className='block text-white'>
+          Ciudad
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='city'
+            {...register('city')}
+          >
+            {cities[state as keyof typeof cities].map((city) => (
+              <option key={city.value} value={city.value}>
+                {city.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label htmlFor='zone' className='block text-white'>
+          Zona
+          <input
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            type='text'
+            id='zone'
+            placeholder='Zona de residencia'
+            {...register('zone')}
+          />
+        </label>
+        <label htmlFor='gender' className='block text-white'>
+          Genero
+          <select
+            className='w-full p-3 border rounded-md border-gray-400 text-black'
+            id='gender'
+            {...register('gender')}
+          >
+            <option value='M'>Masculino</option>
+            <option value='F'>Femenino</option>
+            <option value='O'>Otro</option>
+          </select>
+        </label>
         <label htmlFor='email' className='block text-white'>
           Email
           <input
@@ -171,11 +244,12 @@ export default function RegisterPage() {
         {errors.passwordConfirmation && (
           <ErrorMessage>{errors.passwordConfirmation.message}</ErrorMessage>
         )}
-        <input
+        <button
           type='submit'
-          value='Registrarse'
-          className='bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3  font-black  text-xl cursor-pointer'
-        />
+          className='g-recaptcha bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3  font-black  text-xl cursor-pointer'
+        >
+          Registrarse
+        </button>
       </form>
       <nav className='mt-8 flex flex-col space-y-4'>
         <Link
