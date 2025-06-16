@@ -64,7 +64,9 @@ export type TUser = Pick<
   | 'zone'
   | 'gender'
 >;
-export type UserFormLogin = Pick<User, 'email' | 'password'>;
+export type UserFormLogin = Pick<User, 'email' | 'password'> & {
+  recaptchaToken?: string;
+};
 export type UserFormRegistration = Pick<
   User,
   | 'email'
@@ -79,6 +81,7 @@ export type UserFormRegistration = Pick<
   | 'gender'
 > & {
   uid?: string;
+  recaptchaToken?: string;
 };
 export type UserFormChangePassword = Pick<
   User,

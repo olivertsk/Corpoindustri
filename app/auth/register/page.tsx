@@ -3,6 +3,7 @@
 import { registerUser } from '@/src/api/AuthApi';
 import { uploadFile } from '@/src/api/FileApi';
 import ErrorMessage from '@/src/components/ErrorMessage';
+import { googleCaptchaPublicKey } from '@/src/config/google_captcha';
 import { apiUrl } from '@/src/lib/global';
 import { cities, states } from '@/src/lib/location-ve';
 import { useAuthStore } from '@/src/store/authStore';
@@ -40,10 +41,10 @@ export default function RegisterPage() {
     try {
       window.grecaptcha.enterprise.ready(async () => {
         const token = await window.grecaptcha.enterprise.execute(
-          '6Lek1kUrAAAAAJbq8i-BupfcyP1WaN3ZV9_t-8-3',
+          googleCaptchaPublicKey,
           { action: 'LOGIN' }
         );
-        console.log('token :>> ', token);
+        formData.recaptchaToken = token;
         const response = await registerUser(formData);
         if (!response.success) {
           response.message.forEach(

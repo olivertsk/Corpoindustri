@@ -4,7 +4,7 @@ import { useAuthStore } from '@/src/store/authStore';
 import Logo from '../Logo';
 import { toast } from 'react-toastify';
 import { useCartStore } from '@/src/store/cartSlice';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAppGlobalStore } from '@/src/store/useAppGlobalStore';
 import AuthButton from './AuthButton';
 import AuthButtonMobile from './AuthButtonMobile';
@@ -22,6 +22,7 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
   /** IMPLEMENTING AUTH STORE */
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
+  const refreshUser = useAuthStore((state) => state.refreshUser);
   const orderProducts = useCartStore((state) => state.orderProducts);
   const favoriteProducts = useAppGlobalStore((state) => state.favorite);
 
@@ -41,6 +42,10 @@ export default function HeaderButtons({ handleOpenMenu }: HeaderButtonsProps) {
     () => favoriteProducts.length,
     [favoriteProducts]
   );
+
+  useEffect(() => {
+    refreshUser();
+  }, []);
 
   return (
     <nav className='flex lg:gap-8 lg:ml-8 flex-col items-start lg:flex-row'>

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, PersistOptions } from 'zustand/middleware';
 import { TUser } from '../types/user';
 import { setCookie } from 'cookies-next';
+import { refreshUser } from '../api/UserApi';
 
 interface AuthState {
   from: 'register' | 'login' | undefined;
@@ -10,6 +11,7 @@ interface AuthState {
   token: string | undefined | null;
   setUser: (user: TUser, token: string) => void;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -28,6 +30,21 @@ export const useAuthStore = create<AuthState>()(
       from: undefined,
       setFrom: (from) => {
         set({ from });
+      },
+      refreshUser: async () => {
+        try {
+          const user = await refreshUser();
+          if (user) {
+            set({ user });
+          }
+        } catch (error) {
+          console.error('Error refreshing user:', error);
+        }
+        // if (user) {
+        //   set({ user });
+        // } else {
+        //   set({ user: null });
+        // }
       },
     }),
     {

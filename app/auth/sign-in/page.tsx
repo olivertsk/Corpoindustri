@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { firebaseConfig } from '@/src/lib/firebase';
 import { initializeApp } from 'firebase/app';
+import { googleCaptchaPublicKey } from '@/src/config/google_captcha';
 
 export default function SignInPage() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -33,10 +34,11 @@ export default function SignInPage() {
       ) {
         window.grecaptcha.enterprise.ready(async () => {
           const token = await window.grecaptcha.enterprise.execute(
-            '6Lek1kUrAAAAAJbq8i-BupfcyP1WaN3ZV9_t-8-3',
+            googleCaptchaPublicKey,
             { action: 'LOGIN' }
           );
           console.log('token :>> ', token);
+          data.recaptchaToken = token;
           const response = await authenticateUser(data);
           if (!response.success) {
             toast.error(response.message);

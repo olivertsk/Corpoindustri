@@ -9,6 +9,18 @@ export type IUserFilter = {
   role: string;
 };
 
+export const refreshUser = async () => {
+  try {
+    console.log('Making get from auth/me');
+    const response = await makeGet(`/auth/me`);
+    console.log('response :>> ', response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const getUsers = async (
   parameters: IUserFilter
 ): Promise<{
@@ -33,7 +45,7 @@ export const changeRol = async ({
 }) => {
   try {
     const response = await makePost(
-      `/users/update/${id}`,
+      `/users/updateRol/${id}`,
       {
         rolId: rol,
       },
