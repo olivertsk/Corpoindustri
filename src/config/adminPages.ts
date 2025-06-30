@@ -50,6 +50,11 @@ export const adminButtons = [
     svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M22.775 8A9 9 0 0 1 23 10h-9V1a9 9 0 0 1 8.775 7m-2.067 0A7 7 0 0 0 16 3.292V8z"/><path d="M1 14a9 9 0 0 1 11-8.775V12h6.775A9 9 0 1 1 1 14m15.804 0H10V7.196A6.804 6.804 0 1 0 16.804 14"/></g></svg>',
   },
   {
+    url: '/admin/suggestions',
+    text: 'Sugerencias',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64"><path fill="currentColor" d="M56 9.6H8c-3.4 0-6.3 2.8-6.3 6.3v32.4c0 3.4 2.8 6.3 6.3 6.3h48c3.4 0 6.3-2.8 6.3-6.3V15.8c0-3.4-2.9-6.2-6.3-6.2m0 4.5h.3L32 29.7L7.7 14.1zm0 35.8H8c-1 0-1.8-.8-1.8-1.8V18.5l23.4 15c.7.5 1.5.7 2.3.7s1.6-.2 2.3-.7l23.4-15v29.7c.2 1-.6 1.7-1.6 1.7"/></svg>',
+  },
+  {
     url: '/',
     text: 'Inicio',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m16 8.41l-4.5-4.5L4.41 11H6v8h3v-6h5v6h3v-8h1.59L17 9.41V6h-1zM2 12l9.5-9.5L15 6V5h3v4l3 3h-3v8h-5v-6h-3v6H5v-8z"/></svg>',

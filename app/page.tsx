@@ -20,18 +20,35 @@ export default async function Home() {
     isSalient: true,
   };
   const categoryData: ICategory[] = await fxAllCategories(categoryFilter);
-  const principalBannerData: IBanner[] = await fxAllBanner({
-    position: EPositionBanner.HomePrincipal,
-    isClient: true,
-  });
-  const secondaryBannerData: IBanner[] = await fxAllBanner({
-    position: EPositionBanner.HomeSecondary,
-    isClient: true,
-  });
-  const tertiaryBannerData: IBanner[] = await fxAllBanner({
-    position: EPositionBanner.HomeTertiary,
-    isClient: true,
-  });
+
+  const result = await Promise.allSettled([
+    fxAllBanner({
+      position: EPositionBanner.HomePrincipal,
+      isClient: true,
+    }),
+    fxAllBanner({
+      position: EPositionBanner.HomeSecondary,
+      isClient: true,
+    }),
+    fxAllBanner({
+      position: EPositionBanner.HomeTertiary,
+      isClient: true,
+    }),
+    fxAllBanner({
+      position: EPositionBanner.Contact,
+      isClient: true,
+    }),
+  ]);
+
+  const principalBannerData: IBanner[] =
+    result[0].status === 'fulfilled' ? result[0].value : [];
+  const secondaryBannerData: IBanner[] =
+    result[1].status === 'fulfilled' ? result[1].value : [];
+  const tertiaryBannerData: IBanner[] =
+    result[2].status === 'fulfilled' ? result[2].value : [];
+
+  const contactBannerData: IBanner[] =
+    result[3].status === 'fulfilled' ? result[3].value : [];
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
@@ -56,7 +73,7 @@ export default async function Home() {
     <>
       <section>
         <ShowClientSurvey />
-        {principalBannerData && (
+        {principalBannerData.length && (
           <BannerSlider slides={principalBannerData} showFadeOut={true} />
         )}
         <div className='container mx-auto mb-4'>
@@ -71,7 +88,7 @@ export default async function Home() {
           ))}
         </div>
         <div className='container mx-auto mb-4'>
-          {secondaryBannerData && (
+          {secondaryBannerData.length && (
             <BannerSlider floatingBanner={true} slides={secondaryBannerData} />
           )}
           <div className='mt-12'>
@@ -86,7 +103,7 @@ export default async function Home() {
           </div>
         </div>
         <div className='container mx-auto mt-4 mb-4 p-4'>
-          {tertiaryBannerData && (
+          {tertiaryBannerData.length && (
             <div className='mb-24'>
               <BannerSlider floatingBanner={true} slides={tertiaryBannerData} />
             </div>
@@ -96,6 +113,15 @@ export default async function Home() {
             <InstagramSection />
           </div>
           <MapSection data={mapData.data} />
+          {contactBannerData.length > 0 && (
+            <div className='mb-24'>
+              <BannerSlider
+                floatingBanner={true}
+                slides={contactBannerData}
+                redirectTo='contact'
+              />
+            </div>
+          )}
         </div>
       </section>
     </>

@@ -10,7 +10,12 @@ import {
   tableHeadStyles,
   tableStyles,
 } from '@/src/lib/global';
-import { EPositionBanner, IBanner, IBannerFilter } from '@/src/types/banner';
+import {
+  EPositionBanner,
+  IBanner,
+  IBannerFilter,
+  positionBanenrDictionary,
+} from '@/src/types/banner';
 import { Pagination } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -137,11 +142,7 @@ export default function BannerPage() {
                   />
                 </td>
                 <td className={`${tableBodyStyles} `}>
-                  {banner.position === EPositionBanner.HomePrincipal
-                    ? 'Principal'
-                    : banner.position === EPositionBanner.HomeSecondary
-                    ? 'Secundario'
-                    : 'Terciario'}
+                  {positionBanenrDictionary[banner.position]}
                 </td>
                 <td className={`${tableBodyStyles} `}>
                   <div className='flex gap-4 justify-center'>

@@ -140,6 +140,7 @@ export default function BannerForm({
               <option value={EPositionBanner.HomeTertiary}>
                 Banner Terciario
               </option>
+              <option value={EPositionBanner.Contact}>Contacto</option>
             </select>
           </label>
           {errors.position && (

@@ -8,8 +8,11 @@ import Link from 'next/link';
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import { EStatusOrder, translationsOrder } from '@/src/types/order';
-import { useMemo, useState } from 'react';
-import { normalizeDate } from '@/src/utils/normalizeDate';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  normalizeDate,
+  normalizeDateWithTime,
+} from '@/src/utils/normalizeDate';
 import { methodEnumTranslation } from '@/src/types/method';
 import MethodOption from '../cart/MethodOption';
 import { findCity, findState } from '@/src/lib/location-ve';
@@ -61,7 +64,9 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     });
   };
 
-  console.log('data', data);
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['orders'] });
+  }, [data]);
 
   return (
     <>
@@ -165,6 +170,18 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   Estatus actual:
                   <b> {translationsOrder[data!.status]}</b>
                 </li>
+                {data.responsible && (
+                  <li className='text-slate-600'>
+                    Responsable:
+                    <b> {data.responsible.name}</b>
+                  </li>
+                )}
+                {data.viewTime && (
+                  <li className='text-slate-600'>
+                    Hora de visualización:
+                    <b> {normalizeDateWithTime(data.viewTime)}</b>
+                  </li>
+                )}
                 {data.status === EStatusOrder.Decline && (
                   <li className='text-slate-600'>
                     Razón de rechazo:
@@ -221,30 +238,32 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   </h4>
                 </div>
               </div>
-              {data?.status === EStatusOrder.Pending && !isClient && (
-                <>
-                  <div className='flex justify-center gap-4 mt-4'>
-                    <button
-                      onClick={() =>
-                        mutate({
-                          orderId: data!.id,
-                          status: EStatusOrder.Approve,
-                          reason: '',
-                        })
-                      }
-                      className={primaryBtn}
-                    >
-                      Aprobar
-                    </button>
-                    <button
-                      onClick={() => setIsDeclining(true)}
-                      className={`${primaryBtn} bg-red-600 hover:bg-red-700 text-white`}
-                    >
-                      Rechazar
-                    </button>
-                  </div>
-                </>
-              )}
+              {(data?.status === EStatusOrder.Pending ||
+                data?.status === EStatusOrder.Process) &&
+                !isClient && (
+                  <>
+                    <div className='flex justify-center gap-4 mt-4'>
+                      <button
+                        onClick={() =>
+                          mutate({
+                            orderId: data!.id,
+                            status: EStatusOrder.Approve,
+                            reason: '',
+                          })
+                        }
+                        className={primaryBtn}
+                      >
+                        Aprobar
+                      </button>
+                      <button
+                        onClick={() => setIsDeclining(true)}
+                        className={`${primaryBtn} bg-red-600 hover:bg-red-700 text-white`}
+                      >
+                        Rechazar
+                      </button>
+                    </div>
+                  </>
+                )}
             </div>
           </>
         )}

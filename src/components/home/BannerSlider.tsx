@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { apiUrl } from '@/src/lib/global';
 import { IBanner } from '@/src/types/banner';
@@ -19,19 +20,29 @@ type BannerSliderProps = {
   slides: IBanner[];
   showFadeOut?: boolean;
   floatingBanner?: boolean;
+  redirectTo?: string;
 };
 
 export default function BannerSlider({
   showFadeOut,
   slides,
   floatingBanner,
+  redirectTo,
 }: BannerSliderProps) {
+  const router = useRouter();
+  const handleRedirect = () => {
+    if (redirectTo) {
+      router.push(`${redirectTo}`);
+    }
+  };
+
   return (
     <>
       <div
         className={`relative overflow-hidden ${
           floatingBanner && ' sm:shadow-2xl sm:mt-8 sm:rounded-xl'
-        }`}
+        } ${redirectTo ? 'cursor-pointer' : ''}`}
+        onClick={handleRedirect}
       >
         <Swiper
           spaceBetween={50}

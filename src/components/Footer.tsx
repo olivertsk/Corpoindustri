@@ -93,6 +93,9 @@ export default function Footer() {
             <Link href='terms' className='text-white underline text-center'>
               Preguntas Frecuentes
             </Link>
+            <Link href='contact' className='text-white underline text-center'>
+              Contáctanos
+            </Link>
           </div>
         </footer>
       </>

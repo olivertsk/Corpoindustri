@@ -12,7 +12,15 @@ export enum EPositionBanner {
   HomePrincipal = 'homePrincipal',
   HomeSecondary = 'homeSecondary',
   HomeTertiary = 'homeTertiary',
+  Contact = 'Contact',
 }
+
+export const positionBanenrDictionary: Record<EPositionBanner, string> = {
+  [EPositionBanner.HomePrincipal]: 'Principal',
+  [EPositionBanner.HomeSecondary]: 'Secundario',
+  [EPositionBanner.HomeTertiary]: 'Terciario',
+  [EPositionBanner.Contact]: 'Contacto',
+};
 
 export const bannerSchema = z.object({
   id: z.string(),
