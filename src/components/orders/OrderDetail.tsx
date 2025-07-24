@@ -7,6 +7,8 @@ import { Dialog } from '@mui/material';
 import Link from 'next/link';
 import {
   ArrowsPointingOutIcon,
+  MagnifyingGlassMinusIcon,
+  MagnifyingGlassPlusIcon,
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -29,6 +31,7 @@ type OrderDetailProps = {
 export default function OrderDetail({ isClient }: OrderDetailProps) {
   const [isDeclining, setIsDeclining] = useState(false);
   const [fullScreenVoucher, setFullScreenVoucher] = useState(false);
+  const [showZoom, setShowZoom] = useState(false);
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const router = useRouter();
@@ -38,6 +41,8 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     queryKey: ['order', orderId],
     enabled: orderId !== null,
   });
+
+  console.log('data', data);
 
   const total = useMemo(() => {
     if (!data) return 0;
@@ -147,7 +152,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                 {data.paymentVoucher && (
                   <>
                     <span className='text-slate-600'>Comprobante de pago</span>
-                    <div className='relative w-fit'>
+                    <div className='relative w-fit border'>
                       <Image
                         src={`${apiUrl}/file/${data.paymentVoucher}`}
                         alt=''
@@ -155,7 +160,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                         width='0'
                         height='0'
                         style={{
-                          maxWidth: '350px',
+                          maxWidth: '150px',
                         }}
                         layout='responsive'
                         objectFit='contain'
@@ -305,22 +310,47 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
         maxWidth='md'
         fullWidth={true}
       >
-        <div className='p-2 flex justify-end'>
-          <button onClick={() => setFullScreenVoucher(false)}>
-            <XMarkIcon className='w-8' />
-          </button>
+        <div className='relative'>
+          <div className='p-2 flex justify-end'>
+            <button onClick={() => setFullScreenVoucher(false)}>
+              <XMarkIcon className='w-8' />
+            </button>
+          </div>
+          {data && (
+            <Image
+              src={`${apiUrl}/file/${data.paymentVoucher}`}
+              alt=''
+              title=''
+              width='0'
+              height='0'
+              style={
+                showZoom
+                  ? {
+                      maxWidth: '100%',
+                      maxHeight: '80vh',
+                      objectFit: 'contain',
+                    }
+                  : {}
+              }
+              layout='responsive'
+              objectFit='contain'
+            />
+          )}
+          <div className='sticky bottom-4 left-0 w-full flex justify-center gap-4'>
+            <button
+              className=' bg-black/80 rounded-md p-2'
+              onClick={() => setShowZoom(false)}
+            >
+              <MagnifyingGlassPlusIcon className='w-8   text-white p-2' />
+            </button>
+            <button
+              className=' bg-black/80 rounded-md p-2'
+              onClick={() => setShowZoom(true)}
+            >
+              <MagnifyingGlassMinusIcon className='w-8   text-white p-2' />
+            </button>
+          </div>
         </div>
-        {data && (
-          <Image
-            src={`${apiUrl}/file/${data.paymentVoucher}`}
-            alt=''
-            title=''
-            width='0'
-            height='0'
-            layout='responsive'
-            objectFit='contain'
-          />
-        )}
       </Dialog>
       <Dialog
         open={!!data && isDeclining}
