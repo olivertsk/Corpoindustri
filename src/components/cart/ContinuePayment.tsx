@@ -11,6 +11,7 @@ import SelectPaymentMethod from './SelectPaymentMethod';
 import { getClientSurvey } from '@/src/api/SurveyApi';
 import { ESurveyType, TSurvey } from '@/src/types/survey';
 import SurveyWrapper from '../survey/SurveyWrapper';
+import { uploadFile } from '@/src/api/FileApi';
 
 type ContinuePaymentProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -110,6 +111,12 @@ export default function ContinuePayment({
         throw new Error('');
       }
 
+      const paymentVoucher = formData.get('paymentVoucher');
+      if (paymentVoucher) {
+        const result = await uploadFile(paymentVoucher as File);
+        payload['paymentVoucher'] = result?.fileName[0] || '';
+      }
+
       const response = await createOrder(payload);
       if (response.success) {
         setOpen(false);
@@ -143,7 +150,7 @@ export default function ContinuePayment({
               `[name="${key}"]`
             ) as HTMLInputElement;
             if (input) {
-              input.value = value as string; // Populate the field
+              if (key !== 'paymentVoucher') input.value = value as string; // Populate the field
             }
           }
         }
@@ -306,7 +313,6 @@ export default function ContinuePayment({
             </div>
 
             <input type='hidden' name='amount' defaultValue={total} />
-
             <SelectPaymentMethod />
             <p className='text-slate-700 font-bold text-lg my-4'>
               Monto a pagar: <b>{normalizeAmounts(total)}</b>

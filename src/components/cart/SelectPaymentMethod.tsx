@@ -102,21 +102,37 @@ export default function SelectPaymentMethod() {
             </div>
           ))}
           {typePayment !== ETypePaymentMethods.Cash && (
-            <div className='mb-4'>
-              <label
-                htmlFor='reference'
-                className='block text-sm font-medium text-gray-700'
-              >
-                Referencia
-              </label>
-              <input
-                type='text'
-                name='reference'
-                id='reference'
-                placeholder='Escribe la referencia de tu transacción'
-                className={inputStlyes}
-              />
-            </div>
+            <>
+              <div className='mb-4'>
+                <label
+                  htmlFor='reference'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  Referencia
+                </label>
+                <input
+                  type='text'
+                  name='reference'
+                  id='reference'
+                  placeholder='Escribe la referencia de tu transacción'
+                  className={inputStlyes}
+                />
+              </div>
+              <div className='mb-4'>
+                <label
+                  htmlFor='paymentVoucher'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  Comprobante de Pago
+                </label>
+                <input
+                  type='file'
+                  name='paymentVoucher'
+                  id='paymentVoucher'
+                  className={inputStlyes}
+                />
+              </div>
+            </>
           )}
         </div>
       )}

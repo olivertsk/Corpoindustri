@@ -245,6 +245,11 @@ export default function RegisterPage() {
         {errors.passwordConfirmation && (
           <ErrorMessage>{errors.passwordConfirmation.message}</ErrorMessage>
         )}
+        <p className='text-slate-200 text-sm mt-4 font-light text-center'>
+          Esta información se solicita a fin de llevar un control de la base de
+          datos para futuras ofertas, promociones, eventos, rifas y otra
+          información
+        </p>
         <button
           type='submit'
           className='g-recaptcha bg-accent-100 rounded-md transition-colors hover:bg-accent-200 w-full p-3  font-black  text-xl cursor-pointer'
@@ -252,6 +257,7 @@ export default function RegisterPage() {
           Registrarse
         </button>
       </form>
+
       <nav className='mt-8 flex flex-col space-y-4'>
         <Link
           href='/auth/sign-in'

@@ -2,10 +2,14 @@ import { getOrder, updateOrderStatus } from '@/src/api/OrderApi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
-import { primaryBtn, thClass } from '@/src/lib/global';
+import { apiUrl, primaryBtn, thClass } from '@/src/lib/global';
 import { Dialog } from '@mui/material';
 import Link from 'next/link';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowsPointingOutIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import { EStatusOrder, translationsOrder } from '@/src/types/order';
 import { useEffect, useMemo, useState } from 'react';
@@ -16,6 +20,7 @@ import {
 import { methodEnumTranslation } from '@/src/types/method';
 import MethodOption from '../cart/MethodOption';
 import { findCity, findState } from '@/src/lib/location-ve';
+import Image from 'next/image';
 
 type OrderDetailProps = {
   isClient: boolean;
@@ -23,6 +28,7 @@ type OrderDetailProps = {
 
 export default function OrderDetail({ isClient }: OrderDetailProps) {
   const [isDeclining, setIsDeclining] = useState(false);
+  const [fullScreenVoucher, setFullScreenVoucher] = useState(false);
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const router = useRouter();
@@ -138,6 +144,31 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                       : '-'}
                   </b>
                 </li>
+                {data.paymentVoucher && (
+                  <>
+                    <span className='text-slate-600'>Comprobante de pago</span>
+                    <div className='relative w-fit'>
+                      <Image
+                        src={`${apiUrl}/file/${data.paymentVoucher}`}
+                        alt=''
+                        title=''
+                        width='0'
+                        height='0'
+                        style={{
+                          maxWidth: '350px',
+                        }}
+                        layout='responsive'
+                        objectFit='contain'
+                      />
+                      <button
+                        onClick={() => setFullScreenVoucher(true)}
+                        className='bg-black/40 rounded-md p-2 absolute top-2 right-2'
+                      >
+                        <ArrowsPointingOutIcon className='w-6 text-white' />
+                      </button>
+                    </div>
+                  </>
+                )}
                 {data.method && (
                   <li className='text-slate-600'>
                     Opción Seleccionada:{' '}
@@ -266,6 +297,29 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                 )}
             </div>
           </>
+        )}
+      </Dialog>
+      <Dialog
+        open={fullScreenVoucher}
+        onClose={() => setFullScreenVoucher(false)}
+        maxWidth='md'
+        fullWidth={true}
+      >
+        <div className='p-2 flex justify-end'>
+          <button onClick={() => setFullScreenVoucher(false)}>
+            <XMarkIcon className='w-8' />
+          </button>
+        </div>
+        {data && (
+          <Image
+            src={`${apiUrl}/file/${data.paymentVoucher}`}
+            alt=''
+            title=''
+            width='0'
+            height='0'
+            layout='responsive'
+            objectFit='contain'
+          />
         )}
       </Dialog>
       <Dialog

@@ -49,6 +49,7 @@ export type Order = {
   reference?: string;
   responsible?: User;
   viewTime?: string;
+  paymentVoucher?: string; // File name of the payment voucher
 };
 
 export type DataOrderProduct = {
