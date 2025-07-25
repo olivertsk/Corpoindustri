@@ -245,13 +245,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                             </td>
                             <td className='py-2 px-4'>{product.quantity}</td>
                             <td className='py-2 px-4'>
-                              <b>
-                                {normalizeAmounts(
-                                  product.product.priceWithTax ||
-                                    product.product.promotionalPrice ||
-                                    product.product.price
-                                )}
-                              </b>
+                              <b>{normalizeAmounts(product.salePrice)}</b>
                             </td>
                             <td className='py-2 px-4'>
                               <b>
