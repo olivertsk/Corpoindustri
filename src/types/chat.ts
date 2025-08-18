@@ -11,6 +11,15 @@ export type ChatQuestion = {
   options?: ChatAnswer[];
 };
 
+export type ResponseChatClient = {
+  from: 'user' | 'bot';
+  isAnswered?: boolean;
+  message?: string;
+  selectedOption?: ChatAnswer | null;
+  chatQuestion?: ChatQuestion;
+  index?: number;
+};
+
 export type ChatAnswer = {
   id?: string;
   name: string;
@@ -19,4 +28,9 @@ export type ChatAnswer = {
   chatQuestion?: ChatQuestion;
   answerType?: 'text' | 'question' | 'none';
   addAnAutoResponse?: boolean;
+};
+
+export type ResponseChatFilters = {
+  chatQuestionId?: string | null;
+  chatAnswerId?: string | null;
 };
