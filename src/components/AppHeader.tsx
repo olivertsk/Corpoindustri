@@ -58,7 +58,7 @@ export default function AppHeader() {
             <FloatingChat />
           </QueryClientProvider>
           <a
-            href='https://wa.me/584241902155?text=Hola, Te contacto desde corpoindustri.com'
+            href='https://wa.me/584242418564?text=Hola, Te contacto desde corpoindustri.com'
             className='cursor-pointer flex flex-col items-center justify-center'
             target='_blank'
           >

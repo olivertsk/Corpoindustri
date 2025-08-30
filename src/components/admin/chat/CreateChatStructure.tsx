@@ -1,4 +1,4 @@
-import { createChat, getChat } from '@/src/api/ChatApi';
+import { createChat, getChat, updateChat } from '@/src/api/ChatApi';
 import Questions from '@/src/components/admin/chat/Questions';
 import Spinner from '@/src/components/spinner/Spinner';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
@@ -40,17 +40,20 @@ export default function CreateChatStructure() {
       },
     });
 
-  useEffect(() => {
-    if (data) {
-      setValue('chatQuestions', [{ ...data }]);
-    }
-  }, [data]);
-
-  const { fields, remove } = useFieldArray({
+  const { fields, remove, replace } = useFieldArray({
     control,
     name: 'chatQuestions',
     keyName: '_id',
   });
+
+  useEffect(() => {
+    if (data) {
+      setValue('chatQuestions', [{ ...data }]);
+      replace([{ ...data }]);
+    }
+  }, [data, setValue, replace]);
+
+  console.log('fields', fields);
 
   const { mutate, isPending } = useMutation({
     mutationFn: createChat,
@@ -59,8 +62,19 @@ export default function CreateChatStructure() {
     },
   });
 
+  const { mutate: update } = useMutation({
+    mutationFn: updateChat,
+    onSuccess: (data) => {
+      console.log('Chat created successfully:', data);
+    },
+  });
+
   const save = (formData: ChatData) => {
-    mutate(formData);
+    if (data?.id) {
+      update({ chatId: data.id, data: formData });
+    } else {
+      mutate(formData);
+    }
   };
 
   return (

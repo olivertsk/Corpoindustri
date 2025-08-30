@@ -16,6 +16,20 @@ export const createChat = async (data: ChatData) => {
   }
 };
 
+export const updateChat = async ({
+  chatId,
+  data,
+}: {
+  chatId: string;
+  data: ChatData;
+}) => {
+  try {
+    return await makePost(`/chatQuestions/update/${chatId}`, data, 'PUT');
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getChat = async (): Promise<ChatQuestion> => {
   try {
     return await makeGet('/chatQuestions/show');
