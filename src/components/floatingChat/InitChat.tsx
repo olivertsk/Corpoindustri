@@ -141,7 +141,7 @@ export default function InitChat({ initChat }: InitChatProps) {
           {allChat.map((data, index) =>
             data.from === 'bot' ? (
               <div key={data.chatQuestion?.id} className='flex gap-4'>
-                <div className='w-10 h-10 rounded-full border flex justify-center items-center'>
+                <div className='min-w-[30px] max-w-[30px] h-[30px] rounded-full border flex justify-center items-center'>
                   <Logo />
                 </div>
                 <div>
