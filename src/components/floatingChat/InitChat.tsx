@@ -53,12 +53,37 @@ export default function InitChat({ initChat }: InitChatProps) {
   }, [allChat]);
 
   const handleUserResponseFromOption = (option: ChatAnswer, index: number) => {
-    setAllChat((prev) => [
-      ...prev.map((chat, i) =>
-        i === index ? { ...chat, isAnswered: true, message: option.name } : chat
-      ),
-      { from: 'user', message: option.name, selectedOption: option },
-    ]);
+    console.log('option', option);
+    setAllChat((prev) => {
+      const userResponse = [
+        {
+          from: 'user',
+          message: option.name,
+          selectedOption: option,
+        },
+      ] as ResponseChatClient[];
+
+      if (option.autoResponse) {
+        console.log('option.autoResponse', option.autoResponse);
+        userResponse.push({
+          from: 'bot',
+          message: option.autoResponse,
+          selectedOption: option,
+          chatQuestion: {
+            name: option.autoResponse,
+            type: 'text',
+          },
+        });
+      }
+      return [
+        ...prev.map((chat, i) =>
+          i === index
+            ? { ...chat, isAnswered: true, message: option.name }
+            : chat
+        ),
+        ...userResponse,
+      ];
+    });
     setFilters({
       chatQuestionId: option.chatQuestionId,
       chatAnswerId: option.id,

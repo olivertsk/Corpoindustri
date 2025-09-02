@@ -16,8 +16,6 @@ export default function CreateChatStructure() {
     queryKey: ['chat_admin'],
   });
 
-  console.log('data', data);
-
   const { register, control, watch, handleSubmit, setValue } =
     useForm<ChatData>({
       defaultValues: {
@@ -53,8 +51,6 @@ export default function CreateChatStructure() {
     }
   }, [data, setValue, replace]);
 
-  console.log('fields', fields);
-
   const { mutate, isPending } = useMutation({
     mutationFn: createChat,
     onSuccess: (data) => {
@@ -62,7 +58,7 @@ export default function CreateChatStructure() {
     },
   });
 
-  const { mutate: update } = useMutation({
+  const { mutate: update, isPending: isPendingUpdate } = useMutation({
     mutationFn: updateChat,
     onSuccess: (data) => {
       console.log('Chat created successfully:', data);
@@ -79,7 +75,7 @@ export default function CreateChatStructure() {
 
   return (
     <>
-      {(isPending || isLoading) && (
+      {(isPending || isLoading || isPendingUpdate) && (
         <div className='fixed top-0 left-0 h-full w-full flex justify-center items-center bg-black bg-opacity-30'>
           <Spinner />
         </div>
