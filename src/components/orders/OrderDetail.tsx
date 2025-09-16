@@ -1,7 +1,10 @@
 import { getOrder, updateOrderStatus } from '@/src/api/OrderApi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
+import {
+  normalizeAmounts,
+  normalizeAmountsBs,
+} from '@/src/utils/normalizeAmounts';
 import { apiUrl, primaryBtn, thClass } from '@/src/lib/global';
 import { Dialog } from '@mui/material';
 import Link from 'next/link';
@@ -79,6 +82,12 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
   }, [data]);
 
+  const manageCoinToShow = (price: number): string => {
+    return data?.paidWith === 'BS'
+      ? normalizeAmountsBs(price)
+      : normalizeAmounts(price);
+  };
+
   return (
     <>
       <Dialog
@@ -149,7 +158,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                       : '-'}
                   </b>
                 </li>
-                {data.paymentVoucher && (
+                {data.paymentVoucher && data.paymentVoucher !== '1' && (
                   <>
                     <span className='text-slate-600'>Comprobante de pago</span>
                     <div className='relative w-fit border'>
@@ -245,11 +254,11 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                             </td>
                             <td className='py-2 px-4'>{product.quantity}</td>
                             <td className='py-2 px-4'>
-                              <b>{normalizeAmounts(product.salePrice)}</b>
+                              <b>{manageCoinToShow(product.salePrice)}</b>
                             </td>
                             <td className='py-2 px-4'>
                               <b>
-                                {normalizeAmounts(
+                                {manageCoinToShow(
                                   product.salePrice * product.quantity
                                 )}
                               </b>
@@ -264,7 +273,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                 <div className='flex justify-end mt-4 px-11'>
                   <h4 className='text-slate-600'>Total: </h4>
                   <h4 className='ml-2'>
-                    <b>{normalizeAmounts(total)}</b>
+                    <b>{manageCoinToShow(total)}</b>
                   </h4>
                 </div>
               </div>

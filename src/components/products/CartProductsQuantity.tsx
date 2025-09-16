@@ -1,6 +1,7 @@
 import { OrderProduct } from '@/src/types/product';
 import HandleQuantity from './HandleQuantity';
 import { useCartStore } from '@/src/store/cartSlice';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
 
 export default function CartProductsQuantity({
   orderProduct,
@@ -10,13 +11,14 @@ export default function CartProductsQuantity({
   const addQuantity = useCartStore((state) => state.addQuantity);
   const subtractQuantity = useCartStore((state) => state.subtractQuantity);
   const removeProduct = useCartStore((state) => state.removeProduct);
+  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
 
   const minusCb = () => {
-    subtractQuantity(orderProduct);
+    subtractQuantity(orderProduct, selectedCoin);
   };
 
   const plusCb = () => {
-    addQuantity(orderProduct);
+    addQuantity(orderProduct, selectedCoin);
   };
 
   return (

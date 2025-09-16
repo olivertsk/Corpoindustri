@@ -6,7 +6,8 @@ import SubHeading from '@/src/components/SubHeading';
 import { containerStyles, primaryBtn } from '@/src/lib/global';
 import { useAuthStore } from '@/src/store/authStore';
 import { useCartStore } from '@/src/store/cartSlice';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -23,16 +24,31 @@ export default function CartPage() {
     setOpen(true);
   };
 
+  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
   const total = useMemo(
     () =>
       orderProducts.reduce(
         (init, item) =>
           (init +=
             item.quantity *
-            (item.priceWithTax || item.promotionalPrice || item.price)),
+            (selectedCoin.value === 'USD'
+              ? item.priceWithTax || item.promotionalPrice || item.price
+              : item.priceWithTaxBs ||
+                item.promotionalPriceBs ||
+                item.priceBs)),
         0
       ),
-    [orderProducts]
+    [orderProducts, selectedCoin]
+  );
+
+  const existProductByCoin = orderProducts.some((orderProduct) =>
+    selectedCoin.value === 'USD'
+      ? orderProduct.priceWithTax ||
+        orderProduct.promotionalPrice ||
+        orderProduct.price
+      : orderProduct.priceWithTaxBs ||
+        orderProduct.promotionalPriceBs ||
+        orderProduct.priceBs
   );
 
   return (
@@ -53,10 +69,11 @@ export default function CartPage() {
             </h4>
           )}
         </section>
-        {orderProducts.length > 0 && (
+        {existProductByCoin && (
           <>
             <h4 className='text-slate-600 text-2xl mt-8 text-center'>
-              Total: <b>{normalizeAmounts(total)}</b>
+              Total:{' '}
+              <b>{validateNormalizeAmount(selectedCoin, undefined, total)}</b>
             </h4>
             <div className='mt-8 flex justify-center'>
               <button

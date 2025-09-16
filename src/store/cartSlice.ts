@@ -1,24 +1,25 @@
 import { create } from 'zustand';
 import { OrderProduct, Product } from '../types/product';
 import { persist, PersistOptions } from 'zustand/middleware';
+import { Coin } from './multicoinStore';
+import { amountByCoin } from '../utils/normalizeAmounts';
 
 export type CartStore = {
   orderProducts: OrderProduct[];
-  addProduct: (product: Product, quantity: number) => void;
+  addProduct: (product: Product, quantity: number, selectedCoin: Coin) => void;
   removeProduct: (product: OrderProduct) => void;
-  clearCart: () => void;
-  addQuantity: (product: OrderProduct) => void;
-  subtractQuantity: (product: OrderProduct) => void;
+  clearCart: (selectedCoin: Coin) => void;
+  addQuantity: (product: OrderProduct, selectedCoin: Coin) => void;
+  subtractQuantity: (product: OrderProduct, selectedCoin: Coin) => void;
 };
 
 export const useCartStore = create<CartStore>()(
   persist<CartStore>(
     (set, get) => ({
       orderProducts: [],
-      addProduct: (product, quantity) => {
+      addProduct: (product, quantity, selectedCoin) => {
         if (!!get().orderProducts.find((p) => p.id === product.id)) {
-          const priceToPlus =
-            product.priceWithTax || product.promotionalPrice || product.price;
+          const priceToPlus = amountByCoin(selectedCoin, product);
           set((state) => ({
             orderProducts: state.orderProducts.map((p) =>
               p.id === product.id
@@ -31,8 +32,7 @@ export const useCartStore = create<CartStore>()(
             ),
           }));
         } else {
-          const priceToPlus =
-            product.priceWithTax || product.promotionalPrice || product.price;
+          const priceToPlus = amountByCoin(selectedCoin, product);
           set((state) => ({
             orderProducts: [
               ...state.orderProducts,
@@ -47,6 +47,9 @@ export const useCartStore = create<CartStore>()(
                 subtotal: priceToPlus,
                 taxRate: product.taxRate,
                 code: product.code,
+                priceBs: product.priceBs,
+                promotionalPriceBs: product.promotionalPriceBs,
+                priceWithTaxBs: product.priceWithTaxBs,
               },
             ],
           }));
@@ -57,14 +60,33 @@ export const useCartStore = create<CartStore>()(
           orderProducts: state.orderProducts.filter((p) => p.id !== product.id),
         }));
       },
-      clearCart: () => {
+      clearCart: (selectedCoin) => {
+        let refreshedCart = [...get().orderProducts];
+        get().orderProducts.forEach((product) => {
+          if (selectedCoin.value === 'USD') {
+            if (
+              product.priceWithTax ||
+              product.price ||
+              product.promotionalPrice
+            ) {
+              refreshedCart = refreshedCart.filter((p) => p.id !== product.id);
+            }
+          } else {
+            if (
+              product.priceWithTaxBs ||
+              product.priceBs ||
+              product.promotionalPriceBs
+            ) {
+              refreshedCart = refreshedCart.filter((p) => p.id !== product.id);
+            }
+          }
+        });
         set({
-          orderProducts: [],
+          orderProducts: refreshedCart,
         });
       },
-      addQuantity: (product) => {
-        const priceToPlus =
-          product.priceWithTax || product.promotionalPrice || product.price;
+      addQuantity: (product, selectedCoin) => {
+        const priceToPlus = amountByCoin(selectedCoin, product);
         set((state) => ({
           orderProducts: state.orderProducts.map((p) =>
             p.id === product.id
@@ -77,9 +99,8 @@ export const useCartStore = create<CartStore>()(
           ),
         }));
       },
-      subtractQuantity: (product) => {
-        const priceToPlus =
-          product.priceWithTax || product.promotionalPrice || product.price;
+      subtractQuantity: (product, selectedCoin) => {
+        const priceToPlus = amountByCoin(selectedCoin, product);
         set((state) => ({
           orderProducts: state.orderProducts.map((p) =>
             p.id === product.id

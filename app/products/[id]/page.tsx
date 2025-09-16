@@ -4,12 +4,10 @@ import { getProduct } from '@/src/api/ProductApi';
 import BackBtn from '@/src/components/BackBtn';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import AddProductFavorite from '@/src/components/products/AddProductFavorite';
-import AddProductToOrder from '@/src/components/products/AddProductToOrder';
 import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { apiUrl } from '@/src/lib/global';
-import calcProductTax from '@/src/utils/calcProductTax';
+import ProductDetailPrices from '@/src/components/products/ProductDetailPrices';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -63,42 +61,7 @@ export default async function ProductShowPage({ params }: Props) {
                 <h4 className='font-bold text-2xl mb-4'>{product.name}</h4>
                 <AddProductFavorite product={product} />
               </div>
-              <div className='space-y-1'>
-                <h5
-                  className={`text-xl  ${
-                    product.promotionalPrice &&
-                    product.promotionalPrice > 0 &&
-                    'line-through text-slate-400 text-xl'
-                  }`}
-                >
-                  Ref. {normalizeAmounts(product.price)}
-                </h5>
-                {product.promotionalPrice !== null &&
-                  product.promotionalPrice > 0 && (
-                    <h5 className='text-xl '>
-                      Ref Promo. {normalizeAmounts(product.promotionalPrice)}
-                    </h5>
-                  )}
-                <h5 className='text-xl  text-slate-600'>
-                  IVA Ref. {calcProductTax(product, product.taxRate)}
-                </h5>
-                <h5 className='text-xl font-bold '>
-                  Total Ref.{' '}
-                  {normalizeAmounts(
-                    product.priceWithTax ||
-                      product.promotionalPrice ||
-                      product.price
-                  )}
-                </h5>
-              </div>
-              <div
-                className='whitespace-pre-wrap my-4'
-                dangerouslySetInnerHTML={{
-                  __html: product.description || '',
-                }}
-              ></div>
-
-              <AddProductToOrder product={product} />
+              <ProductDetailPrices product={product} />
             </div>
           </aside>
         </div>

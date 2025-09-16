@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ArrowDown } from '../Icons';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
 
 export default function HeaderSearchbar() {
   const [search, setSearch] = useState('');
   const router = useRouter();
+
+  const coins = useMultiCoinStore((state) => state.coins);
+  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const setSelectedCoin = useMultiCoinStore((state) => state.setSelectedCoin);
 
   const onSearch = () => {
     router.push(`/search?name=${search}`);
@@ -13,15 +20,54 @@ export default function HeaderSearchbar() {
   return (
     <div className='flex-1 flex justify-center'>
       <div className='flex flex-1 max-w-2xl justify-between bg-white rounded-full overflow-hidden items-center shadow-header'>
-        <input
-          type='text'
-          className='p-2.5 px-8 pr-2 lg:pr-8 w-full outline-none'
-          placeholder='Buscar Productos...'
-          onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button onClick={onSearch} className='  h-full px-4 lg:px-2 lg:pl-1'>
+        <div className='flex items-center'>
+          <Menu>
+            <MenuButton
+              style={{
+                backgroundColor: 'transparent',
+              }}
+              className='ml-2 h-8 flex items-center justify-center font-bold'
+            >
+              <div className='flex items-center mr-1'>
+                <div
+                  className={
+                    ' text-white rounded-full h-8 w-8 flex items-center justify-center'
+                  }
+                  style={{ backgroundColor: selectedCoin.color }}
+                >
+                  <span className='text-xs'>{selectedCoin.value}</span>
+                </div>
+              </div>
+              <ArrowDown />
+            </MenuButton>
+
+            <MenuItems
+              anchor='bottom'
+              className='space-y-2 origin-top-right rounded-sm border  p-1  bg-white shadow-md z-30 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0'
+            >
+              {coins.map((coin) => (
+                <MenuItem as='div' key={coin.value}>
+                  <button
+                    onClick={() => setSelectedCoin(coin)}
+                    className=' text-white rounded-full h-8 w-8 flex items-center justify-center'
+                    style={{ backgroundColor: coin.color }}
+                  >
+                    <span className='text-xs font-semibold'>{coin.value}</span>
+                  </button>
+                </MenuItem>
+              ))}
+            </MenuItems>
+          </Menu>
+          <input
+            type='text'
+            className='p-2.5  pr-2 lg:pr-8 w-full outline-none'
+            placeholder='Buscar Productos...'
+            onKeyDown={(e) => e.key === 'Enter' && onSearch()}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <button onClick={onSearch} className='  h-full px-2 lg:pl-1'>
           <div className='bg-primary flex justify-center items-center rounded-full p-1'>
             <svg
               xmlns='http://www.w3.org/2000/svg'

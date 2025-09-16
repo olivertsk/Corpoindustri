@@ -14,6 +14,7 @@ type EditProductFormWrapperProps = {
 export default function EditProductFormWrapper({
   product,
 }: EditProductFormWrapperProps) {
+  console.log('product', product);
   const navigate = useRouter();
   useBreadcrumb('Productos', `Editar Producto: ${product.name}`);
 
@@ -44,6 +45,9 @@ export default function EditProductFormWrapper({
         : 0,
       status: product.status,
       longDescription: product.longDescription,
+      priceBs: product.priceBs,
+      promotionalPriceBs: product.promotionalPriceBs,
+      priceWithTaxBs: product.priceWithTaxBs,
     },
   });
   const queryClient = useQueryClient();

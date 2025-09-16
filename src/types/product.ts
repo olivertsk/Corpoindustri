@@ -40,6 +40,9 @@ export const productSchema = z.object({
   price: z.number(),
   promotionalPrice: z.number().nullable(),
   priceWithTax: z.number().nullable(),
+  priceBs: z.number(),
+  promotionalPriceBs: z.number().nullable(),
+  priceWithTaxBs: z.number().nullable(),
   department: departmentSchema.optional(),
   category: categorySchema.optional(),
   stock: z.number(),
@@ -78,6 +81,9 @@ export type TProductForm = Pick<
   | 'stock'
   | 'status'
   | 'coverImage'
+  | 'priceBs'
+  | 'promotionalPriceBs'
+  | 'priceWithTaxBs'
 > & {
   images?: Array<
     Pick<Product['images'][0], 'alt' | 'file' | 'isVideo' | 'position'>
@@ -88,9 +94,12 @@ export type OrderProduct = Pick<
   | 'id'
   | 'name'
   | 'price'
-  | 'promotionalPrice'
-  | 'coverImage'
   | 'priceWithTax'
+  | 'promotionalPrice'
+  | 'priceWithTaxBs'
+  | 'priceBs'
+  | 'promotionalPriceBs'
+  | 'coverImage'
   | 'taxRate'
   | 'code'
 > & {

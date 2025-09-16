@@ -3,7 +3,6 @@ import { inputStlyes, primaryBtn } from '@/src/lib/global';
 import { useAuthStore } from '@/src/store/authStore';
 import { useCartStore } from '@/src/store/cartSlice';
 import { Order } from '@/src/types/order';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
 import { Dialog } from '@mui/material';
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -12,6 +11,12 @@ import { getClientSurvey } from '@/src/api/SurveyApi';
 import { ESurveyType, TSurvey } from '@/src/types/survey';
 import SurveyWrapper from '../survey/SurveyWrapper';
 import { uploadFile } from '@/src/api/FileApi';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import {
+  amountByCoin,
+  validateNormalizeAmount,
+} from '@/src/utils/normalizeAmounts';
+import Spinner from '../spinner/Spinner';
 
 type ContinuePaymentProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -25,27 +30,31 @@ export default function ContinuePayment({
   const orderProducts = useCartStore((state) => state.orderProducts);
   const clearCart = useCartStore((state) => state.clearCart);
   const user = useAuthStore((store) => store.user);
+  const selectedCoin = useMultiCoinStore((store) => store.selectedCoin);
+  const [sending, setSending] = useState(false);
 
   const total = useMemo(
     () =>
       orderProducts.reduce(
         (init, item) =>
-          (init +=
-            item.quantity *
-            (item.priceWithTax || item.promotionalPrice || item.price)),
+          (init += item.quantity * amountByCoin(selectedCoin, item)),
         0
       ),
-    [orderProducts]
+    [orderProducts, selectedCoin]
   );
 
   const totalWithoutTax = useMemo(
     () =>
       orderProducts.reduce(
         (init, item) =>
-          (init += item.quantity * (item.promotionalPrice || item.price)),
+          (init +=
+            item.quantity *
+            (selectedCoin.value === 'USD'
+              ? item.promotionalPrice || item.price
+              : item.promotionalPriceBs || item.priceBs)),
         0
       ),
-    [orderProducts]
+    [orderProducts, selectedCoin]
   );
 
   const totalTax = useMemo(
@@ -59,13 +68,10 @@ export default function ContinuePayment({
         productId: product.id,
         code: product.code,
         valueTax: product.taxRate,
-        salePrice:
-          product.priceWithTax || product.promotionalPrice || product.price,
+        salePrice: amountByCoin(selectedCoin, product),
         quantity: product.quantity,
         subtotalTax: (product.taxRate || 0) * product.quantity,
-        subtotal:
-          (product.priceWithTax || product.promotionalPrice || product.price) *
-          product.quantity,
+        subtotal: amountByCoin(selectedCoin, product) * product.quantity,
       })),
     [orderProducts]
   );
@@ -117,13 +123,18 @@ export default function ContinuePayment({
         payload['paymentVoucher'] = result?.fileName[0] || '';
       }
 
-      const response = await createOrder(payload);
+      setSending(true);
+      const response = await createOrder({
+        ...payload,
+        paidWith: selectedCoin.value,
+      });
+      setSending(false);
       if (response.success) {
         setOpen(false);
         toast.success(
           'Le enviaremos una notificacion cuando su pedido haya sido confirmado'
         );
-        clearCart();
+        clearCart(selectedCoin);
         const surveyId = await getClientSurvey(ESurveyType.FIRSTPURCHASE);
         setSurveyId(surveyId);
         return;
@@ -160,7 +171,7 @@ export default function ContinuePayment({
 
   return (
     <>
-      <SurveyWrapper surveyId={surveyId} setSurveyId={setSurveyId} />;
+      <SurveyWrapper surveyId={surveyId} setSurveyId={setSurveyId} />
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -315,11 +326,16 @@ export default function ContinuePayment({
             <input type='hidden' name='amount' defaultValue={total} />
             <SelectPaymentMethod />
             <p className='text-slate-700 font-bold text-lg my-4'>
-              Monto a pagar: <b>{normalizeAmounts(total)}</b>
+              Monto a pagar:{' '}
+              <b>{validateNormalizeAmount(selectedCoin, undefined, total)}</b>
             </p>
-            <button type='submit' className={`${primaryBtn} w-full`}>
-              Solicitud de Compra
-            </button>
+            {sending ? (
+              <Spinner />
+            ) : (
+              <button type='submit' className={`${primaryBtn} w-full`}>
+                Solicitud de Compra
+              </button>
+            )}
           </form>
         </div>
       </Dialog>

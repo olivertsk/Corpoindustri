@@ -1,3 +1,4 @@
+import { Coin } from '../store/multicoinStore';
 import { ETypePaymentMethods, PaymentMethod } from './method';
 import { Product } from './product';
 import { User } from './user';
@@ -49,6 +50,7 @@ export type Order = {
   reference?: string;
   responsible?: User;
   viewTime?: string;
+  paidWith: Coin['value'];
   paymentVoucher?: string; // File name of the payment voucher
 };
 

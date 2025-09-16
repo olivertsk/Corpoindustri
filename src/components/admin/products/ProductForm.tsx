@@ -196,12 +196,7 @@ export default function ProductForm({
             {!isLoadingCategories && categories?.data.length !== 0 && (
               <label htmlFor=''>
                 Categoria
-                <select
-                  className={inputStlyes}
-                  {...register('categoryId', {
-                    required: 'Este campo es requerido',
-                  })}
-                >
+                <select className={inputStlyes} {...register('categoryId')}>
                   <option value=''>Seleccionar</option>
                   {categories?.data.map((item) => (
                     <option key={item.id} value={item.id}>
@@ -211,74 +206,130 @@ export default function ProductForm({
                 </select>
               </label>
             )}
-            {errors.categoryId && (
-              <ErrorMessage>{errors.categoryId.message}</ErrorMessage>
-            )}
           </div>
-          <div>
-            <label htmlFor=''>
-              Precio
-              <input
-                {...register('price', {
-                  required: 'Este campo es requerido',
-                  setValueAs: (value) => (value ? Number(value) : 0),
-                })}
-                type='number'
-                step='0.01'
-                className={inputStlyes}
-              />
-            </label>
-            {errors.price && (
-              <ErrorMessage>{errors.price.message}</ErrorMessage>
-            )}
+          <div className='grid lg:grid-cols-2 col-span-2 gap-4'>
+            <div>
+              <h4 className='text-sm text-slate-400'>Dólares</h4>
+              <div className='grid grid-cols-1 lg:grid-cols-3 col-span-2 gap-4 border border-slate-300 p-8 rounded-md'>
+                <div>
+                  <label htmlFor=''>
+                    Precio
+                    <input
+                      {...register('price', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                </div>
+                <div>
+                  <label htmlFor=''>
+                    Precio Promocional
+                    <input
+                      {...register('promotionalPrice', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                  {errors.promotionalPrice && (
+                    <ErrorMessage>
+                      {errors.promotionalPrice.message}
+                    </ErrorMessage>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor=''>
+                    Precio con Tax
+                    <input
+                      {...register('priceWithTax', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                  {errors.priceWithTax && (
+                    <ErrorMessage>{errors.priceWithTax.message}</ErrorMessage>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className='text-sm text-slate-400'>Bs</h4>
+              <div className='grid grid-cols-1 lg:grid-cols-3 col-span-2 gap-4 border border-slate-300 p-8 rounded-md'>
+                <div>
+                  <label htmlFor=''>
+                    Precio
+                    <input
+                      {...register('priceBs', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                </div>
+                <div>
+                  <label htmlFor=''>
+                    Precio Promocional
+                    <input
+                      {...register('promotionalPriceBs', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                  {errors.promotionalPrice && (
+                    <ErrorMessage>
+                      {errors.promotionalPrice.message}
+                    </ErrorMessage>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor=''>
+                    Precio con Tax
+                    <input
+                      {...register('priceWithTaxBs', {
+                        setValueAs: (value) => (value ? Number(value) : 0),
+                      })}
+                      type='number'
+                      step='0.01'
+                      className={inputStlyes}
+                    />
+                  </label>
+                  {errors.priceWithTax && (
+                    <ErrorMessage>{errors.priceWithTax.message}</ErrorMessage>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor=''>
-              Precio Promocional
-              <input
-                {...register('promotionalPrice', {
-                  setValueAs: (value) => (value ? Number(value) : 0),
-                })}
-                type='number'
-                step='0.01'
-                className={inputStlyes}
-              />
-            </label>
-            {errors.promotionalPrice && (
-              <ErrorMessage>{errors.promotionalPrice.message}</ErrorMessage>
-            )}
-          </div>
-          <div>
-            <label htmlFor=''>
-              Precio con Tax
-              <input
-                {...register('priceWithTax', {
-                  setValueAs: (value) => (value ? Number(value) : 0),
-                })}
-                type='number'
-                step='0.01'
-                className={inputStlyes}
-              />
-            </label>
-            {errors.priceWithTax && (
-              <ErrorMessage>{errors.priceWithTax.message}</ErrorMessage>
-            )}
-          </div>
-          <div>
-            <label htmlFor=''>
-              Tax
-              <input
-                {...register('taxRate', {
-                  required: 'Este campo es requerido',
-                  setValueAs: (value) => (value ? Number(value) : 0),
-                })}
-                type='number'
-                className={inputStlyes}
-              />
-            </label>
-            {errors.taxRate && (
-              <ErrorMessage>{errors.taxRate.message}</ErrorMessage>
-            )}
+          <div className='lg:col-span-2 grid lg:grid-cols-6'>
+            <div>
+              <label htmlFor=''>
+                Tax
+                <input
+                  {...register('taxRate', {
+                    required: 'Este campo es requerido',
+                    setValueAs: (value) => (value ? Number(value) : 0),
+                  })}
+                  type='number'
+                  className={inputStlyes}
+                />
+              </label>
+              {errors.taxRate && (
+                <ErrorMessage>{errors.taxRate.message}</ErrorMessage>
+              )}
+            </div>
           </div>
           <div>
             <label htmlFor=''>

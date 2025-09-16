@@ -3,8 +3,9 @@ import Link from 'next/link';
 
 import { apiUrl } from '@/src/lib/global';
 import { Favorite } from '@/src/types/favorite';
-import { normalizeAmounts } from '@/src/utils/normalizeAmounts';
+import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
 import calcProductTax from '@/src/utils/calcProductTax';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
 
 type FavoriteCardProps = {
   favorite: Favorite;
@@ -13,6 +14,8 @@ type FavoriteCardProps = {
 export default function FavoriteCard({
   favorite: { product },
 }: FavoriteCardProps) {
+  const selectedCoin = useMultiCoinStore((store) => store.selectedCoin);
+
   return (
     product && (
       <Link
@@ -41,27 +44,35 @@ export default function FavoriteCard({
                 'line-through text-slate-400 text-sm'
               }`}
             >
-              Ref. {normalizeAmounts(product.price)}
+              Ref.{' '}
+              {validateNormalizeAmount(
+                selectedCoin,
+                product,
+                undefined,
+                'price'
+              )}
             </p>
             {product.promotionalPrice ? (
               <p className='text-sm  text-slate-600 flex-1 overflow-hidden text-ellipsis w-full'>
-                Ref Promo. {normalizeAmounts(product.promotionalPrice)}
+                Ref Promo.{' '}
+                {validateNormalizeAmount(
+                  selectedCoin,
+                  product,
+                  undefined,
+                  'promoPrice'
+                )}
               </p>
             ) : (
               ''
             )}
             {product.taxRate != null && product.taxRate > 0 && (
               <p className='text-sm text-slate-600'>
-                IVA Ref. {calcProductTax(product, product.taxRate)}
+                IVA Ref.{' '}
+                {calcProductTax(product, product.taxRate, selectedCoin)}
               </p>
             )}
             <p className='text-sm font-bold'>
-              Total Ref.{' '}
-              {normalizeAmounts(
-                product.priceWithTax ||
-                  product.promotionalPrice ||
-                  product.price
-              )}
+              Total Ref. {validateNormalizeAmount(selectedCoin, product)}
             </p>
           </div>
         </div>

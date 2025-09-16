@@ -15,6 +15,7 @@ export type ProductFilters = {
   minPrice?: string | null;
   maxPrice?: string | null;
   order?: 'maxPrice' | 'minPrice';
+  typePrice?: 'price' | 'priceBs';
   typeSearch?: string | null;
   isClient?: boolean;
 };
