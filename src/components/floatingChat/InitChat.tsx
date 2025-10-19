@@ -10,6 +10,7 @@ import Spinner from '../spinner/Spinner';
 import Logo from '../Logo';
 import { useEffect, useRef, useState } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import './InitChat.css';
 
 type InitChatProps = {
   initChat: boolean;
@@ -27,6 +28,8 @@ export default function InitChat({ initChat }: InitChatProps) {
     queryFn: () => getClientChat(filter),
     enabled: initChat,
   });
+
+  console.log('chat client', data);
 
   const [sendChat, setSendChat] = useState<boolean>(false);
   const [allChat, setAllChat] = useState<ResponseChatClient[]>([]);
@@ -64,7 +67,6 @@ export default function InitChat({ initChat }: InitChatProps) {
       ] as ResponseChatClient[];
 
       if (option.autoResponse) {
-        console.log('option.autoResponse', option.autoResponse);
         userResponse.push({
           from: 'bot',
           message: option.autoResponse,
@@ -158,7 +160,7 @@ export default function InitChat({ initChat }: InitChatProps) {
 
   if (allChat.length > 0)
     return (
-      <div className='flex flex-col h-full'>
+      <div className='flex flex-col h-full chat-bot'>
         <div
           className='px-4 py-8 flex flex-col gap-4 flex-1 overflow-auto'
           ref={messagesContainer}
@@ -172,7 +174,11 @@ export default function InitChat({ initChat }: InitChatProps) {
                 <div>
                   <div>
                     <div className='bg-gray-100 p-2 rounded-md px-4 w-fit'>
-                      <h4>{data.chatQuestion?.name}</h4>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: data.chatQuestion?.name || '',
+                        }}
+                      ></div>
                     </div>
                     {data.chatQuestion?.options !== undefined &&
                       data.chatQuestion?.options?.length > 0 &&
@@ -197,11 +203,13 @@ export default function InitChat({ initChat }: InitChatProps) {
             ) : (
               <div key={index} className='self-end'>
                 <div className='bg-primary/80 text-white p-2 rounded-md px-4 w-fit'>
-                  <h4>
-                    {data.selectedOption
-                      ? data.selectedOption?.name
-                      : data.message}
-                  </h4>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: data.selectedOption
+                        ? data.selectedOption?.name
+                        : data.message || '',
+                    }}
+                  ></div>
                 </div>
               </div>
             )

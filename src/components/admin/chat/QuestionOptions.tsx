@@ -10,7 +10,6 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import Questions from './Questions';
-import { useEffect } from 'react';
 
 type QuestionOptionsProps = {
   fields: FieldArrayWithId<
@@ -48,14 +47,19 @@ export default function QuestionOptions({
     `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`
   );
 
-  useEffect(() => {
-    if (answerType !== 'question') {
+  const handleChangeAnswerType = () => {
+    setTimeout(() => {
       setValue(
-        `${watchQuestionTypeFieldName}.options.${optionIndex}.chatQuestion.options` as `chatQuestions.${number}.options`,
-        []
+        `${watchQuestionTypeFieldName}.options.${optionIndex}.chatQuestion` as `chatQuestions.${number}.options.${number}.chatQuestion`,
+        null
       );
-    }
-  }, [answerType]);
+      setValue(
+        `${watchQuestionTypeFieldName}.options.${optionIndex}.autoResponse` as `chatQuestions.${number}.options.${number}.autoResponse`,
+        ''
+      );
+    }, 100);
+    console.log('called');
+  };
 
   return (
     <div className='w-full'>
@@ -76,7 +80,10 @@ export default function QuestionOptions({
               type='radio'
               id={`${watchQuestionTypeFieldName}.options.${optionIndex}.answerType`}
               {...register(
-                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`
+                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`,
+                {
+                  onChange: handleChangeAnswerType,
+                }
               )}
               value={'text'}
             />
@@ -92,7 +99,10 @@ export default function QuestionOptions({
               type='radio'
               id={`${watchQuestionTypeFieldName}.options.${optionIndex}.question`}
               {...register(
-                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`
+                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`,
+                {
+                  onChange: handleChangeAnswerType,
+                }
               )}
               value={'question'}
             />
@@ -108,7 +118,10 @@ export default function QuestionOptions({
               type='radio'
               id={`${watchQuestionTypeFieldName}.options.${optionIndex}.none`}
               {...register(
-                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`
+                `${watchQuestionTypeFieldName}.options.${optionIndex}.answerType` as `chatQuestions.${number}.options.${number}.answerType`,
+                {
+                  onChange: handleChangeAnswerType,
+                }
               )}
               value={'none'}
             />
@@ -121,14 +134,18 @@ export default function QuestionOptions({
           </div>
         </div>
         {answerType === 'text' && (
-          <div className='max-w-lg'>
-            <input
-              type='text'
+          <div className='pl-8'>
+            <textarea
               id='name'
               placeholder='Ej. Nuestros horarios son de lunes a viernes de 8:00 a 17:00...'
-              className={inputStlyes}
+              className={`${inputStlyes} w-full resize-none`}
+              style={
+                {
+                  'field-sizing': 'content',
+                } as React.CSSProperties
+              }
               {...register(
-                `chatQuestions.${questionIndex}.options.${optionIndex}.autoResponse`
+                `${watchQuestionTypeFieldName}.options.${optionIndex}.autoResponse` as `chatQuestions.${number}.options.${number}.autoResponse`
               )}
             />
           </div>

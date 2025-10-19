@@ -39,11 +39,12 @@ export default function EditBannerWrapper({ banner }: EditBannerWrapperProps) {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: ['banners'] });
         queryClient.invalidateQueries({ queryKey: ['banner', id] });
-
         navigate.push('/admin/banners');
         setTimeout(() => {
           toast.success('Banner actualizado correctamente');
         }, 1000);
+      } else if (data.message) {
+        toast.error(data.message);
       }
     },
     onError: (error) => {

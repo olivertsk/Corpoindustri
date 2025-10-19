@@ -7,6 +7,7 @@ import { CheckIcon } from '@heroicons/react/24/solid';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function CreateChatStructure() {
   useBreadcrumb('Chat', 'Editar o Crear un chat');
@@ -55,13 +56,19 @@ export default function CreateChatStructure() {
     mutationFn: createChat,
     onSuccess: (data) => {
       console.log('Chat created successfully:', data);
+      if (data.success) {
+        toast.success('Chat creado correctamente');
+      }
     },
   });
 
   const { mutate: update, isPending: isPendingUpdate } = useMutation({
     mutationFn: updateChat,
     onSuccess: (data) => {
-      console.log('Chat created successfully:', data);
+      if (data.success) {
+        toast.success('Chat actualizado correctamente');
+      }
+      console.log('Update:', data);
     },
   });
 

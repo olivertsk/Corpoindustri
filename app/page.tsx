@@ -6,6 +6,7 @@ import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import InstagramSection from '@/src/components/home/InstagramSection';
 import { MapSection } from '@/src/components/home/MapSection';
+import PopoverBanner from '@/src/components/home/PopoverBanner';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import TiktokSection from '@/src/components/home/TiktokSection';
 import ShowClientSurvey from '@/src/components/survey/ShowClientSurvey';
@@ -38,6 +39,14 @@ export default async function Home() {
       position: EPositionBanner.Contact,
       isClient: true,
     }),
+    fxAllBanner({
+      position: EPositionBanner.PopupOnce,
+      isClient: true,
+    }),
+    fxAllBanner({
+      position: EPositionBanner.AlwaysPopup,
+      isClient: true,
+    }),
   ]);
 
   const principalBannerData: IBanner[] =
@@ -49,6 +58,10 @@ export default async function Home() {
 
   const contactBannerData: IBanner[] =
     result[3].status === 'fulfilled' ? result[3].value : [];
+  const popupOnce: IBanner[] =
+    result[4].status === 'fulfilled' ? result[4].value : [];
+  const alwaysPopup: IBanner[] =
+    result[5].status === 'fulfilled' ? result[5].value : [];
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
@@ -69,8 +82,13 @@ export default async function Home() {
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);
 
+  console.log('alwaysPopup', alwaysPopup);
   return (
     <>
+      <PopoverBanner
+        banner={popupOnce.length ? popupOnce : alwaysPopup}
+        isOncePopup={!!popupOnce.length}
+      />
       <section>
         <ShowClientSurvey />
         {principalBannerData.length && (

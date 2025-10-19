@@ -97,6 +97,14 @@ export default function BannerPage() {
             <option value={EPositionBanner.HomePrincipal}>Principal</option>
             <option value={EPositionBanner.HomeSecondary}>Secundario</option>
             <option value={EPositionBanner.HomeTertiary}>Terciario</option>
+            <option value={EPositionBanner.Filter}>Flitro</option>
+            <option value={EPositionBanner.Product}>Productos</option>
+            <option value={EPositionBanner.PopupOnce}>
+              Emergente (Una vez)
+            </option>
+            <option value={EPositionBanner.AlwaysPopup}>
+              Emergente (Siempre)
+            </option>
           </select>
           <input
             value={filters.name!}

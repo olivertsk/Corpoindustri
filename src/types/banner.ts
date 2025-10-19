@@ -12,7 +12,13 @@ export enum EPositionBanner {
   HomePrincipal = 'homePrincipal',
   HomeSecondary = 'homeSecondary',
   HomeTertiary = 'homeTertiary',
+  TikTok = 'TikTok',
+  Instagram = 'Instagram',
   Contact = 'Contact',
+  PopupOnce = 'PopupOnce',
+  AlwaysPopup = 'AlwaysPopup',
+  Product = 'Product',
+  Filter = 'Filter',
 }
 
 export const positionBanenrDictionary: Record<EPositionBanner, string> = {
@@ -20,6 +26,12 @@ export const positionBanenrDictionary: Record<EPositionBanner, string> = {
   [EPositionBanner.HomeSecondary]: 'Secundario',
   [EPositionBanner.HomeTertiary]: 'Terciario',
   [EPositionBanner.Contact]: 'Contacto',
+  [EPositionBanner.TikTok]: 'TikTok',
+  [EPositionBanner.Instagram]: 'Instagram',
+  [EPositionBanner.PopupOnce]: 'Popup Una Vez',
+  [EPositionBanner.AlwaysPopup]: 'Popup Siempre',
+  [EPositionBanner.Product]: 'Producto',
+  [EPositionBanner.Filter]: 'Filtro',
 };
 
 export const bannerSchema = z.object({

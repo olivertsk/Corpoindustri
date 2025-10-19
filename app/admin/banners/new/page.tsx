@@ -40,11 +40,15 @@ export default function NewBannerPage() {
           toast.success('Banner creado correctamente');
         }, 1000);
       } else {
-        data.message.forEach((item: { field: string }) => {
-          if (item.field === 'images') {
-            toast.error('Debe subir una imagen');
-          }
-        });
+        if (Array.isArray(data.message)) {
+          data.message.forEach((item: { field: string }) => {
+            if (item.field === 'images') {
+              toast.error('Debe subir una imagen');
+            }
+          });
+        } else {
+          toast.error(data.message);
+        }
       }
     },
     onError: (error) => {

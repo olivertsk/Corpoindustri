@@ -16,7 +16,7 @@ export type ResponseChatClient = {
   isAnswered?: boolean;
   message?: string;
   selectedOption?: ChatAnswer | null;
-  chatQuestion?: ChatQuestion;
+  chatQuestion?: ChatQuestion | null;
   index?: number;
 };
 
@@ -25,7 +25,7 @@ export type ChatAnswer = {
   name: string;
   chatQuestionId?: ChatQuestion['id'];
   autoResponse?: string;
-  chatQuestion?: ChatQuestion;
+  chatQuestion?: ChatQuestion | null;
   answerType?: 'text' | 'question' | 'none';
   addAnAutoResponse?: boolean;
 };

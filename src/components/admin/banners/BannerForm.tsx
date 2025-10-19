@@ -29,7 +29,7 @@ export default function BannerForm({
 
   const image = watch('images');
   const mobileImage = watch('mobileImage');
-
+  const position = watch('position');
   const handleFile = async (
     ev: ChangeEvent<HTMLInputElement>,
     field: 'images' | 'mobileImage'
@@ -60,7 +60,12 @@ export default function BannerForm({
           <h4 className='text-center font-bold text-lg mb-4'>Imagen Web</h4>
           {image && (
             <div className='w-full aspect-video relative'>
-              <Image src={`${apiUrl}/file/${image}`} fill alt='a' />
+              <Image
+                src={`${apiUrl}/file/${image}`}
+                fill
+                alt='a'
+                className='object-contain'
+              />
             </div>
           )}
           <button
@@ -81,7 +86,12 @@ export default function BannerForm({
           <h4 className='text-center font-bold text-lg mb-4'>Imagen Movil</h4>
           {mobileImage && (
             <div className='w-full aspect-video relative'>
-              <Image src={`${apiUrl}/file/${mobileImage}`} fill alt='a' />
+              <Image
+                src={`${apiUrl}/file/${mobileImage}`}
+                fill
+                alt='a'
+                className='object-contain'
+              />
             </div>
           )}
           <button
@@ -98,6 +108,13 @@ export default function BannerForm({
             ref={inputMobileFileRef}
           />
         </div>
+        {position === EPositionBanner.Filter && (
+          <div className='col-span-2'>
+            <p className='text-slate-400 text-sm'>
+              Recomendamos usar una medida de 1080×2400 para web y movil
+            </p>
+          </div>
+        )}
         <div>
           <label htmlFor=''>
             <span>Nombre</span>
@@ -131,16 +148,18 @@ export default function BannerForm({
               })}
               className={inputStlyes}
             >
-              <option value={EPositionBanner.HomePrincipal}>
-                Banner Principal
-              </option>
-              <option value={EPositionBanner.HomeSecondary}>
-                Banner Secundario
-              </option>
-              <option value={EPositionBanner.HomeTertiary}>
-                Banner Terciario
-              </option>
               <option value={EPositionBanner.Contact}>Contacto</option>
+              <option value={EPositionBanner.HomePrincipal}>Principal</option>
+              <option value={EPositionBanner.HomeSecondary}>Secundario</option>
+              <option value={EPositionBanner.HomeTertiary}>Terciario</option>
+              <option value={EPositionBanner.Filter}>Flitro</option>
+              <option value={EPositionBanner.Product}>Productos</option>
+              <option value={EPositionBanner.PopupOnce}>
+                Emergente (Una vez)
+              </option>
+              <option value={EPositionBanner.AlwaysPopup}>
+                Emergente (Siempre)
+              </option>
             </select>
           </label>
           {errors.position && (

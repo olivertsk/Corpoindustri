@@ -14,6 +14,9 @@ import { ProductFilters } from '@/src/api/ProductApi';
 import { useRouter } from 'next/navigation';
 import { inputStlyes, primaryBtn } from '@/src/lib/global';
 import { ICategory } from '@/src/types/category';
+import { fxAllBanner } from '@/src/api/BannerApi';
+import { EPositionBanner, IBanner } from '@/src/types/banner';
+import BannerSliderFilter from '../search/BannerSliderFilter';
 
 type AccordionProps = {
   setFilters: Dispatch<SetStateAction<ProductFilters>>;
@@ -44,6 +47,18 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   const [filteredCategories, setCategories] = useState<FilteredCategories[]>(
     []
   );
+
+  const { data: filterBanner } = useQuery<IBanner[]>({
+    queryKey: ['filter_banner'],
+    queryFn: () =>
+      fxAllBanner({
+        position: EPositionBanner.Filter,
+        isClient: true,
+      }),
+    refetchOnWindowFocus: false,
+  });
+
+  console.log('filterBanner', filterBanner);
 
   const { data } = useQuery({
     queryKey: ['departments'],
@@ -238,7 +253,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
               className='accordion-trigger font-bold uppercase'
               htmlFor='accordion-trigger-1'
             >
-              Departamento
+              Departamentos
               <span className='block text-xs font-normal'>
                 Departamentos seleccionadas ({filters.departmentIds?.length})
               </span>
@@ -408,7 +423,19 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
               Aplicar Filtros
             </button>
           </div>
+          {filterBanner && (
+            <div className='pb-8 lg:hidden max-w-[90%] mx-auto'>
+              <div className='mt-4 rounded-md overflow-hidden'>
+                <BannerSliderFilter slides={filterBanner} />
+              </div>
+            </div>
+          )}
         </div>
+        {filterBanner && (
+          <div className='mt-4 rounded-md overflow-hidden'>
+            <BannerSliderFilter slides={filterBanner} />
+          </div>
+        )}
       </section>
     </>
   );

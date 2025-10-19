@@ -8,6 +8,7 @@ import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
 import { apiUrl } from '@/src/lib/global';
 import ProductDetailPrices from '@/src/components/products/ProductDetailPrices';
+import BannerProduct from '@/src/components/products/BannerProduct';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -66,6 +67,9 @@ export default async function ProductShowPage({ params }: Props) {
           </aside>
         </div>
       </main>
+      <div className='container mx-auto mt-10'>
+        <BannerProduct />
+      </div>
       <div className='container mx-auto mt-10'>
         <ProductsSlider
           products={product.relations}

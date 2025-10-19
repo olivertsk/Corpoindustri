@@ -34,9 +34,11 @@ export const makeGet = async (url: string, parameters?: unknown) => {
       return respJSON.data;
     } else {
       console.log(response);
+      console.log('url', url);
       throw new Error('Error fetching data');
     }
   } catch (error) {
+    console.log('url', url);
     throw error;
   }
 };
@@ -58,6 +60,7 @@ export const makePost = async (
     });
     return await response.json();
   } catch (error) {
+    console.log('url', url);
     throw error;
   }
 };
@@ -74,6 +77,7 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
     });
     return await response.json();
   } catch (error) {
+    console.log('url', url);
     throw error;
   }
 };
