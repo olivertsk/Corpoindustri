@@ -43,7 +43,7 @@ export default function PopoverBanner({
               </button>
             </div>
             <div>
-              <picture className='relative w-full h-[420px]'>
+              <picture className='relative w-full '>
                 <source
                   srcSet={`${apiUrl}/file/${slide.mobileImage || slide.images}`}
                   media='(max-width: 768px)'
@@ -52,11 +52,10 @@ export default function PopoverBanner({
                   src={`${apiUrl}/file/${slide.images}`}
                   alt={slide?.description || 'mercado'}
                   width={2048}
-                  height={1024}
                   style={{
                     width: '100%',
-                    height: '420px',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
+                    maxHeight: '90vh',
                   }}
                 />
               </picture>
