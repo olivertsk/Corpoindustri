@@ -7,6 +7,8 @@ export type ICategoryFilter = {
   name?: string;
   isSalient?: boolean | string;
   departmentId?: Department['id'];
+  sort?: string;
+  filters?: string;
 };
 
 export const categorySchema = z.object({

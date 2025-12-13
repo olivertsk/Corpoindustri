@@ -111,11 +111,11 @@ export default function DepartmentPage() {
           </Link>
         </div>
         <TaskTable<DepartmentFilters>
-          rows={data.data.map((department) => ({
-            id: department.id,
-            name: department.name,
-            status: department.status ? 'Activo' : 'Inactivo',
-            isSalient: department.isSalient ? 'Si' : 'No',
+          rows={data.data.map((item) => ({
+            id: item.id,
+            name: item.name,
+            status: item.status ? 'Activo' : 'Inactivo',
+            isSalient: item.isSalient ? 'Si' : 'No',
           }))}
           columns={allColumns}
           rowCount={data.meta.total}
