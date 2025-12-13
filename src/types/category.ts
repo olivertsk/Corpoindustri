@@ -3,7 +3,7 @@ import { Department } from './department';
 
 export type ICategoryFilter = {
   pag?: number;
-  limit?: number;
+  limit: number;
   name?: string;
   isSalient?: boolean | string;
   departmentId?: Department['id'];

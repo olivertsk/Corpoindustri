@@ -1,30 +1,73 @@
 'use client';
 import { deleteDepartment, getDepartments } from '@/src/api/DepartmentsApi';
 import Spinner from '@/src/components/spinner/Spinner';
+import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { deleteBtn, editBtn, tableBodyStyles } from '@/src/lib/global';
+import { deleteBtn, editBtn } from '@/src/lib/global';
 import { Department, DepartmentFilters } from '@/src/types/department';
-import { Pagination } from '@mui/material';
+import { GridColDef, getGridBooleanOperators } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const thClass = 'text-center bg-primary py-2 text-white';
-
 export default function DepartmentPage() {
+  const allColumns: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'Nombre',
+      flex: 1,
+      minWidth: 150,
+    },
+    {
+      field: 'status',
+      headerName: 'Estatus',
+      flex: 1,
+      minWidth: 150,
+      filterOperators: getGridBooleanOperators().filter(
+        (op) => op.value === 'is' || op.value === 'isNot'
+      ),
+    },
+    {
+      field: 'isSalient',
+      headerName: 'Destacada',
+      flex: 1,
+      minWidth: 150,
+      filterOperators: getGridBooleanOperators().filter(
+        (op) => op.value === 'is' || op.value === 'isNot'
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={`departments/${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Editar
+          </Link>
+          <button
+            onClick={() => handleDeleteBtn(params.row.id)}
+            className={`${deleteBtn} h-[32px] flex items-center justify-center`}
+          >
+            Eliminar
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   useBreadcrumb('Departamentos', 'Todos los departamentos');
   const [filters, setFilters] = useState<DepartmentFilters>({
     pag: 1,
     name: '',
     isSalient: '',
+    limit: 10,
   });
-
-  const handleChange = (
-    ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [ev.target.name]: ev.target.value });
-  };
 
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -32,13 +75,6 @@ export default function DepartmentPage() {
     queryFn: () => getDepartments(filters),
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['departments'] });
-    });
-  };
 
   const { mutate } = useMutation({
     mutationFn: deleteDepartment,
@@ -49,13 +85,6 @@ export default function DepartmentPage() {
       }
     },
   });
-
-  const handleFilterBtn = () => {
-    setFilters({ ...filters, pag: 1 });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['departments'] });
-    });
-  };
 
   const handleDeleteBtn = (id: Department['id']) => {
     if (typeof window !== 'undefined') {
@@ -74,32 +103,6 @@ export default function DepartmentPage() {
       <section>
         <h4 className='font-bold mb-2'>Filtros</h4>
         <div className='mb-4 flex gap-2 flex-wrap'>
-          <select
-            onChange={handleChange}
-            value={filters.isSalient + ''}
-            id=''
-            name='isSalient'
-            className='bg-white rounded-md px-4'
-          >
-            <option value=''>Todos</option>
-            <option value='true'>Destacada</option>
-            <option value='false'>No Destacada</option>
-          </select>
-          <input
-            value={filters.name!}
-            onChange={handleChange}
-            type='text'
-            name='name'
-            placeholder='Buscar Departamentos'
-            className='h-full py-2 rounded-md flex-1 px-4'
-            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
-          />
-          <button
-            onClick={handleFilterBtn}
-            className='bg-primary text-white py-2 px-4 rounded-md font-bold'
-          >
-            Filtrar
-          </button>
           <Link
             href='departments/new'
             className='bg-accent-100 font-bold py-2 px-4 rounded-md'
@@ -107,52 +110,23 @@ export default function DepartmentPage() {
             Nuevo Departamento
           </Link>
         </div>
-        <table className='w-full rounded-md overflow-hidden bg-white'>
-          <thead>
-            <tr>
-              <th className={thClass}>Nombre</th>
-              <th className={thClass}>Estatus</th>
-              <th className={thClass}>Destacada</th>
-              <th className={thClass}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((department) => (
-              <tr key={department.id}>
-                <td className={tableBodyStyles}>{department.name}</td>
-                <td className={tableBodyStyles}>
-                  {department.status ? 'Activo' : 'Inactivo'}
-                </td>
-                <td className={tableBodyStyles}>
-                  {department.isSalient ? 'Si' : 'No'}
-                </td>
-                <td className={tableBodyStyles}>
-                  <Link
-                    href={`departments/${department.id}`}
-                    className={editBtn}
-                  >
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDeleteBtn(department.id)}
-                    className={deleteBtn}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className='flex justify-center mt-8'>
-          <Pagination
-            count={data.meta.totalPage}
-            page={data.meta.actualPage}
-            onChange={(ev, page) => changePage(page)}
-            showFirstButton
-            showLastButton
-          />
-        </div>
+        <TaskTable<DepartmentFilters>
+          rows={data.data.map((department) => ({
+            id: department.id,
+            name: department.name,
+            status: department.status ? 'Activo' : 'Inactivo',
+            isSalient: department.isSalient ? 'Si' : 'No',
+          }))}
+          columns={allColumns}
+          rowCount={data.meta.total}
+          isLoading={isLoading}
+          page={data.meta.actualPage - 1}
+          pageSize={filters.limit}
+          onRowClick={() => {}}
+          setFilters={setFilters}
+          filters={filters}
+          queryClientKey='departments'
+        />
       </section>
     );
 }
