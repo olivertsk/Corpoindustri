@@ -29,4 +29,5 @@ export type TSurveyForm = Omit<
 export type TSurveyFilter = {
   pag: number;
   title: string;
+  limit?: number;
 };

@@ -121,7 +121,7 @@ export default function DepartmentPage() {
           rowCount={data.meta.total}
           isLoading={isLoading}
           page={data.meta.actualPage - 1}
-          pageSize={filters.limit}
+          pageSize={filters.limit!}
           onRowClick={() => {}}
           setFilters={setFilters}
           filters={filters}

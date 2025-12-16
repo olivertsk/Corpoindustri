@@ -3,55 +3,96 @@
 import { getRols } from '@/src/api/RolApi';
 import { changeRol, getUsers, IUserFilter } from '@/src/api/UserApi';
 import Spinner from '@/src/components/spinner/Spinner';
+import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import {
-  apiUrl,
-  inputStlyes,
-  tableBodyStyles,
-  thClass,
-} from '@/src/lib/global';
+import { apiUrl, inputStlyes } from '@/src/lib/global';
 import { findCity, findState } from '@/src/lib/location-ve';
 import { rolDictionary } from '@/src/types/rol';
 import { User } from '@/src/types/user';
 import { getUserGender } from '@/src/utils/userGenderType';
-import { Pagination } from '@mui/material';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+import { GridColDef } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
+const queryKey = 'users';
+
 export default function UsersPage() {
+  const allColumns: GridColDef[] = [
+    {
+      field: 'avatar',
+      headerName: 'Avatar',
+      flex: 1,
+      minWidth: 100,
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          {params.row.avatar ? (
+            <Image
+              width={80}
+              height={80}
+              src={`${apiUrl}/file/${params.row.avatar}`}
+              alt={params.row.name}
+              className='w-[40px] h-[40px] object-cover rounded-full'
+            />
+          ) : (
+            <div>
+              <UserCircleIcon className='w-8' />
+            </div>
+          )}
+        </div>
+      ),
+    },
+    { flex: 1, minWidth: 100, field: 'name', headerName: 'Nombre' },
+    { flex: 1, minWidth: 100, field: 'email', headerName: 'Email' },
+    { flex: 1, minWidth: 100, field: 'phoneNumber', headerName: 'Teléfono' },
+    { flex: 1, minWidth: 100, field: 'dni', headerName: 'C.I' },
+    { flex: 1, minWidth: 100, field: 'gender', headerName: 'Genero' },
+    { flex: 1, minWidth: 100, field: 'state', headerName: 'Estado' },
+    { flex: 1, minWidth: 100, field: 'city', headerName: 'Ciudad' },
+    { flex: 1, minWidth: 100, field: 'zone', headerName: 'Zona' },
+    {
+      flex: 1,
+      minWidth: 100,
+      field: 'rol',
+      headerName: 'Rol',
+      renderCell: (params) => (
+        <select
+          defaultValue={params.row.rol?.id}
+          name='rol'
+          onChange={(ev) => handleRolChange(ev, params.row.id)}
+          className={`${inputStlyes}`}
+        >
+          {rolsData?.data.map((rol) => (
+            <option key={rol.id} value={rol.id}>
+              {rolDictionary[rol.name as keyof typeof rolDictionary]}
+            </option>
+          ))}
+        </select>
+      ),
+    },
+  ];
   useBreadcrumb('Usuarios', 'Todos los usuarios');
   const [filters, setFilters] = useState<IUserFilter>({
     name: '',
     pag: 1,
     email: '',
     role: '',
+    limit: 10,
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['users'],
+    queryKey: [queryKey],
     queryFn: () => getUsers(filters),
     refetchOnWindowFocus: false,
   });
+  console.log('data', data);
   const { data: rolsData } = useQuery({
     queryKey: ['rols'],
     queryFn: () => getRols(),
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    });
-  };
-
-  const handleChange = (
-    ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [ev.target.name]: ev.target.value });
-  };
 
   const { mutate } = useMutation({
     mutationFn: changeRol,
@@ -74,13 +115,6 @@ export default function UsersPage() {
     });
   };
 
-  const handleFilterBtn = () => {
-    setFilters({ ...filters, pag: 1 });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    });
-  };
-
   const queryClient = useQueryClient();
 
   if (isLoading) {
@@ -90,101 +124,30 @@ export default function UsersPage() {
   if (data && rolsData)
     return (
       <section className='overflow-hidden'>
-        <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2 flex-wrap'>
-          <input
-            value={filters.name!}
-            onChange={handleChange}
-            type='text'
-            name='name'
-            placeholder='Buscar Usuarios: nombre, email, c.i'
-            className='h-full py-2 rounded-md flex-1 px-4'
-            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
-          />
-          <button
-            onClick={handleFilterBtn}
-            className='bg-primary text-white py-2 px-4 rounded-md font-bold'
-          >
-            Filtrar
-          </button>
-        </div>
-        <div className='overflow-auto'>
-          <table className='w-full rounded-md overflow-hidden bg-white'>
-            <thead>
-              <tr>
-                <th className={thClass}>Avatar</th>
-                <th className={thClass}>Nombre</th>
-                <th className={thClass}>Email</th>
-                <th className={thClass}>Teléfono</th>
-                <th className={thClass}>C.I</th>
-                <th className={thClass}>Genero</th>
-                <th className={thClass}>Estado</th>
-                <th className={thClass}>Ciudad</th>
-                <th className={thClass}>Zona</th>
-                <th className={thClass}>Rol</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.data.map((item) => (
-                <tr key={item.id}>
-                  <td className={`${tableBodyStyles} text-center`}>
-                    <Image
-                      width={80}
-                      height={80}
-                      src={`${apiUrl}/file/${item.avatar}`}
-                      alt={item.name}
-                      className='m-auto'
-                    />
-                  </td>
-                  <td className={tableBodyStyles}>{item.name || 'N/A'}</td>
-                  <td className={tableBodyStyles}>{item.email || 'N/A'}</td>
-                  <td className={tableBodyStyles}>
-                    {item.phoneNumber || 'N/A'}
-                  </td>
-                  <td className={tableBodyStyles}>
-                    {item.dniType || 'N/A'}
-                    {item.dni || '- N/A'}
-                  </td>
-                  <td className={tableBodyStyles}>
-                    {getUserGender(item.gender)}
-                  </td>
-                  <td className={tableBodyStyles}>{findState(item.state)}</td>
-                  <td className={tableBodyStyles}>
-                    {findCity(item.state, item.city)}
-                  </td>
-                  <td className={tableBodyStyles}>{item.zone || 'N/A'}</td>
-                  <td className={tableBodyStyles}>
-                    <select
-                      defaultValue={item.rol?.id}
-                      name='rol'
-                      onChange={(ev) => handleRolChange(ev, item.id)}
-                      className={`${inputStlyes} min-w-40 max-w-40`}
-                    >
-                      {rolsData?.data.map((rol) => (
-                        <option key={rol.id} value={rol.id}>
-                          {
-                            rolDictionary[
-                              rol.name as keyof typeof rolDictionary
-                            ]
-                          }
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='flex justify-center mt-8'>
-          <Pagination
-            count={data.meta.totalPage}
-            page={data.meta.actualPage}
-            onChange={(ev, page) => changePage(page)}
-            showFirstButton
-            showLastButton
-          />
-        </div>
+        <TaskTable<IUserFilter>
+          rows={data.data.map((item) => ({
+            id: item.id,
+            avatar: item.avatar,
+            name: item.name,
+            email: item.email,
+            phoneNumber: item.phoneNumber || 'N/A',
+            dni: (item.dniType || '') + (item.dni || 'N/A'),
+            gender: getUserGender(item.gender),
+            state: findState(item.state),
+            city: findCity(item.state, item.city),
+            zone: item.zone || 'N/A',
+            rol: item.rol,
+          }))}
+          columns={allColumns}
+          rowCount={data.meta.total}
+          isLoading={isLoading}
+          page={data.meta.actualPage - 1}
+          pageSize={filters.limit!}
+          onRowClick={() => {}}
+          setFilters={setFilters}
+          filters={filters}
+          queryClientKey={queryKey}
+        />
       </section>
     );
 }

@@ -23,7 +23,7 @@ export type TDepartmentForm = Pick<
 
 export type DepartmentFilters = {
   pag?: number;
-  limit: number;
+  limit?: number;
   name?: string | null;
   isSalient?: boolean | null | string;
   product?: boolean;

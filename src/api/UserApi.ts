@@ -7,6 +7,7 @@ export type IUserFilter = {
   name: string;
   email: string;
   role: string;
+  limit?: number;
 };
 
 export const refreshUser = async () => {

@@ -4,6 +4,7 @@ import { Suggestion } from '../types/suggestion';
 
 export type SuggestionParams = {
   pag: number;
+  limit?: number;
 };
 
 export const createSuggestion = async ({

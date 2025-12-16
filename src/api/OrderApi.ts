@@ -5,6 +5,7 @@ import { Order } from '../types/order';
 export type OrderParams = {
   pag: number;
   isClient: boolean;
+  limit?: number;
 };
 
 export const createOrder = async (order: Order) => {

@@ -1,5 +1,4 @@
 export enum ETypePaymentMethods {
-  All = '',
   Cash = 'cash',
   Bank = 'bank',
   Zelle = 'zelle',
@@ -7,7 +6,6 @@ export enum ETypePaymentMethods {
 }
 
 export const methodEnumTranslation = {
-  [ETypePaymentMethods.All]: '',
   [ETypePaymentMethods.Cash]: 'Efectivo',
   [ETypePaymentMethods.Bank]: 'Transferencia Bancaria',
   [ETypePaymentMethods.Zelle]: 'Zelle',

@@ -6,7 +6,7 @@ import { Product, ProductDetail, TProductForm } from '../types/product';
 
 export type ProductFilters = {
   pag?: number;
-  limit: number;
+  limit?: number;
   name?: string | null;
   departmentId?: string | null;
   departmentIds?: Department['id'][] | null;
