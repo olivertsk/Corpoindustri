@@ -17,12 +17,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const queryKey = 'users';
 
 export default function UsersPage() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <UsersPageContent />
+    </Suspense>
+  );
+}
+
+function UsersPageContent() {
   const allColumns: GridColDef[] = [
     {
       field: 'avatar',
