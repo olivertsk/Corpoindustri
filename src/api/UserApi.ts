@@ -12,9 +12,7 @@ export type IUserFilter = {
 
 export const refreshUser = async () => {
   try {
-    console.log('Making get from auth/me');
     const response = await makeGet(`/auth/me`);
-    console.log('response :>> ', response);
     return response;
   } catch (error) {
     console.error(error);

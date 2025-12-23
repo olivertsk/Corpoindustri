@@ -1,6 +1,7 @@
 import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
 import { Order } from '../types/order';
+import { TUser } from '../types/user';
 
 export type OrderParams = {
   pag: number;
@@ -54,6 +55,16 @@ export const updateOrderStatus = async ({
       { status, reason },
       'PUT'
     );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getOrdersByUser = async (
+  userId: TUser['id']
+): Promise<AllOrders> => {
+  try {
+    return await makeGet(`/orders/all`, { userId });
   } catch (error) {
     throw error;
   }

@@ -10,7 +10,7 @@ import {
   GridSortModel,
 } from '@mui/x-data-grid';
 import CustomPagination from './CustomPagination';
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 type TaskTableProps<T> = {
@@ -124,9 +124,39 @@ export default function TaskTable<T>({
     }, 500);
   };
 
+  const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    setFilters({ ...filters, [ev.target.name]: ev.target.value });
+  };
+
+  const handleFilterBtn = () => {
+    setFilters({ ...filters, pag: 1 });
+    setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: [queryClientKey] });
+    });
+  };
+
   return (
     <>
-      <div style={{ height: 500, width: '100%' }}>
+      <div style={{ height: 'auto', width: '100%' }}>
+        <div className='mb-2'>
+          {/* Buscador */}
+          <div className='py-2 flex gap-2'>
+            <input
+              onChange={handleChange}
+              type='text'
+              name='search'
+              placeholder='Buscar...'
+              className='h-full py-2.5 rounded-md flex-1 px-4'
+              onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
+            />
+            <button
+              onClick={handleFilterBtn}
+              className='bg-primary text-white py-2 px-4 rounded-md font-bold'
+            >
+              Filtrar
+            </button>
+          </div>
+        </div>
         <DataGrid
           getRowId={(row) =>
             row.id ??
@@ -158,6 +188,7 @@ export default function TaskTable<T>({
               },
             },
             overflowX: { overflowX },
+            height: 'auto',
           }}
           getRowClassName={(params) => {
             if ('isOpportunities' in params.row && isLead) {

@@ -2,10 +2,11 @@
 
 import { getRols } from '@/src/api/RolApi';
 import { changeRol, getUsers, IUserFilter } from '@/src/api/UserApi';
+import UserDetail from '@/src/components/admin/users/UserDetail';
 import Spinner from '@/src/components/spinner/Spinner';
 import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { apiUrl, inputStlyes } from '@/src/lib/global';
+import { apiUrl, editBtn, inputStlyes } from '@/src/lib/global';
 import { findCity, findState } from '@/src/lib/location-ve';
 import { rolDictionary } from '@/src/types/rol';
 import { User } from '@/src/types/user';
@@ -14,7 +15,9 @@ import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { GridColDef } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const queryKey = 'users';
@@ -72,6 +75,22 @@ export default function UsersPage() {
         </select>
       ),
     },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={`?id=${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Ver Historial
+          </Link>
+        </div>
+      ),
+    },
   ];
   useBreadcrumb('Usuarios', 'Todos los usuarios');
   const [filters, setFilters] = useState<IUserFilter>({
@@ -87,7 +106,6 @@ export default function UsersPage() {
     queryFn: () => getUsers(filters),
     refetchOnWindowFocus: false,
   });
-  console.log('data', data);
   const { data: rolsData } = useQuery({
     queryKey: ['rols'],
     queryFn: () => getRols(),
@@ -103,6 +121,13 @@ export default function UsersPage() {
       }
     },
   });
+  const [userId, setUserId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    setUserId(id);
+  }, [searchParams]);
 
   const handleRolChange = (
     ev: ChangeEvent<HTMLSelectElement>,
@@ -148,6 +173,7 @@ export default function UsersPage() {
           filters={filters}
           queryClientKey={queryKey}
         />
+        <UserDetail userId={userId} setUserId={setUserId} />
       </section>
     );
 }
