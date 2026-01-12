@@ -81,7 +81,7 @@ export default async function Home() {
   const half = Math.ceil(departamentData.data.length / 2);
   const firstHalf = departamentData.data.slice(0, half);
   const secondHalf = departamentData.data.slice(half);
-
+  console.log('firstHalf', firstHalf);
   console.log('alwaysPopup', alwaysPopup);
   return (
     <>

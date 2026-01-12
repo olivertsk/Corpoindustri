@@ -22,7 +22,7 @@ export const useMultiCoinStore = create<MultiCoinStore>()(
         { label: 'Bolívares', value: 'BS', color: '#eab308' },
         { label: 'Dólares', value: 'USD', color: '#218445' },
       ],
-      selectedCoin: { label: 'Dólares', value: 'USD', color: '#218445' },
+      selectedCoin: { label: 'Bolívares', value: 'BS', color: '#eab308' },
       setSelectedCoin: (coin) => set({ selectedCoin: coin }),
     }),
     {
