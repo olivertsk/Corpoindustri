@@ -37,7 +37,6 @@ export default function SignInPage() {
             googleCaptchaPublicKey,
             { action: 'LOGIN' }
           );
-          console.log('token :>> ', token);
           data.recaptchaToken = token;
           const response = await authenticateUser(data);
           if (!response.success) {

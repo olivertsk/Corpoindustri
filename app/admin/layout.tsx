@@ -6,7 +6,7 @@ import Logo from '@/src/components/Logo';
 import { adminButtons } from '@/src/config/adminPages';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import SplitPane, { Pane } from 'split-pane-react';
 import 'split-pane-react/esm/themes/default.css';
 import { ISplitProps } from 'split-pane-react/esm/types';
@@ -16,6 +16,18 @@ const hideMenuSize = '45px';
 const queryClient = new QueryClient();
 
 export default function AdminLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <Suspense fallback={null}>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </Suspense>
+  );
+}
+
+function AdminLayoutContent({
   children,
 }: Readonly<{
   children: React.ReactNode;
