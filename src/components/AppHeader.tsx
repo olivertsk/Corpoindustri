@@ -4,17 +4,23 @@ import HeaderButtons from './header/HeaderButtons';
 import HeaderSearchbar from './header/HeaderSearchbar';
 import Logo from './Logo';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FloatingChat from './floatingChat/FloatingChat';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAuthStore } from '../store/authStore';
 
 const queryClient = new QueryClient();
 
 export default function AppHeader() {
+  const refreshUser = useAuthStore((state) => state.refreshUser);
   const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
 
   const handleOpenMenu = () => setOpenMenu(!openMenu);
+
+  useEffect(() => {
+    refreshUser();
+  }, []);
 
   return (
     !pathname.includes('auth') &&

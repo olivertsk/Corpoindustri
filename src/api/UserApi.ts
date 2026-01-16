@@ -1,5 +1,6 @@
 import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
+import { TRol } from '../types/rol';
 import { User } from '../types/user';
 
 export type IUserFilter = {
@@ -53,6 +54,15 @@ export const changeRol = async ({
     return response;
   } catch (error) {
     console.error(error);
+    throw error;
+  }
+};
+
+export const getRols = async (): Promise<TRol[] | undefined> => {
+  try {
+    const response = await makeGet('/rols/all');
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

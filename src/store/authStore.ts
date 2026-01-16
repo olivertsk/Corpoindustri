@@ -20,6 +20,7 @@ export const useAuthStore = create<AuthState>()(
       user: undefined,
       token: undefined,
       setUser: async (user, token) => {
+        console.log('user', user);
         setCookie('token', token, { path: '/', maxAge: 60 * 60 * 24 * 30 });
         set({ user, token });
       },
@@ -34,6 +35,7 @@ export const useAuthStore = create<AuthState>()(
       refreshUser: async () => {
         try {
           const user = await refreshUser();
+          console.log('user', user);
           if (user) {
             set({ user });
           }

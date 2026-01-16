@@ -33,7 +33,7 @@ export default function AuthButtonMobile({
             </div>
           </AccordionSummary>
           <AccordionDetails className='space-y-3'>
-            {user?.rol?.name === 'admin' && (
+            {user?.rol?.name !== 'client' && (
               <Link
                 className='text-white p-1 flex items-center gap-4'
                 href='/admin'
