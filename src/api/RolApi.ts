@@ -32,11 +32,8 @@ export const getAllRolsForTable = async (
   params: IRolFilter
 ): Promise<AllRolTable | undefined> => {
   try {
-    const { data } = await makeGet('/rols/all', {
-      params,
-    });
-
-    const result = data.data;
+    const data = await makeGet('/rols/all', params);
+    const result = data;
     const rows: GridRowsProp = result.data.map((item: TRol) => ({
       id: item.id,
       name: item.name,
@@ -80,11 +77,11 @@ export const updateRol = async ({
 
 export const getRolById = async (id: TRol['id']): Promise<TRol | undefined> => {
   try {
-    const { data } = await makeGet(`/rols/show/${id}`);
+    const data = await makeGet(`/rols/show/${id}`);
     delete data.created_at;
     delete data.updated_at;
 
-    return data.data;
+    return data;
   } catch (error) {
     throw error;
   }

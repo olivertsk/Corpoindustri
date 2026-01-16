@@ -12,12 +12,8 @@ export const getAllViews = async (
   params: IViewFilter
 ): Promise<AllViewResponse | undefined> => {
   try {
-    const { data } = await makeGet('/views/all', {
-      params,
-    });
-
-    const result = data.data;
-    return result;
+    const data = await makeGet('/views/all', params);
+    return data;
   } catch (error) {
     throw error;
   }
@@ -27,15 +23,14 @@ export const getAllViewsForTable = async (
   params: IViewFilter
 ): Promise<AllViewTable | undefined> => {
   try {
-    const { data } = await makeGet('/views/all', {
-      params,
-    });
+    const data = await makeGet('/views/all', params);
 
     const result = data.data;
-    const rows: GridRowsProp = result.data.map((item: IView) => ({
+    const rows: GridRowsProp = result.map((item: IView) => ({
       id: item.id,
       name: item.name,
       route: item.route,
+      url: item.url,
     }));
 
     return {
@@ -75,11 +70,11 @@ export const getViewById = async (
   id: IView['id']
 ): Promise<IView | undefined> => {
   try {
-    const { data } = await makeGet(`/views/show/${id}`);
+    const data = await makeGet(`/views/show/${id}`);
     delete data.created_at;
     delete data.updated_at;
 
-    return data.data;
+    return data;
   } catch (error) {
     throw error;
   }

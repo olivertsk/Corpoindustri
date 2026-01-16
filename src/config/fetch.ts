@@ -4,8 +4,13 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const handleUnauthorized = async (): Promise<never> => {
-  redirect('/logout');
+const handleUnauthorized = async (statusCode: number): Promise<never> => {
+  if (statusCode === 401 || statusCode === 403) {
+    redirect(`/logout?status=${statusCode}`);
+  } else if (statusCode === 419) {
+    redirect('?permission=denied');
+  }
+  redirect(`/logout?status=${statusCode}`);
 };
 
 const comprobeToken = async () => {
@@ -39,11 +44,12 @@ export const makeGet = async (url: string, parameters?: unknown) => {
       return respJSON.data;
     } else {
       if (
-        (response.status === 403 || response.status === 401) &&
+        (response.status === 403 ||
+          response.status === 401 ||
+          response.status === 419) &&
         url !== '/auth/me'
       ) {
-        console.log('path :>> ', path);
-        return await handleUnauthorized();
+        return await handleUnauthorized(response.status);
       }
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
@@ -68,8 +74,12 @@ export const makePost = async (
       },
       body: JSON.stringify(body),
     });
-    if (response.status === 403 || response.status === 401) {
-      return await handleUnauthorized();
+    if (
+      response.status === 403 ||
+      response.status === 401 ||
+      response.status === 419
+    ) {
+      return await handleUnauthorized(response.status);
     }
     return await response.json();
   } catch (error) {
@@ -88,8 +98,12 @@ export const uploadFileRequest = async (url: string, body: unknown) => {
       },
       body: body as BodyInit,
     });
-    if (response.status === 403 || response.status === 401) {
-      return await handleUnauthorized();
+    if (
+      response.status === 403 ||
+      response.status === 401 ||
+      response.status === 419
+    ) {
+      return await handleUnauthorized(response.status);
     }
     return await response.json();
   } catch (error) {

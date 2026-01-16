@@ -1,16 +1,28 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import UsersPage from './UsersPage';
-import RolsPage from './RolsPage';
-import ViewsPage from './ViewsPage';
+import RolsPage from './role/RolsPage';
+import ViewsPage from './views/ViewsPage';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function UserTabPage() {
   const [activeTab, setActiveTab] = useState(0);
+  const tab = useSearchParams().get('tab');
+  const router = useRouter();
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log('event :>> ', event);
-    setActiveTab(newValue);
+  useEffect(() => {
+    if (tab) {
+      const tabIndex =
+        tab === 'users' ? 0 : tab === 'roles' ? 1 : tab === 'views' ? 2 : 0;
+      setActiveTab(tabIndex);
+    }
+  }, [tab]);
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    const tabName =
+      newValue === 0 ? 'users' : newValue === 1 ? 'roles' : 'views';
+    router.replace(`/admin/users?tab=${tabName}`);
   };
 
   return (

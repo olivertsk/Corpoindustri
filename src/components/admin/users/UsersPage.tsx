@@ -7,7 +7,6 @@ import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { apiUrl, editBtn, inputStlyes } from '@/src/lib/global';
 import { findCity, findState } from '@/src/lib/location-ve';
-import { rolDictionary } from '@/src/types/rol';
 import { User } from '@/src/types/user';
 import { getUserGender } from '@/src/utils/userGenderType';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
@@ -76,7 +75,7 @@ function UsersPageContent() {
         >
           {rolsData?.map((rol) => (
             <option key={rol.id} value={rol.id}>
-              {rolDictionary[rol.name as keyof typeof rolDictionary]}
+              {rol.name}
             </option>
           ))}
         </select>

@@ -2,9 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GridColDef } from '@mui/x-data-grid';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
-import TaskTable from '../../TaskTable';
-import Spinner from '../../spinner/Spinner';
+import TaskTable from '../../../TaskTable';
+import Spinner from '../../../spinner/Spinner';
 import {
   containerStyles,
   deleteBtn,
@@ -13,6 +12,7 @@ import {
 } from '@/src/lib/global';
 import { deleteRol, getAllRolsForTable } from '@/src/api/RolApi';
 import Link from 'next/link';
+import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 
 const columnStyles =
   'bg-secondary-200 text-white [&_svg]:text-white [&_div]:font-bold';
@@ -20,8 +20,8 @@ const columnStyles =
 const queryKey = 'rols';
 
 export default function RolsPage() {
+  useBreadcrumb('Roles', 'Todos los roles');
   const [filters, setFilters] = useState({ pag: 1, limit: 10 });
-  const navigate = useRouter();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -49,15 +49,26 @@ export default function RolsPage() {
 
   const columns: GridColDef[] = [
     {
+      field: 'name',
+      headerName: 'Nombre',
+      flex: 1,
+      headerClassName: columnStyles,
+    },
+    {
+      field: 'permissions',
+      headerName: 'Permisos',
+      flex: 1,
+      headerClassName: columnStyles,
+    },
+    {
       field: 'actions',
       headerName: '',
       flex: 1,
       headerClassName: columnStyles,
-      maxWidth: 40,
       renderCell: (params) => (
         <div className='flex items-center h-full'>
           <Link
-            href={`categories/${params.row.id}`}
+            href={`/admin/users/rols/edit/${params.row.id}`}
             className={`${editBtn} h-[32px] flex items-center justify-center`}
           >
             Editar
@@ -71,18 +82,6 @@ export default function RolsPage() {
         </div>
       ),
     },
-    {
-      field: 'name',
-      headerName: 'Nombre',
-      flex: 1,
-      headerClassName: columnStyles,
-    },
-    {
-      field: 'permissions',
-      headerName: 'Permisos',
-      flex: 1,
-      headerClassName: columnStyles,
-    },
   ];
 
   if (isLoading) return <Spinner />;
@@ -92,12 +91,9 @@ export default function RolsPage() {
       <div className={containerStyles}>
         <div className='mb-4 flex gap-2'>
           <div className='flex-1'></div>
-          <button
-            onClick={() => navigate.push('/rols/new')}
-            className={`${primaryBtn}`}
-          >
+          <Link href={'/admin/users/rols/new'} className={`${primaryBtn}`}>
             Nuevo Rol
-          </button>
+          </Link>
         </div>
 
         {data && (
@@ -105,7 +101,7 @@ export default function RolsPage() {
             pageSize={filters?.limit || 10}
             rowCount={data.meta?.total || 0}
             isLoading={isLoading}
-            onRowClick={(params) => navigate.push(`/rols/edit/${params.id}`)}
+            onRowClick={() => {}}
             page={filters.pag ? filters.pag - 1 : 0}
             rows={data.items}
             columns={columns}

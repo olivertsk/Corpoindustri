@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { permissionSchema } from './permissionsTypes';
 
 export const userSchema = z.object({
   avatar: z.string().optional(),
@@ -22,6 +23,7 @@ export const userSchema = z.object({
     .object({
       id: z.string(),
       name: z.string(),
+      permissions: z.array(permissionSchema),
     })
     .optional(),
   id: z.string(),

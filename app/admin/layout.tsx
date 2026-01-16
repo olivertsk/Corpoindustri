@@ -5,11 +5,12 @@ import Breadcrumb from '@/src/components/admin/Breadcrumb';
 import Logo from '@/src/components/Logo';
 import { adminButtons } from '@/src/config/adminPages';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SplitPane, { Pane } from 'split-pane-react';
 import 'split-pane-react/esm/themes/default.css';
 import { ISplitProps } from 'split-pane-react/esm/types';
+import { useAuthStore } from '@/src/store/authStore';
 
 const hideMenuSize = '45px';
 const queryClient = new QueryClient();
@@ -19,6 +20,18 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = useAuthStore((state) => state.user);
+  const params = useSearchParams();
+  const route = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (params.get('permission') === 'denied') {
+      alert('No tienes permiso para realizar esta acción.');
+      route.replace(pathname);
+    }
+  }, [params, pathname, route]);
+
   const [loaded, setLoaded] = useState(false);
   const [mQuery, setMQuery] = useState<{ matches: boolean }>({
     matches: false,
@@ -44,7 +57,6 @@ export default function AdminLayout({
     }
   }, []);
 
-  const pathname = usePathname();
   useEffect(() => {
     if (!mQuery.matches && loaded) {
       setSizes([0, '100%']);
@@ -88,6 +100,16 @@ export default function AdminLayout({
     }
   };
 
+  const permittedUrls = new Set(
+    (user?.rol?.permissions ?? [])
+      .map((permission) => permission.view?.route)
+      .filter((url): url is string => Boolean(url))
+  );
+
+  const visibleButtons = adminButtons.filter((button) =>
+    permittedUrls.has(button.url)
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <main className='h-screen'>
@@ -118,7 +140,7 @@ export default function AdminLayout({
                   </svg>
                 </button>
               </div>
-              {adminButtons.map((button) => (
+              {visibleButtons.map((button) => (
                 <Link
                   className={`${
                     pathname.includes(button.url) && button.url !== '/'
@@ -132,6 +154,25 @@ export default function AdminLayout({
                   {button.text}
                 </Link>
               ))}
+              <Link
+                className={`text-white p-2 flex rounded-md  text-sm gap-2 hover:bg-white/20 transition-colors`}
+                href={'/'}
+              >
+                <div>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='24'
+                    height='24'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      fill='currentColor'
+                      d='m16 8.41l-4.5-4.5L4.41 11H6v8h3v-6h5v6h3v-8h1.59L17 9.41V6h-1zM2 12l9.5-9.5L15 6V5h3v4l3 3h-3v8h-5v-6h-3v6H5v-8z'
+                    />
+                  </svg>
+                </div>
+                Inicio
+              </Link>
             </div>
           </Pane>
           <Pane className={` !overflow-auto transition-all`}>

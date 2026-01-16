@@ -27,7 +27,7 @@ export default function AuthButton({
       </Link>
       {user && (
         <div className='absolute top-[80%] -left-[100%] w-64 bg-white p-4 hidden user-options lg:group-hover:flex shadow-lg rounded-md text-black flex-col gap-2 text-sm'>
-          {user?.rol?.name === 'admin' && (
+          {user?.rol?.name !== 'client' && (
             <Link
               className='hover:text-gray-700 p-1 flex gap-2'
               href='/admin'

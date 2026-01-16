@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GridColDef } from '@mui/x-data-grid';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
   containerStyles,
@@ -10,9 +9,11 @@ import {
   primaryBtn,
 } from '@/src/lib/global';
 import Link from 'next/link';
-import Spinner from '../../spinner/Spinner';
-import TaskTable from '../../TaskTable';
+import Spinner from '../../../spinner/Spinner';
+import TaskTable from '../../../TaskTable';
 import { deleteView, getAllViewsForTable } from '@/src/api/ViewApi';
+import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
+import { IView } from '@/src/types/permissionsTypes';
 
 const columnStyles =
   'bg-secondary-200 text-white [&_svg]:text-white [&_div]:font-bold';
@@ -20,8 +21,8 @@ const columnStyles =
 const queryKey = 'views';
 
 export default function ViewsPage() {
+  useBreadcrumb('Vistas', 'Todas las vistas');
   const [filters, setFilters] = useState({ pag: 1, limit: 10 });
-  const navigate = useRouter();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -41,59 +42,13 @@ export default function ViewsPage() {
     },
   });
 
-  const manageDeleteItem = (id: string) => {
+  const manageDeleteItem = (id: IView['id']) => {
     if (window.confirm('¿Estás seguro de eliminar esta vista?')) {
       deleteMutate(id);
     }
   };
 
   const columns: GridColDef[] = [
-    {
-      field: 'actions',
-      headerName: '',
-      flex: 1,
-      headerClassName: columnStyles,
-      maxWidth: 40,
-      renderCell: (params) => (
-        <div className='flex items-center h-full'>
-          <Link
-            href={`categories/${params.row.id}`}
-            className={`${editBtn} h-[32px] flex items-center justify-center`}
-          >
-            Editar
-          </Link>
-          <button
-            onClick={() => manageDeleteItem(params.row.id)}
-            className={`${deleteBtn} h-[32px] flex items-center justify-center`}
-          >
-            Eliminar
-          </button>
-        </div>
-      ),
-    },
-    {
-      field: 'icon',
-      headerName: 'Icono',
-      flex: 1,
-      headerClassName: columnStyles,
-      renderCell: (params) => (
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='20'
-          height='20'
-          viewBox='0 0 24 24'
-        >
-          <path
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='1.5'
-            d={params.value}
-          />
-        </svg>
-      ),
-    },
     {
       field: 'name',
       headerName: 'Nombre',
@@ -112,6 +67,29 @@ export default function ViewsPage() {
       flex: 1,
       headerClassName: columnStyles,
     },
+    {
+      field: 'actions',
+      headerName: '',
+      flex: 1,
+      headerClassName: columnStyles,
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={`/admin/users/views/edit/${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Editar
+          </Link>
+          <button
+            type='button'
+            onClick={() => manageDeleteItem(params.row.id)}
+            className={`${deleteBtn} h-[32px] flex items-center justify-center`}
+          >
+            Eliminar
+          </button>
+        </div>
+      ),
+    },
   ];
 
   if (isLoading) return <Spinner />;
@@ -121,12 +99,9 @@ export default function ViewsPage() {
       <div className={containerStyles}>
         <div className='mb-4 flex gap-2'>
           <div className='flex-1'></div>
-          <button
-            onClick={() => navigate.push('/views/new')}
-            className={`${primaryBtn}`}
-          >
+          <Link href='/admin/users/views/new' className={`${primaryBtn}`}>
             Nueva Vista
-          </button>
+          </Link>
         </div>
 
         {data && (
@@ -134,7 +109,7 @@ export default function ViewsPage() {
             pageSize={filters?.limit || 10}
             rowCount={data.meta?.total || 0}
             isLoading={isLoading}
-            onRowClick={(params) => navigate.push(`/views/edit/${params.id}`)}
+            onRowClick={() => {}}
             page={filters.pag ? filters.pag - 1 : 0}
             rows={data.items}
             columns={columns}

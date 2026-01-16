@@ -1,5 +1,5 @@
-import { GridRowsProp } from "@mui/x-data-grid";
-import { z } from "zod";
+import { GridRowsProp } from '@mui/x-data-grid';
+import { z } from 'zod';
 
 export const viewSchema = z.object({
   id: z.string(),
@@ -25,8 +25,8 @@ export interface IViewFilter {
   name?: string;
 }
 
-export type IViewPayloadForm = Pick<IView, "name" | "route" | "url"> & {
-  id?: string;
+export type IViewPayloadForm = Pick<IView, 'name' | 'route' | 'url'> & {
+  id?: IView['id'] | null;
   icon?: string | null;
   order?: number | null;
 };
@@ -57,7 +57,7 @@ export const permissionSchema = z.object({
   post: z.boolean(),
   put: z.boolean(),
   delete: z.boolean(),
-  view: viewSchema.optional().nullable()
+  view: viewSchema.optional().nullable(),
 });
 
 export type IPermission = z.infer<typeof permissionSchema>;
