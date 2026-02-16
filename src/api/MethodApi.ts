@@ -9,7 +9,8 @@ import {
 export type PaymentMethodQuery = {
   pag?: number;
   name?: string;
-  type: ETypePaymentMethods;
+  type?: ETypePaymentMethods;
+  limit?: number;
 };
 
 export const getMethods = async (

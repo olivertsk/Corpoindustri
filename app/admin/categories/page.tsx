@@ -1,36 +1,74 @@
 'use client';
 import { deleteCategory, getCategories } from '@/src/api/CategoriesApi';
 import Spinner from '@/src/components/spinner/Spinner';
+import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import {
-  deleteBtn,
-  editBtn,
-  tableBodyStyles,
-  tableHeadStyles,
-  tableStyles,
-} from '@/src/lib/global';
+import { deleteBtn, editBtn } from '@/src/lib/global';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
-import { Pagination } from '@mui/material';
+import { getGridBooleanOperators, GridColDef } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const queryKey = 'categories';
 
 export default function CategoriesPage() {
+  const allColumns: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'Nombre',
+      flex: 1,
+      minWidth: 150,
+    },
+    {
+      field: 'status',
+      headerName: 'Estatus',
+      flex: 1,
+      minWidth: 150,
+      filterOperators: getGridBooleanOperators().filter(
+        (op) => op.value === 'is' || op.value === 'isNot'
+      ),
+    },
+    {
+      field: 'isSalient',
+      headerName: 'Destacada',
+      flex: 1,
+      minWidth: 150,
+      filterOperators: getGridBooleanOperators().filter(
+        (op) => op.value === 'is' || op.value === 'isNot'
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={`categories/${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Editar
+          </Link>
+          <button
+            onClick={() => handleDeleteBtn(params.row.id)}
+            className={`${deleteBtn} h-[32px] flex items-center justify-center`}
+          >
+            Eliminar
+          </button>
+        </div>
+      ),
+    },
+  ];
   useBreadcrumb('Categorias', 'Todos las categorias');
   const [filters, setFilters] = useState<ICategoryFilter>({
     pag: 1,
     name: '',
     isSalient: '',
+    limit: 10,
   });
-
-  const handleChange = (
-    ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [ev.target.name]: ev.target.value });
-  };
 
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -38,13 +76,6 @@ export default function CategoriesPage() {
     queryFn: () => getCategories(filters),
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-    });
-  };
 
   const { mutate } = useMutation({
     mutationFn: deleteCategory,
@@ -55,13 +86,6 @@ export default function CategoriesPage() {
       }
     },
   });
-
-  const handleFilterBtn = () => {
-    setFilters({ ...filters, pag: 1 });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-    });
-  };
 
   const handleDeleteBtn = (id: ICategory['id']) => {
     if (typeof window !== 'undefined') {
@@ -80,32 +104,6 @@ export default function CategoriesPage() {
       <section>
         <h4 className='font-bold mb-2'>Filtros</h4>
         <div className='mb-4 flex gap-2 flex-wrap'>
-          <select
-            onChange={handleChange}
-            value={filters.isSalient + ''}
-            id=''
-            name='isSalient'
-            className='bg-white rounded-md px-4'
-          >
-            <option value=''>Todos</option>
-            <option value='true'>Destacada</option>
-            <option value='false'>No Destacada</option>
-          </select>
-          <input
-            value={filters.name!}
-            onChange={handleChange}
-            type='text'
-            name='name'
-            placeholder='Buscar Categorias'
-            className='h-full py-2 rounded-md flex-1 px-4'
-            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
-          />
-          <button
-            onClick={handleFilterBtn}
-            className='bg-primary text-white py-2 px-4 rounded-md font-bold'
-          >
-            Filtrar
-          </button>
           <Link
             href='categories/new'
             className='bg-accent-100 font-bold py-2 px-4 rounded-md'
@@ -113,52 +111,23 @@ export default function CategoriesPage() {
             Nueva Categoria
           </Link>
         </div>
-        <table className={tableStyles}>
-          <thead>
-            <tr>
-              <th className={tableHeadStyles}>Nombre</th>
-              <th className={tableHeadStyles}>Estatus</th>
-              <th className={tableHeadStyles}>Destacada</th>
-              <th className={tableHeadStyles}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((department) => (
-              <tr key={department.id}>
-                <td className={tableBodyStyles}>{department.name}</td>
-                <td className={tableBodyStyles}>
-                  {department.status ? 'Activo' : 'Inactivo'}
-                </td>
-                <td className={tableBodyStyles}>
-                  {department.isSalient ? 'Si' : 'No'}
-                </td>
-                <td className={tableBodyStyles}>
-                  <Link
-                    href={`categories/${department.id}`}
-                    className={editBtn}
-                  >
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDeleteBtn(department.id)}
-                    className={deleteBtn}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className='flex justify-center mt-8'>
-          <Pagination
-            count={data.meta.totalPage}
-            page={data.meta.actualPage}
-            onChange={(ev, page) => changePage(page)}
-            showFirstButton
-            showLastButton
-          />
-        </div>
+        <TaskTable<ICategoryFilter>
+          rows={data.data.map((item) => ({
+            id: item.id,
+            name: item.name,
+            status: item.status ? 'Activo' : 'Inactivo',
+            isSalient: item.isSalient ? 'Si' : 'No',
+          }))}
+          columns={allColumns}
+          rowCount={data.meta.total}
+          isLoading={isLoading}
+          page={data.meta.actualPage - 1}
+          pageSize={filters.limit!}
+          onRowClick={() => {}}
+          setFilters={setFilters}
+          filters={filters}
+          queryClientKey={queryKey}
+        />
       </section>
     );
 }

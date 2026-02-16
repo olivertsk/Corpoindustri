@@ -29,4 +29,6 @@ export type DepartmentFilters = {
   product?: boolean;
   isClient?: boolean;
   categories?: boolean;
+  filters?: string;
+  sort?: string;
 };

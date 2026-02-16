@@ -13,6 +13,8 @@ export default function ViewChatResponse() {
     queryFn: () => getConversation(id),
   });
 
+  console.log('data', data);
+
   if (isLoading) return <Spinner />;
 
   if (data)
@@ -25,10 +27,19 @@ export default function ViewChatResponse() {
           >
             <h2>
               <span className='font-bold'> Bot:</span>{' '}
-              {message.metadata.chatQuestion.name}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: message.metadata.chatQuestion.name,
+                }}
+              ></div>
             </h2>
             <p>
-              <span className='font-bold'> Cliente:</span> {message.message}
+              <span className='font-bold'> Cliente:</span>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: message.message,
+                }}
+              ></div>
             </p>
           </div>
         ))}

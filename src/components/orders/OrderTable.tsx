@@ -1,37 +1,123 @@
 import { getOrders, OrderParams } from '@/src/api/OrderApi';
 import OrderDetail from '@/src/components/orders/OrderDetail';
 import Spinner from '@/src/components/spinner/Spinner';
-import { primaryBtn, tableBodyStyles, thClass } from '@/src/lib/global';
+import { editBtn } from '@/src/lib/global';
 import { methodEnumTranslation } from '@/src/types/method';
 import { translationsOrder, translationsOrderColor } from '@/src/types/order';
-import { Pagination } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
+import TaskTable from '../TaskTable';
+import { GridColDef } from '@mui/x-data-grid';
+import './OrderTable.css';
 
 type OrderTableProps = {
   isClient: boolean;
 };
 
+const queryKey = 'orders';
+
 export default function OrderTable({ isClient = false }: OrderTableProps) {
+  const allColumns: GridColDef[] = [
+    { field: 'date', headerName: 'Fecha', flex: 1, minWidth: 150 },
+    { field: 'nameClient', headerName: 'Nombre', flex: 1, minWidth: 150 },
+    {
+      field: 'dni',
+      headerName: 'Cédula',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div>
+          <span>
+            {params.row.dniType}-{params.row.dni}
+          </span>
+        </div>
+      ),
+    },
+    { field: 'phoneNumber', headerName: 'Teléfono', flex: 1, minWidth: 150 },
+    {
+      field: 'typePayment',
+      headerName: 'Método de Pago',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div>
+          {params.row.typePayment
+            ? methodEnumTranslation[
+                params.row.typePayment as keyof typeof methodEnumTranslation
+              ]
+            : '-'}
+        </div>
+      ),
+    },
+    {
+      field: 'code',
+      headerName: 'Código Orden',
+      width: isClient ? 0 : 150,
+      maxWidth: isClient ? 0 : 150,
+      minWidth: isClient ? 0 : 150,
+      headerClassName: isClient ? 'hidden' : 'text',
+      cellClassName: isClient ? 'hidden' : '',
+      renderHeader: () => (isClient ? null : 'Código Orden'),
+      renderCell: (params) => (
+        <div>{isClient ? null : <span>{params.row.code}</span>}</div>
+      ),
+    },
+    {
+      field: 'status',
+      headerName: 'Estatus',
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <div className='flex items-center justify-center h-full w-full'>
+          <div
+            style={{
+              backgroundColor:
+                translationsOrderColor[
+                  params.row.status as keyof typeof translationsOrderColor
+                ],
+            }}
+            className={`p-1 rounded-md font-bold text-white h-[32px] flex items-center justify-center w-full`}
+          >
+            {
+              translationsOrder[
+                params.row.status as keyof typeof translationsOrder
+              ]
+            }
+          </div>
+        </div>
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Acción',
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={
+              isClient
+                ? `/profile/orders?orderId=${params.row.id}`
+                : `/admin/orders?orderId=${params.row.id}`
+            }
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Ver
+          </Link>
+        </div>
+      ),
+    },
+  ];
   const [filters, setFilters] = useState<OrderParams>({
     pag: 1,
     isClient,
+    limit: 10,
   });
 
-  const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryFn: () => getOrders(filters),
-    queryKey: ['orders'],
+    queryKey: [queryKey],
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-    });
-  };
 
   if (isLoading) {
     return <Spinner />;
@@ -46,76 +132,28 @@ export default function OrderTable({ isClient = false }: OrderTableProps) {
           </div>
         ) : (
           <>
-            <section className='overflow-hidden'>
-              <div className='overflow-auto'>
-                <table className='w-full rounded-md overflow-hidden bg-white'>
-                  <thead>
-                    <tr>
-                      <th className={thClass}>Fecha</th>
-                      <th className={thClass}>Nombre</th>
-                      <th className={thClass}>Cédula</th>
-                      <th className={thClass}>Teléfono</th>
-                      <th className={thClass}>Método de Pago</th>
-                      {!isClient && <th className={thClass}>Código Orden</th>}
-                      <th className={thClass}>Estatus</th>
-                      <th className={thClass}>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.data.map((item) => (
-                      <tr key={item.id}>
-                        <td className={tableBodyStyles}>{item.date}</td>
-                        <td className={tableBodyStyles}>{item.nameClient}</td>
-                        <td className={tableBodyStyles}>
-                          {item.dniType}-{item.dni}
-                        </td>
-                        <td className={tableBodyStyles}>{item.phoneNumber}</td>
-                        <td className={tableBodyStyles}>
-                          {item.typePayment
-                            ? methodEnumTranslation[item.typePayment]
-                            : '-'}
-                        </td>
-                        {!isClient && (
-                          <td className={tableBodyStyles}>{item.code}</td>
-                        )}
-                        <td className={tableBodyStyles}>
-                          <div
-                            style={{
-                              backgroundColor:
-                                translationsOrderColor[item.status],
-                            }}
-                            className={`p-1 rounded-md font-bold text-white `}
-                          >
-                            {translationsOrder[item.status]}
-                          </div>
-                        </td>
-                        <td className={tableBodyStyles}>
-                          <Link
-                            href={
-                              isClient
-                                ? `/profile/orders?orderId=${item.id}`
-                                : `/admin/orders?orderId=${item.id}`
-                            }
-                            className={primaryBtn}
-                          >
-                            Ver
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className='flex justify-center mt-8'>
-                <Pagination
-                  count={data.meta.totalPage}
-                  page={data.meta.actualPage}
-                  onChange={(_, page) => changePage(page)}
-                  showFirstButton
-                  showLastButton
-                />
-              </div>
-            </section>
+            <TaskTable
+              rows={data.data.map((item) => ({
+                date: item.date,
+                nameClient: item.nameClient,
+                dniType: item.dniType,
+                dni: item.dni,
+                phoneNumber: item.phoneNumber,
+                typePayment: item.typePayment,
+                code: item?.code,
+                status: item.status,
+                id: item.id,
+              }))}
+              columns={allColumns}
+              rowCount={data.meta.total}
+              isLoading={isLoading}
+              page={data.meta.actualPage - 1}
+              pageSize={filters.limit!}
+              onRowClick={() => {}}
+              setFilters={setFilters}
+              filters={filters}
+              queryClientKey={queryKey}
+            />
             <OrderDetail isClient={isClient} />
           </>
         )}

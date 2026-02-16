@@ -5,36 +5,70 @@ import {
   PaymentMethodQuery,
 } from '@/src/api/MethodApi';
 import Spinner from '@/src/components/spinner/Spinner';
+import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { deleteBtn, editBtn, tableBodyStyles } from '@/src/lib/global';
+import { deleteBtn, editBtn } from '@/src/lib/global';
 import {
   ETypePaymentMethods,
   methodEnumTranslation,
   PaymentMethod,
 } from '@/src/types/method';
-import { Pagination } from '@mui/material';
+import { getGridSingleSelectOperators, GridColDef } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-
-const thClass = 'text-center bg-primary py-2 text-white';
 
 const queryKey = 'paymentMethods';
 
 export default function PaymentMethods() {
+  const typeOptions = Object.values(ETypePaymentMethods).map((type) => ({
+    value: type,
+    label: methodEnumTranslation[type],
+  }));
+
+  const allColumns: GridColDef[] = [
+    { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 150 },
+    { field: 'status', headerName: 'Estatus', flex: 1, minWidth: 150 },
+    {
+      field: 'type',
+      headerName: 'Tipo',
+      flex: 1,
+      minWidth: 150,
+      type: 'singleSelect',
+      valueOptions: typeOptions,
+      filterOperators: getGridSingleSelectOperators(),
+      renderCell: (params) => <span>{params.row.type}</span>,
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      minWidth: 250,
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <div className='flex items-center h-full justify-center'>
+          <Link
+            href={`methods/${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Editar
+          </Link>
+          <button
+            onClick={() => handleDeleteBtn(params.row.id)}
+            className={`${deleteBtn} h-[32px] flex items-center justify-center`}
+          >
+            Eliminar
+          </button>
+        </div>
+      ),
+    },
+  ];
   useBreadcrumb('Métodos de Pago', 'Todos los Métodos de pago');
   const [filters, setFilters] = useState<PaymentMethodQuery>({
     pag: 1,
     name: '',
-    type: ETypePaymentMethods.All,
+    limit: 10,
   });
-
-  const handleChange = (
-    ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [ev.target.name]: ev.target.value });
-  };
 
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -42,13 +76,6 @@ export default function PaymentMethods() {
     queryFn: () => getMethods(filters),
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-    });
-  };
 
   const { mutate } = useMutation({
     mutationFn: deleteMethod,
@@ -59,13 +86,6 @@ export default function PaymentMethods() {
       }
     },
   });
-
-  const handleFilterBtn = () => {
-    setFilters({ ...filters, pag: 1 });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-    });
-  };
 
   const handleDeleteBtn = (id: PaymentMethod['id']) => {
     if (typeof window !== 'undefined') {
@@ -84,34 +104,6 @@ export default function PaymentMethods() {
       <section>
         <h4 className='font-bold mb-2'>Filtros</h4>
         <div className='mb-4 flex gap-2 flex-wrap'>
-          <select
-            onChange={handleChange}
-            value={filters.type + ''}
-            id=''
-            name='type'
-            className='bg-white rounded-md px-4'
-          >
-            <option value={ETypePaymentMethods.All}>Todos</option>
-            <option value={ETypePaymentMethods.Bank}>Bancos</option>
-            <option value={ETypePaymentMethods.Cash}>Efectivo</option>
-            <option value={ETypePaymentMethods.Zelle}>Zelle</option>
-            <option value={ETypePaymentMethods.PagoMovil}>Pago Móvil</option>
-          </select>
-          <input
-            value={filters.name!}
-            onChange={handleChange}
-            type='text'
-            name='name'
-            placeholder='Buscar Método de Pago'
-            className='h-full py-2 rounded-md flex-1 px-4'
-            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
-          />
-          <button
-            onClick={handleFilterBtn}
-            className='bg-primary text-white py-2 px-4 rounded-md font-bold'
-          >
-            Filtrar
-          </button>
           <Link
             href='methods/new'
             className='bg-accent-100 font-bold py-2 px-4 rounded-md'
@@ -119,51 +111,23 @@ export default function PaymentMethods() {
             Nuevo Método de Pago
           </Link>
         </div>
-        <table className='w-full rounded-md overflow-hidden bg-white'>
-          <thead>
-            <tr>
-              <th className={thClass}>Nombre</th>
-              <th className={thClass}>Estatus</th>
-              <th className={thClass}>Tipo</th>
-              <th className={thClass}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((item) => (
-              <tr key={item.id}>
-                <td className={tableBodyStyles}>{item.name}</td>
-                <td className={tableBodyStyles}>
-                  {item.status ? 'Activo' : 'Inactivo'}
-                </td>
-                <td className={tableBodyStyles}>
-                  {methodEnumTranslation[item.type]}
-                </td>
-                <td
-                  className={`${tableBodyStyles} flex items-center justify-center gap-4 flex-wrap`}
-                >
-                  <Link href={`methods/${item.id}`} className={editBtn}>
-                    Editar
-                  </Link>
-                  <button
-                    onClick={() => handleDeleteBtn(item.id)}
-                    className={deleteBtn}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className='flex justify-center mt-8'>
-          <Pagination
-            count={data.meta.totalPage}
-            page={data.meta.actualPage}
-            onChange={(ev, page) => changePage(page)}
-            showFirstButton
-            showLastButton
-          />
-        </div>
+        <TaskTable<PaymentMethodQuery>
+          rows={data.data.map((item) => ({
+            id: item.id,
+            name: item.name,
+            status: item.status ? 'Activo' : 'Inactivo',
+            type: methodEnumTranslation[item.type],
+          }))}
+          columns={allColumns}
+          rowCount={data.meta.total}
+          isLoading={isLoading}
+          page={data.meta.actualPage - 1}
+          pageSize={filters.limit!}
+          onRowClick={() => {}}
+          setFilters={setFilters}
+          filters={filters}
+          queryClientKey={queryKey}
+        />
       </section>
     );
 }

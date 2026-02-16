@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ArrowDown } from '../Icons';
+import { Menu, MenuItem, MenuItems } from '@headlessui/react';
 import { useMultiCoinStore } from '@/src/store/multicoinStore';
 
 export default function HeaderSearchbar() {
@@ -9,7 +8,7 @@ export default function HeaderSearchbar() {
   const router = useRouter();
 
   const coins = useMultiCoinStore((state) => state.coins);
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  // const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
   const setSelectedCoin = useMultiCoinStore((state) => state.setSelectedCoin);
 
   const onSearch = () => {
@@ -22,7 +21,7 @@ export default function HeaderSearchbar() {
       <div className='flex flex-1 max-w-2xl justify-between bg-white rounded-full overflow-hidden items-center shadow-header'>
         <div className='flex items-center'>
           <Menu>
-            <MenuButton
+            {/* <MenuButton
               style={{
                 backgroundColor: 'transparent',
               }}
@@ -39,7 +38,7 @@ export default function HeaderSearchbar() {
                 </div>
               </div>
               <ArrowDown />
-            </MenuButton>
+            </MenuButton> */}
 
             <MenuItems
               anchor='bottom'

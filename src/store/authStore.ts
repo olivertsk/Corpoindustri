@@ -40,11 +40,6 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           console.error('Error refreshing user:', error);
         }
-        // if (user) {
-        //   set({ user });
-        // } else {
-        //   set({ user: null });
-        // }
       },
     }),
     {

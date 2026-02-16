@@ -2,34 +2,49 @@
 import { getSuggestions, SuggestionParams } from '@/src/api/SuggestionApi';
 import Spinner from '@/src/components/spinner/Spinner';
 import SuggestionDetail from '@/src/components/suggestions/SuggestionDetail';
+import TaskTable from '@/src/components/TaskTable';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
-import { primaryBtn, tableBodyStyles, thClass } from '@/src/lib/global';
+import { editBtn } from '@/src/lib/global';
 import { normalizeDate } from '@/src/utils/normalizeDate';
-import { Pagination } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GridColDef } from '@mui/x-data-grid';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+const queryKey = 'suggestions';
 
 export default function SuggestionPage() {
   useBreadcrumb('Sugerencias', 'Todas las sugerencias');
 
+  const allColumns: GridColDef[] = [
+    { field: 'createdAt', headerName: 'Fecha', minWidth: 150, flex: 1 },
+    { field: 'title', headerName: 'Razón', minWidth: 150, flex: 1 },
+    { field: 'description', headerName: 'Descripción', minWidth: 150, flex: 1 },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      renderCell: (params) => (
+        <div className='flex items-center h-full'>
+          <Link
+            href={`/admin/suggestions?id=${params.row.id}`}
+            className={`${editBtn} h-[32px] flex items-center justify-center`}
+          >
+            Ver
+          </Link>
+        </div>
+      ),
+    },
+  ];
   const [filters, setFilters] = useState<SuggestionParams>({
     pag: 1,
+    limit: 10,
   });
 
-  const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryFn: () => getSuggestions(filters),
-    queryKey: ['suggestions'],
+    queryKey: [queryKey],
     refetchOnWindowFocus: false,
   });
-
-  const changePage = (page: number) => {
-    setFilters({ ...filters, pag: page });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['suggestions'] });
-    });
-  };
 
   if (isLoading) {
     return <Spinner />;
@@ -44,48 +59,24 @@ export default function SuggestionPage() {
           </div>
         ) : (
           <>
-            <section className='overflow-hidden'>
-              <div className='overflow-auto'>
-                <table className='w-full rounded-md overflow-hidden bg-white'>
-                  <thead>
-                    <tr>
-                      <th className={thClass}>Fecha</th>
-                      <th className={thClass}>Razon</th>
-                      <th className={thClass}>Descripción</th>
-                      <th className={thClass}>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.data.map((item) => (
-                      <tr key={item.id}>
-                        <td className={tableBodyStyles}>
-                          {normalizeDate(item.createdAt)}
-                        </td>
-                        <td className={tableBodyStyles}>{item.title}</td>
-                        <td className={tableBodyStyles}>{item.description}</td>
-                        <td className={tableBodyStyles}>
-                          <Link
-                            href={`/admin/suggestions?id=${item.id}`}
-                            className={primaryBtn}
-                          >
-                            Ver
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className='flex justify-center mt-8'>
-                <Pagination
-                  count={data.meta.totalPage}
-                  page={data.meta.actualPage}
-                  onChange={(_, page) => changePage(page)}
-                  showFirstButton
-                  showLastButton
-                />
-              </div>
-            </section>
+            <TaskTable<SuggestionParams>
+              rows={data.data.map((item) => ({
+                id: item.id,
+                createdAt: normalizeDate(item.createdAt),
+                title: item.title,
+                description: item.description,
+              }))}
+              columns={allColumns}
+              rowCount={data.meta.total}
+              isLoading={isLoading}
+              page={data.meta.actualPage - 1}
+              pageSize={filters.limit!}
+              onRowClick={() => {}}
+              setFilters={setFilters}
+              filters={filters}
+              queryClientKey={queryKey}
+            />
+
             <SuggestionDetail />
           </>
         )}

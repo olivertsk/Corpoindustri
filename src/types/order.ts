@@ -52,6 +52,7 @@ export type Order = {
   viewTime?: string;
   paidWith: Coin['value'];
   paymentVoucher?: string; // File name of the payment voucher
+  createdAt: string;
 };
 
 export type DataOrderProduct = {

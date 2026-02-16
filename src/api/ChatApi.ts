@@ -124,14 +124,11 @@ export const getConversation = async (
     const data: UnparsedConversationResponse = await makeGet(
       `/conversations/show/${id}`
     );
+    console.log('data', data);
 
-    const parsedData = data.messages.map((message) => {
-      message.metadata = JSON.parse(message.metadata);
-      return message;
-    });
-    console.log('parsedData', parsedData);
-    return { messages: parsedData as unknown as ParsedMessages[] };
+    return { messages: data.messages as unknown as ParsedMessages[] };
   } catch (error) {
+    console.log('error', error);
     throw error;
   }
 };
