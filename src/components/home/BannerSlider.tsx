@@ -23,6 +23,47 @@ type BannerSliderProps = {
   redirectTo?: string;
 };
 
+// Componente de copo de nieve individual
+const Snowflake = () => {
+  const size = Math.random() * 8 + 4; // Tamaño entre 4px y 12px
+  const left = Math.random() * 100; // Posición horizontal aleatoria
+  const animationDuration = Math.random() * 5 + 5; // Duración entre 5s y 10s
+  const opacity = Math.random() * 0.7 + 0.3; // Opacidad entre 0.3 y 1
+  const delay = Math.random() * 5; // Retardo aleatorio
+
+  return (
+    <div
+      className="absolute top-0 pointer-events-none z-10"
+      style={{
+        left: `${left}%`,
+        width: `${size}px`,
+        height: `${size}px`,
+        animation: `snowfall ${animationDuration}s linear ${delay}s infinite`,
+        opacity: opacity,
+      }}
+    >
+      <div
+        className="w-full h-full bg-white rounded-full"
+        style={{
+          boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)',
+          filter: 'blur(0.5px)',
+        }}
+      />
+    </div>
+  );
+};
+
+// Componente contenedor de efectos de nieve
+const SnowEffect = ({ snowflakeCount = 50 }: { snowflakeCount?: number }) => {
+  return (
+    <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+      {Array.from({ length: snowflakeCount }).map((_, index) => (
+        <Snowflake key={index} />
+      ))}
+    </div>
+  );
+};
+
 export default function BannerSlider({
   showFadeOut,
   slides,
@@ -38,12 +79,26 @@ export default function BannerSlider({
 
   return (
     <>
+      <style jsx global>{`
+        @keyframes snowfall {
+          0% {
+            transform: translateY(-100px) rotate(0deg);
+          }
+          100% {
+            transform: translateY(calc(100vh + 100px)) rotate(360deg);
+          }
+        }
+      `}</style>
+      
       <div
         className={`relative overflow-hidden ${
           floatingBanner && ' sm:shadow-2xl sm:mt-8 sm:rounded-xl'
         } ${redirectTo ? 'cursor-pointer' : ''}`}
         onClick={handleRedirect}
       >
+        {/* Efecto de nieve solo cuando NO es floatingBanner */}
+        {!floatingBanner && <SnowEffect snowflakeCount={50} />}
+        
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
