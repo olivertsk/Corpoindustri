@@ -64,6 +64,46 @@ const SnowEffect = ({ snowflakeCount = 50 }: { snowflakeCount?: number }) => {
   );
 };
 
+const Confetti = () => {
+  const colors = ['#facc15', '#ec4899', '#3b82f6', '#22c55e', '#a855f7']; // Colores vivos
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  const left = Math.random() * 100;
+  const duration = Math.random() * 3 + 3;
+  const delay = Math.random() * 5;
+
+  return (
+    <div
+      className="absolute top-0 pointer-events-none z-10"
+      style={{
+        left: `${left}%`,
+        width: '10px',
+        height: '10px',
+        backgroundColor: color,
+        borderRadius: Math.random() > 0.5 ? '50%' : '2px', // Mezcla de círculos y cuadrados
+        animation: `snowfall ${duration}s linear ${delay}s infinite`,
+      }}
+    />
+  );
+};
+
+const getSeason = () => {
+  const now = new Date();
+  const month = now.getMonth() + 1; // Enero es 0
+  const day = now.getDate();
+
+  // Navidad: 1 de Diciembre al 6 de Enero
+  if (month === 12 || (month === 1 && day <= 6)) return 'christmas';
+
+  // Carnaval: Variable, pero usualmente Febrero/Marzo. 
+  // Para simplificar, usemos Febrero completo o fechas específicas de 2026 (16-17 Feb)
+  if (month === 2) return 'carnival';
+
+  // Independencia de Venezuela: 5 de Julio
+  if (month === 7 && day === 5) return 'patriotic';
+
+  return 'none';
+};
+
 export default function BannerSlider({
   showFadeOut,
   slides,
@@ -71,6 +111,7 @@ export default function BannerSlider({
   redirectTo,
 }: BannerSliderProps) {
   const router = useRouter();
+  const season = getSeason();
   const handleRedirect = () => {
     if (redirectTo) {
       router.push(`${redirectTo}`);
@@ -97,8 +138,19 @@ export default function BannerSlider({
         onClick={handleRedirect}
       >
         {/* Efecto de nieve solo cuando NO es floatingBanner */}
-        {!floatingBanner && <SnowEffect snowflakeCount={50} />}
-        
+        {/* {!floatingBanner && <SnowEffect snowflakeCount={50} />} */}
+        {!floatingBanner && (
+          <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+            {season === 'christmas' && 
+              Array.from({ length: 40 }).map((_, i) => <Snowflake key={i} />)}
+            
+            {season === 'carnival' && 
+              Array.from({ length: 50 }).map((_, i) => <Confetti key={i} />)}
+              
+            {season === 'patriotic' && 
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-blue-500/10 to-red-500/10 animate-pulse" />}
+          </div>
+        )}
         <Swiper
           spaceBetween={50}
           slidesPerView={1}
