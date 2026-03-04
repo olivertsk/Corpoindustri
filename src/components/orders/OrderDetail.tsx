@@ -51,7 +51,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     if (!data) return 0;
     return data.products.reduce(
       (acc, item) => acc + item.salePrice * item.quantity,
-      0
+      0,
     );
   }, [data]);
   const returnLink = isClient ? `/profile/orders` : `/admin/orders`;
@@ -234,6 +234,25 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   </li>
                 )}
               </ul>
+              {!isClient && (
+                <>
+                  <h4 className='font-bold text-lg mt-4'>Datos del usuario</h4>
+                  <ul>
+                    <li className='text-slate-600'>
+                      Nombre:
+                      <b> {data?.user?.name || '-'}</b>
+                    </li>
+                    <li className='text-slate-600'>
+                      Email:
+                      <b> {data?.user?.email || '-'}</b>
+                    </li>
+                    <li className='text-slate-600'>
+                      Teléfono:
+                      <b> {data?.user?.phoneNumber || '-'}</b>
+                    </li>
+                  </ul>
+                </>
+              )}
               <div className='rounded-md  border mt-8 overflow-auto'>
                 <table className='w-full'>
                   <thead>
@@ -259,12 +278,12 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                             <td className='py-2 px-4'>
                               <b>
                                 {manageCoinToShow(
-                                  product.salePrice * product.quantity
+                                  product.salePrice * product.quantity,
                                 )}
                               </b>
                             </td>
                           </tr>
-                        )
+                        ),
                     )}
                   </tbody>
                 </table>
