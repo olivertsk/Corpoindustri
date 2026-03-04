@@ -33,7 +33,7 @@ const Snowflake = () => {
 
   return (
     <div
-      className="absolute top-0 pointer-events-none z-10"
+      className='absolute top-0 pointer-events-none z-10'
       style={{
         left: `${left}%`,
         width: `${size}px`,
@@ -43,23 +43,12 @@ const Snowflake = () => {
       }}
     >
       <div
-        className="w-full h-full bg-white rounded-full"
+        className='w-full h-full bg-white rounded-full'
         style={{
           boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)',
           filter: 'blur(0.5px)',
         }}
       />
-    </div>
-  );
-};
-
-// Componente contenedor de efectos de nieve
-const SnowEffect = ({ snowflakeCount = 50 }: { snowflakeCount?: number }) => {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-      {Array.from({ length: snowflakeCount }).map((_, index) => (
-        <Snowflake key={index} />
-      ))}
     </div>
   );
 };
@@ -73,7 +62,7 @@ const Confetti = () => {
 
   return (
     <div
-      className="absolute top-0 pointer-events-none z-10"
+      className='absolute top-0 pointer-events-none z-10'
       style={{
         left: `${left}%`,
         width: '10px',
@@ -94,7 +83,7 @@ const getSeason = () => {
   // Navidad: 1 de Diciembre al 6 de Enero
   if (month === 12 || (month === 1 && day <= 6)) return 'christmas';
 
-  // Carnaval: Variable, pero usualmente Febrero/Marzo. 
+  // Carnaval: Variable, pero usualmente Febrero/Marzo.
   // Para simplificar, usemos Febrero completo o fechas específicas de 2026 (16-17 Feb)
   if (month === 2) return 'carnival';
 
@@ -130,7 +119,7 @@ export default function BannerSlider({
           }
         }
       `}</style>
-      
+
       <div
         className={`relative overflow-hidden ${
           floatingBanner && ' sm:shadow-2xl sm:mt-8 sm:rounded-xl'
@@ -140,15 +129,16 @@ export default function BannerSlider({
         {/* Efecto de nieve solo cuando NO es floatingBanner */}
         {/* {!floatingBanner && <SnowEffect snowflakeCount={50} />} */}
         {!floatingBanner && (
-          <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-            {season === 'christmas' && 
+          <div className='absolute inset-0 pointer-events-none z-10 overflow-hidden'>
+            {season === 'christmas' &&
               Array.from({ length: 40 }).map((_, i) => <Snowflake key={i} />)}
-            
-            {season === 'carnival' && 
+
+            {season === 'carnival' &&
               Array.from({ length: 50 }).map((_, i) => <Confetti key={i} />)}
-              
-            {season === 'patriotic' && 
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-blue-500/10 to-red-500/10 animate-pulse" />}
+
+            {season === 'patriotic' && (
+              <div className='absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-blue-500/10 to-red-500/10 animate-pulse' />
+            )}
           </div>
         )}
         <Swiper
@@ -187,7 +177,7 @@ export default function BannerSlider({
                     />
                   </picture>
                 </SwiperSlide>
-              )
+              ),
           )}
         </Swiper>
         {showFadeOut && (

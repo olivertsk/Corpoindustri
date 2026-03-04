@@ -6,10 +6,9 @@ export default function InstagramSection() {
     <div className='container mx-auto grid grid-cols-3 gap-8'>
       <div className=' bg-white rounded-md col-span-3 md:col-span-2'>
         <iframe
-          src='https://widgets.sociablekit.com/instagram-feed/iframe/25505573'
-          frameBorder='0'
+          src='https://widgets.sociablekit.com/instagram-feed/iframe/25659513'
           width='100%'
-          height='1000'
+          height='1000px'
         ></iframe>
       </div>
       <div className='hidden md:flex justify-center items-center bg-gradient-to-b from-[#DD2A7B] to-[#515BD4] rounded-md'>
