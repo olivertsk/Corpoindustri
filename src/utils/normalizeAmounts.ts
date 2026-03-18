@@ -17,53 +17,9 @@ export const normalizeAmountsBs = (amount: number) => {
   }).format(amount);
 };
 
-export const validateNormalizeAmount = (
-  selectedCoin: Coin,
-  product?: Product | OrderProduct,
-  price?: number,
-  priceType: 'price' | 'promoPrice' | 'any' = 'any'
-): string => {
-  if (selectedCoin.value === 'BS') {
-    if (product) {
-      const { priceWithTaxBs, promotionalPriceBs, priceBs } = product;
-      switch (priceType) {
-        case 'price':
-          return normalizeAmountsBs(priceBs || 0);
-        case 'promoPrice':
-          return normalizeAmountsBs(promotionalPriceBs || 0);
-        case 'any':
-          return normalizeAmountsBs(
-            priceWithTaxBs || promotionalPriceBs || priceBs
-          );
-        default:
-          return '';
-      }
-    } else if (price !== undefined) {
-      return normalizeAmountsBs(price);
-    }
-  } else {
-    if (product) {
-      const { priceWithTax, promotionalPrice, price } = product;
-      switch (priceType) {
-        case 'price':
-          return normalizeAmounts(price || 0);
-        case 'promoPrice':
-          return normalizeAmounts(promotionalPrice || 0);
-        case 'any':
-          return normalizeAmounts(priceWithTax || promotionalPrice || price);
-        default:
-          return '';
-      }
-    } else if (price !== undefined) {
-      return normalizeAmounts(price);
-    }
-  }
-  return '';
-};
-
 export const amountByCoin = (
   selectedCoin: Coin,
-  product: OrderProduct | Product
+  product: OrderProduct | Product,
 ) => {
   if (selectedCoin.value === 'BS') {
     return (

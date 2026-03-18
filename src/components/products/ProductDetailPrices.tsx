@@ -1,10 +1,8 @@
 'use client';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
 import { Product } from '@/src/types/product';
-import calcProductTax from '@/src/utils/calcProductTax';
-import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
 import React from 'react';
 import AddProductToOrder from './AddProductToOrder';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 
 type ProductDetailPricesProps = {
   product: Product;
@@ -13,21 +11,14 @@ type ProductDetailPricesProps = {
 export default function ProductDetailPrices({
   product,
 }: ProductDetailPricesProps) {
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { choosePrice, validateNormalizeAmount, calcProductTax, currentCoin } =
+    useCalcAmount();
 
-  const productPrice =
-    selectedCoin.value === 'BS' ? product.priceBs : product.price;
-  const productPromotionalPrice =
-    selectedCoin.value === 'BS'
-      ? product.promotionalPriceBs
-      : product.promotionalPrice;
+  const productPrice = product.priceBs;
+  const productPromotionalPrice = product.promotionalPriceBs;
 
-  const totalRef =
-    selectedCoin.value === 'BS'
-      ? product.priceWithTaxBs || product.promotionalPriceBs || product.priceBs
-      : product.priceWithTax || product.promotionalPrice || product.price;
+  const totalRef = choosePrice(product);
 
-  console.log('selectedCoin', selectedCoin);
   return (
     <>
       {productPrice || productPromotionalPrice || totalRef ? (
@@ -40,31 +31,20 @@ export default function ProductDetailPrices({
                 'line-through text-slate-400 text-xl'
               }`}
             >
-              Ref.{' '}
-              {validateNormalizeAmount(
-                selectedCoin,
-                product,
-                undefined,
-                'price'
-              )}
+              Ref. {validateNormalizeAmount(product, undefined, 'price')}
             </h5>
             {product.promotionalPrice !== null &&
               product.promotionalPrice > 0 && (
                 <h5 className='text-xl '>
                   Ref Promo.{' '}
-                  {validateNormalizeAmount(
-                    selectedCoin,
-                    product,
-                    undefined,
-                    'promoPrice'
-                  )}
+                  {validateNormalizeAmount(product, undefined, 'promoPrice')}
                 </h5>
               )}
             <h5 className='text-xl  text-slate-600'>
-              IVA Ref. {calcProductTax(product, product.taxRate, selectedCoin)}
+              IVA Ref. {calcProductTax(product, product.taxRate)}
             </h5>
             <h5 className='text-xl font-bold '>
-              Total Ref. {validateNormalizeAmount(selectedCoin, product)}
+              Total Ref. {validateNormalizeAmount(product)}
             </h5>
           </div>
           <div
@@ -79,7 +59,7 @@ export default function ProductDetailPrices({
       ) : (
         <div>
           <p className='text-sm font-bold text-slate-600'>
-            Este producto no esta disponible en {selectedCoin.value}
+            Este producto no esta disponible en {currentCoin.value}
           </p>
         </div>
       )}

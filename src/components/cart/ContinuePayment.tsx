@@ -11,12 +11,9 @@ import { getClientSurvey } from '@/src/api/SurveyApi';
 import { ESurveyType, TSurvey } from '@/src/types/survey';
 import SurveyWrapper from '../survey/SurveyWrapper';
 import { uploadFile } from '@/src/api/FileApi';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
-import {
-  amountByCoin,
-  validateNormalizeAmount,
-} from '@/src/utils/normalizeAmounts';
 import Spinner from '../spinner/Spinner';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
+import { useMultiCoinStore } from '@/src/store/multicoinStore';
 
 type ContinuePaymentProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -30,36 +27,40 @@ export default function ContinuePayment({
   const orderProducts = useCartStore((state) => state.orderProducts);
   const clearCart = useCartStore((state) => state.clearCart);
   const user = useAuthStore((store) => store.user);
-  const selectedCoin = useMultiCoinStore((store) => store.selectedCoin);
   const [sending, setSending] = useState(false);
+  const currencies = useMultiCoinStore((state) => state.currencies);
+  const { choosePrice, currentCoin, validateNormalizeAmount } = useCalcAmount();
 
   const total = useMemo(
     () =>
       orderProducts.reduce(
-        (init, item) =>
-          (init += item.quantity * amountByCoin(selectedCoin, item)),
-        0
+        (init, item) => (init += item.quantity * choosePrice(item)),
+        0,
       ),
-    [orderProducts, selectedCoin]
+    [orderProducts, choosePrice],
+  );
+
+  const originalTotal = useMemo(
+    () =>
+      orderProducts.reduce(
+        (init, item) => (init += item.quantity * choosePrice(item, false)),
+        0,
+      ),
+    [orderProducts, choosePrice],
   );
 
   const totalWithoutTax = useMemo(
     () =>
       orderProducts.reduce(
-        (init, item) =>
-          (init +=
-            item.quantity *
-            (selectedCoin.value === 'USD'
-              ? item.promotionalPrice || item.price
-              : item.promotionalPriceBs || item.priceBs)),
-        0
+        (init, item) => (init += item.quantity * choosePrice(item, false)),
+        0,
       ),
-    [orderProducts, selectedCoin]
+    [orderProducts, choosePrice],
   );
 
   const totalTax = useMemo(
     () => orderProducts.reduce((init, item) => (init += item.taxRate || 0), 0),
-    [orderProducts]
+    [orderProducts],
   );
 
   const parsedOrderProducts = useMemo(
@@ -68,12 +69,12 @@ export default function ContinuePayment({
         productId: product.id,
         code: product.code,
         valueTax: product.taxRate,
-        salePrice: amountByCoin(selectedCoin, product),
+        salePrice: choosePrice(product),
         quantity: product.quantity,
         subtotalTax: (product.taxRate || 0) * product.quantity,
-        subtotal: amountByCoin(selectedCoin, product) * product.quantity,
+        subtotal: choosePrice(product) * product.quantity,
       })),
-    [orderProducts]
+    [orderProducts, choosePrice],
   );
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -126,15 +127,16 @@ export default function ContinuePayment({
       setSending(true);
       const response = await createOrder({
         ...payload,
-        paidWith: selectedCoin.value,
+        paidWith: currentCoin.value,
+        exchangeRate: currencies[0]?.exchangeRate || 1,
       });
       setSending(false);
       if (response.success) {
         setOpen(false);
         toast.success(
-          'Le enviaremos una notificacion cuando su pedido haya sido confirmado'
+          'Le enviaremos una notificacion cuando su pedido haya sido confirmado',
         );
-        clearCart(selectedCoin);
+        clearCart(currentCoin);
         const surveyId = await getClientSurvey(ESurveyType.FIRSTPURCHASE);
         setSurveyId(surveyId);
         return;
@@ -151,14 +153,14 @@ export default function ContinuePayment({
         for (const [key, value] of formData.entries()) {
           if (key === 'typePayment') {
             const input = formRef.current!.querySelector(
-              `[value="${value}"]`
+              `[value="${value}"]`,
             ) as HTMLInputElement;
             if (input) {
               input.checked = true; // Populate the field
             }
           } else {
             const input = formRef.current!.querySelector(
-              `[name="${key}"]`
+              `[name="${key}"]`,
             ) as HTMLInputElement;
             if (input) {
               if (key !== 'paymentVoucher') input.value = value as string; // Populate the field
@@ -323,11 +325,10 @@ export default function ContinuePayment({
               />
             </div>
 
-            <input type='hidden' name='amount' defaultValue={total} />
+            <input type='hidden' name='amount' defaultValue={originalTotal} />
             <SelectPaymentMethod />
             <p className='text-slate-700 font-bold text-lg my-4'>
-              Monto a pagar:{' '}
-              <b>{validateNormalizeAmount(selectedCoin, undefined, total)}</b>
+              Monto a pagar: <b>{validateNormalizeAmount(undefined, total)}</b>
             </p>
             {sending ? (
               <Spinner />

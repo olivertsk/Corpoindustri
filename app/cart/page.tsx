@@ -3,11 +3,10 @@ import ContinuePayment from '@/src/components/cart/ContinuePayment';
 import Heading from '@/src/components/Heading';
 import CartProductCard from '@/src/components/products/CartProductCard';
 import SubHeading from '@/src/components/SubHeading';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 import { containerStyles, primaryBtn } from '@/src/lib/global';
 import { useAuthStore } from '@/src/store/authStore';
 import { useCartStore } from '@/src/store/cartSlice';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
-import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -24,31 +23,18 @@ export default function CartPage() {
     setOpen(true);
   };
 
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { choosePrice, validateNormalizeAmount } = useCalcAmount();
   const total = useMemo(
     () =>
       orderProducts.reduce(
-        (init, item) =>
-          (init +=
-            item.quantity *
-            (selectedCoin.value === 'USD'
-              ? item.priceWithTax || item.promotionalPrice || item.price
-              : item.priceWithTaxBs ||
-                item.promotionalPriceBs ||
-                item.priceBs)),
-        0
+        (init, item) => (init += item.quantity * choosePrice(item)),
+        0,
       ),
-    [orderProducts, selectedCoin]
+    [orderProducts, choosePrice],
   );
 
   const existProductByCoin = orderProducts.some((orderProduct) =>
-    selectedCoin.value === 'USD'
-      ? orderProduct.priceWithTax ||
-        orderProduct.promotionalPrice ||
-        orderProduct.price
-      : orderProduct.priceWithTaxBs ||
-        orderProduct.promotionalPriceBs ||
-        orderProduct.priceBs
+    choosePrice(orderProduct),
   );
 
   return (
@@ -72,8 +58,7 @@ export default function CartPage() {
         {existProductByCoin && (
           <>
             <h4 className='text-slate-600 text-2xl mt-8 text-center'>
-              Total:{' '}
-              <b>{validateNormalizeAmount(selectedCoin, undefined, total)}</b>
+              Total: <b>{validateNormalizeAmount(undefined, total)}</b>
             </h4>
             <div className='mt-8 flex justify-center'>
               <button

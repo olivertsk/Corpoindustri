@@ -1,32 +1,22 @@
 'use client';
 
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 import { Product } from '@/src/types/product';
-import calcProductTax from '@/src/utils/calcProductTax';
-import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
 
 type CardProductPriceProps = {
   product: Product;
 };
 
 export default function CardProductPrice({ product }: CardProductPriceProps) {
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { choosePrice, validateNormalizeAmount, calcProductTax, currentCoin } =
+    useCalcAmount();
 
-  const hasPromotionalPrice = !!(selectedCoin.value === 'BS'
-    ? product.promotionalPriceBs
-    : product.promotionalPrice);
+  const hasPromotionalPrice = !!product.promotionalPriceBs;
 
-  const productPrice =
-    selectedCoin.value === 'BS' ? product.priceBs : product.price;
-  const productPromotionalPrice =
-    selectedCoin.value === 'BS'
-      ? product.promotionalPriceBs
-      : product.promotionalPrice;
+  const productPrice = product.priceBs;
+  const productPromotionalPrice = product.promotionalPriceBs;
 
-  const totalRef =
-    selectedCoin.value === 'BS'
-      ? product.priceWithTaxBs || product.promotionalPriceBs || product.priceBs
-      : product.priceWithTax || product.promotionalPrice || product.price;
+  const totalRef = choosePrice(product);
 
   return (
     <>
@@ -38,16 +28,14 @@ export default function CardProductPrice({ product }: CardProductPriceProps) {
                 hasPromotionalPrice && 'line-through text-slate-400 text-sm'
               }`}
             >
-              Ref.{' '}
-              {validateNormalizeAmount(selectedCoin, undefined, productPrice)}
+              Ref. {validateNormalizeAmount(undefined, productPrice)}
             </p>
             {hasPromotionalPrice ? (
               <p className='text-sm  text-slate-600 flex-1 overflow-hidden text-ellipsis w-full'>
                 Ref Promo.{' '}
                 {validateNormalizeAmount(
-                  selectedCoin,
                   undefined,
-                  productPromotionalPrice || 0
+                  productPromotionalPrice || 0,
                 )}
               </p>
             ) : (
@@ -55,20 +43,18 @@ export default function CardProductPrice({ product }: CardProductPriceProps) {
             )}
             {product.taxRate != null && product.taxRate > 0 && (
               <p className='text-sm text-slate-600'>
-                IVA Ref.{' '}
-                {calcProductTax(product, product.taxRate, selectedCoin)}
+                IVA Ref. {calcProductTax(product, product.taxRate)}
               </p>
             )}
             <p className='text-sm font-bold'>
-              Total Ref.{' '}
-              {validateNormalizeAmount(selectedCoin, undefined, totalRef)}
+              Total Ref. {validateNormalizeAmount(product, undefined)}
             </p>
           </div>
         </div>
       ) : (
         <div>
           <p className='text-sm font-bold text-slate-600 p-4'>
-            Este producto no esta disponible en {selectedCoin.value}
+            Este producto no esta disponible en {currentCoin.value}
           </p>
         </div>
       )}

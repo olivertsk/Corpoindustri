@@ -8,11 +8,16 @@ import { useEffect, useState } from 'react';
 import FloatingChat from './floatingChat/FloatingChat';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '../store/authStore';
+import { useMultiCoinStore } from '../store/multicoinStore';
+import Spinner from './spinner/Spinner';
 
 const queryClient = new QueryClient();
 
 export default function AppHeader() {
   const refreshUser = useAuthStore((state) => state.refreshUser);
+  const { getCurrency, isLoadingCurrencies } = useMultiCoinStore(
+    (state) => state,
+  );
   const [openMenu, setOpenMenu] = useState(false);
   const pathname = usePathname();
 
@@ -20,12 +25,21 @@ export default function AppHeader() {
 
   useEffect(() => {
     refreshUser();
+    getCurrency();
   }, []);
 
   return (
     !pathname.includes('auth') &&
     !pathname.includes('admin') && (
       <>
+        {isLoadingCurrencies && (
+          <div className='fixed top-0 left-0 w-full h-full bg-secondary z-[100000] flex items-center justify-center'>
+            <div className='max-w-[200px] m-auto '>
+              <Logo />
+              <Spinner />
+            </div>
+          </div>
+        )}
         <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
           <div className='container mx-auto flex gap-4 items-center'>
             <div className='max-w-[50px] lg:max-w-[100px]'>

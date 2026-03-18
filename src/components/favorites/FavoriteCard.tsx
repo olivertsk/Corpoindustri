@@ -3,9 +3,7 @@ import Link from 'next/link';
 
 import { apiUrl } from '@/src/lib/global';
 import { Favorite } from '@/src/types/favorite';
-import { validateNormalizeAmount } from '@/src/utils/normalizeAmounts';
-import calcProductTax from '@/src/utils/calcProductTax';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 
 type FavoriteCardProps = {
   favorite: Favorite;
@@ -14,7 +12,7 @@ type FavoriteCardProps = {
 export default function FavoriteCard({
   favorite: { product },
 }: FavoriteCardProps) {
-  const selectedCoin = useMultiCoinStore((store) => store.selectedCoin);
+  const { validateNormalizeAmount, calcProductTax } = useCalcAmount();
 
   return (
     product && (
@@ -44,35 +42,23 @@ export default function FavoriteCard({
                 'line-through text-slate-400 text-sm'
               }`}
             >
-              Ref.{' '}
-              {validateNormalizeAmount(
-                selectedCoin,
-                product,
-                undefined,
-                'price'
-              )}
+              Ref. {validateNormalizeAmount(product, undefined, 'price')}
             </p>
             {product.promotionalPrice ? (
               <p className='text-sm  text-slate-600 flex-1 overflow-hidden text-ellipsis w-full'>
                 Ref Promo.{' '}
-                {validateNormalizeAmount(
-                  selectedCoin,
-                  product,
-                  undefined,
-                  'promoPrice'
-                )}
+                {validateNormalizeAmount(product, undefined, 'promoPrice')}
               </p>
             ) : (
               ''
             )}
             {product.taxRate != null && product.taxRate > 0 && (
               <p className='text-sm text-slate-600'>
-                IVA Ref.{' '}
-                {calcProductTax(product, product.taxRate, selectedCoin)}
+                IVA Ref. {calcProductTax(product, product.taxRate)}
               </p>
             )}
             <p className='text-sm font-bold'>
-              Total Ref. {validateNormalizeAmount(selectedCoin, product)}
+              Total Ref. {validateNormalizeAmount(product)}
             </p>
           </div>
         </div>

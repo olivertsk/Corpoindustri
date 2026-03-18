@@ -45,6 +45,7 @@ export type Order = {
   location?: string;
   products: DataOrderProduct[];
   typePayment?: ETypePaymentMethods;
+  exchangeRate?: number;
   method?: PaymentMethod;
   paymentMethodId?: PaymentMethod['id'];
   reference?: string;

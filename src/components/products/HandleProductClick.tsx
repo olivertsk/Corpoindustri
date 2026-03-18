@@ -1,7 +1,7 @@
 'use client';
 
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 import { useCartStore } from '@/src/store/cartSlice';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
 import { Product } from '@/src/types/product';
 import { toast } from 'react-toastify';
 type HandleProductClickProps = {
@@ -12,9 +12,9 @@ export default function HandleProductClick({
   product,
 }: HandleProductClickProps) {
   const addProduct = useCartStore((state) => state.addProduct);
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { currentCoin } = useCalcAmount();
   const handleButtonClick = () => {
-    addProduct(product, 1, selectedCoin);
+    addProduct(product, 1, currentCoin);
     toast.success('Producto agregado al carrito');
   };
 

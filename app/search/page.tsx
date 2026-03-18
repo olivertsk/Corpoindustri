@@ -5,7 +5,7 @@ import Accordion from '@/src/components/accordion/Accordion';
 import Paginator from '@/src/components/paginator/Paginator';
 import CardProducts from '@/src/components/products/CardProducts';
 import Spinner from '@/src/components/spinner/Spinner';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -14,14 +14,14 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 
 function Main() {
   const searchParams = useSearchParams();
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { currentCoin } = useCalcAmount();
   const setArrayFilter = useCallback(
     (name: string) =>
       searchParams
         .get(name)
         ?.split(',')
         ?.filter((item) => item) || [],
-    [searchParams]
+    [searchParams],
   );
 
   const [filters, setFilters] = useState<ProductFilters>({
@@ -33,7 +33,7 @@ function Main() {
     maxPrice: searchParams.get('maxPrice') || '',
     order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
     isClient: true,
-    typePrice: selectedCoin.value === 'BS' ? 'priceBs' : 'price',
+    typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
   });
 
   const { data, isFetching } = useQuery({
@@ -59,15 +59,15 @@ function Main() {
       departmentIds: setArrayFilter('departmentIds'),
       categoriesIds: setArrayFilter('categoriesIds'),
       pag: searchParams.get('pag') ? +searchParams.get('pag')! : 1,
-      typePrice: selectedCoin.value === 'BS' ? 'priceBs' : 'price',
+      typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
     }));
 
-    console.log('selectedCoin', selectedCoin);
+    console.log('currentCoin', currentCoin);
 
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     }, 500);
-  }, [searchParams, selectedCoin, queryClient, setArrayFilter]);
+  }, [searchParams, currentCoin, queryClient, setArrayFilter]);
 
   const navigate = useRouter();
   const applyFilters = () => {

@@ -45,8 +45,6 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
     enabled: orderId !== null,
   });
 
-  console.log('data', data);
-
   const total = useMemo(() => {
     if (!data) return 0;
     return data.products.reduce(
@@ -83,9 +81,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
   }, [data]);
 
   const manageCoinToShow = (price: number): string => {
-    return data?.paidWith === 'BS'
-      ? normalizeAmountsBs(price)
-      : normalizeAmounts(price);
+    return normalizeAmounts(price);
   };
 
   return (
@@ -145,6 +141,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   Ubicación:
                   <b> {data?.location}</b>
                 </li>
+
                 <li className='text-slate-600'>
                   Observación:
                   <b> {data?.observation || '-'}</b>
@@ -233,6 +230,10 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                     <b> {data?.reason || '-'}</b>
                   </li>
                 )}
+                <li className='text-slate-600'>
+                  Taza de cambio (USD):
+                  <b> {data?.exchangeRate ? data?.exchangeRate : '-'}</b>
+                </li>
               </ul>
               {!isClient && (
                 <>
@@ -253,6 +254,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                   </ul>
                 </>
               )}
+
               <div className='rounded-md  border mt-8 overflow-auto'>
                 <table className='w-full'>
                   <thead>
@@ -290,9 +292,17 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
               </div>
               <div>
                 <div className='flex justify-end mt-4 px-11'>
-                  <h4 className='text-slate-600'>Total: </h4>
+                  <h4 className='text-slate-600'>Total USD: </h4>
                   <h4 className='ml-2'>
                     <b>{manageCoinToShow(total)}</b>
+                  </h4>
+                </div>
+                <div className='flex justify-end mt-4 px-11'>
+                  <h4 className='text-slate-600'>Total BS: </h4>
+                  <h4 className='ml-2'>
+                    <b>
+                      {normalizeAmountsBs(total * (data?.exchangeRate || 1))}
+                    </b>
                   </h4>
                 </div>
               </div>

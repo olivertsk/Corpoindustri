@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import HandleQuantity from './HandleQuantity';
-import { useMultiCoinStore } from '@/src/store/multicoinStore';
+import { useCalcAmount } from '@/src/hooks/useCalcAmount';
 
 type AddProductToOrderProps = {
   product: Product;
@@ -16,10 +16,10 @@ type AddProductToOrderProps = {
 export default function AddProductToOrder({ product }: AddProductToOrderProps) {
   const [quantity, setQuantity] = useState(1);
   const addProduct = useCartStore((state) => state.addProduct);
-  const selectedCoin = useMultiCoinStore((state) => state.selectedCoin);
+  const { currentCoin } = useCalcAmount();
 
   const handleAddCart = () => {
-    addProduct(product, quantity, selectedCoin);
+    addProduct(product, quantity, currentCoin);
     setQuantity(1);
     toast.success('Producto agregado al carrito');
   };
