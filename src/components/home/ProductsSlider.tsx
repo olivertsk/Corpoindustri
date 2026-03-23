@@ -61,7 +61,7 @@ export default function ProductsSlider({
         navigation={true}
       >
         {products.map((product) => (
-          <SwiperSlide key={product.name} className='pb-6 lg:px-1'>
+          <SwiperSlide key={product.name} className='pb-6 lg:px-1 h-full'>
             <CardProducts product={product} />
           </SwiperSlide>
         ))}

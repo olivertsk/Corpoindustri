@@ -1,4 +1,8 @@
-import { ETypePaymentMethods, PaymentMethodForm } from '@/src/types/method';
+import {
+  EAvailableCurrency,
+  ETypePaymentMethods,
+  PaymentMethodForm,
+} from '@/src/types/method';
 import {
   FieldErrors,
   UseFormRegister,
@@ -34,7 +38,7 @@ export default function MethodForm({
     setValue('numberAccount', '');
     setValue('phoneNumber', '');
     setValue('status', true);
-  }, [type]);
+  }, [type, setValue]);
 
   return (
     <>
@@ -174,8 +178,42 @@ export default function MethodForm({
           </div>
         </div>
       )}
+      <div className='flex flex-col gap-2'>
+        <label htmlFor='currency' className='font-medium'>
+          Disponible en
+        </label>
+        <label htmlFor='bolivares'>
+          <input
+            type='checkbox'
+            id='bolivares'
+            value={EAvailableCurrency.BS}
+            {...register('currency', {
+              required: 'Selecciona al menos una moneda',
+            })}
+            className='mr-2'
+          />
+          Bolívares
+        </label>
+        <label htmlFor='dolares'>
+          <input
+            type='checkbox'
+            id='dolares'
+            value={EAvailableCurrency.USD}
+            {...register('currency', {
+              required: 'Selecciona al menos una moneda',
+            })}
+            className='mr-2'
+          />
+          Dólares
+        </label>
+        {errors.currency?.message && (
+          <ErrorMessage>{errors.currency.message}</ErrorMessage>
+        )}
+      </div>
       <div className='flex justify-center mt-8 gap-2 col-span-2'>
-        <button className={`${primaryBtn} `}>Guardar</button>
+        <button type='submit' className={primaryBtn}>
+          Guardar
+        </button>
         <button
           onClick={() => navigate.push('/admin/methods')}
           type='button'

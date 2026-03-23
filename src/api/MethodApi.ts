@@ -14,7 +14,7 @@ export type PaymentMethodQuery = {
 };
 
 export const getMethods = async (
-  params?: PaymentMethodQuery
+  params?: PaymentMethodQuery,
 ): Promise<{
   data: PaymentMethod[];
   meta: Meta;
@@ -28,7 +28,12 @@ export const getMethods = async (
 
 export const createMethod = async (data: PaymentMethodForm) => {
   try {
-    return await makePost('/paymentMethods/create', data);
+    return await makePost('/paymentMethods/create', {
+      ...data,
+      currency: data.currency
+        ? (data.currency as unknown as Array<string>).join(',')
+        : '',
+    });
   } catch (error) {
     throw error;
   }
@@ -42,7 +47,16 @@ export const updateMethod = async ({
   data: PaymentMethodForm;
 }) => {
   try {
-    return await makePost(`/paymentMethods/update/${id}`, data, 'PUT');
+    return await makePost(
+      `/paymentMethods/update/${id}`,
+      {
+        ...data,
+        currency: data.currency
+          ? (data.currency as unknown as Array<string>).join(',')
+          : '',
+      },
+      'PUT',
+    );
   } catch (error) {
     throw error;
   }
@@ -55,7 +69,7 @@ export const deleteMethod = async (id: PaymentMethod['id']) => {
       {
         id,
       },
-      'DELETE'
+      'DELETE',
     );
   } catch (error) {
     throw error;
@@ -64,7 +78,12 @@ export const deleteMethod = async (id: PaymentMethod['id']) => {
 
 export const getMethod = async (id: PaymentMethod['id']) => {
   try {
-    return await makeGet(`/paymentMethods/show/${id}`);
+    const result = await makeGet(`/paymentMethods/show/${id}`);
+    console.log('result', result);
+    return {
+      ...result,
+      currency: result.currency ? result.currency.split(',') : [],
+    };
   } catch (error) {
     throw error;
   }

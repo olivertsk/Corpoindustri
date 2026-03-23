@@ -1,3 +1,4 @@
+import { useCartStore } from '@/src/store/cartSlice';
 import { PaymentMethod } from '@/src/types/method';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -10,6 +11,7 @@ export default function MethodOption({
   method,
   isAdmin = false,
 }: MethodOptionProps) {
+  const setSelectedMethod = useCartStore((state) => state.setSelectedMethod);
   const copyText = (text?: string) => {
     navigator.clipboard.writeText(text || '');
     toast.success('Texto copiado al portapapeles');
@@ -28,6 +30,7 @@ export default function MethodOption({
           name='paymentMethodId'
           id={method.id}
           value={method.id}
+          onChange={() => setSelectedMethod(method)}
         />
       )}
       <div className='flex flex-col break-all gap-1'>

@@ -5,6 +5,11 @@ export enum ETypePaymentMethods {
   PagoMovil = 'pago movil',
 }
 
+export enum EAvailableCurrency {
+  USD = 'USD',
+  BS = 'BS',
+}
+
 export const methodEnumTranslation = {
   [ETypePaymentMethods.Cash]: 'Efectivo',
   [ETypePaymentMethods.Bank]: 'Transferencia Bancaria',
@@ -21,6 +26,7 @@ export type PaymentMethod = {
   phoneNumber?: string;
   numberAccount?: string;
   accountType?: string;
+  currency?: string;
   status: boolean | true;
 };
 

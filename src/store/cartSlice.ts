@@ -3,20 +3,27 @@ import { OrderProduct, Product } from '../types/product';
 import { persist, PersistOptions } from 'zustand/middleware';
 import { Coin } from './multicoinStore';
 import { amountByCoin } from '../utils/normalizeAmounts';
+import { PaymentMethod } from '../types/method';
 
 export type CartStore = {
   orderProducts: OrderProduct[];
+  selectedMethod?: PaymentMethod;
   addProduct: (product: Product, quantity: number, selectedCoin: Coin) => void;
   removeProduct: (product: OrderProduct) => void;
   clearCart: (selectedCoin: Coin) => void;
   addQuantity: (product: OrderProduct, selectedCoin: Coin) => void;
   subtractQuantity: (product: OrderProduct, selectedCoin: Coin) => void;
+  setSelectedMethod: (method?: PaymentMethod) => void;
 };
 
 export const useCartStore = create<CartStore>()(
   persist<CartStore>(
     (set, get) => ({
       orderProducts: [],
+      selectedMethod: undefined,
+      setSelectedMethod: (method) => {
+        set({ selectedMethod: method });
+      },
       addProduct: (product, quantity, selectedCoin) => {
         if (!!get().orderProducts.find((p) => p.id === product.id)) {
           const priceToPlus = amountByCoin(selectedCoin, product);
@@ -28,7 +35,7 @@ export const useCartStore = create<CartStore>()(
                     quantity: p.quantity + quantity,
                     subtotal: priceToPlus * (p.quantity + quantity),
                   }
-                : p
+                : p,
             ),
           }));
         } else {
@@ -83,6 +90,7 @@ export const useCartStore = create<CartStore>()(
         });
         set({
           orderProducts: refreshedCart,
+          selectedMethod: undefined,
         });
       },
       addQuantity: (product, selectedCoin) => {
@@ -95,7 +103,7 @@ export const useCartStore = create<CartStore>()(
                   quantity: p.quantity + 1,
                   subtotal: priceToPlus * (p.quantity + 1),
                 }
-              : p
+              : p,
           ),
         }));
       },
@@ -109,13 +117,13 @@ export const useCartStore = create<CartStore>()(
                   quantity: p.quantity - 1,
                   subtotal: priceToPlus * (p.quantity - 1),
                 }
-              : p
+              : p,
           ),
         }));
       },
     }),
     {
       name: 'cart-storage',
-    } as PersistOptions<CartStore>
-  )
+    } as PersistOptions<CartStore>,
+  ),
 );

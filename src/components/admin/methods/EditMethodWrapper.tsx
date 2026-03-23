@@ -26,17 +26,19 @@ export default function EditMethodWrapper({ method }: EditMethodWrapperProps) {
     defaultValues: method,
   });
 
+  const type = watch('type');
+
   useEffect(() => {
     if (!settedType) {
       Object.keys(method).forEach((key) => {
         setValue(
           key as keyof PaymentMethodForm,
-          method[key as keyof PaymentMethodForm]
+          method[key as keyof PaymentMethodForm],
         );
       });
       setSettedType(true);
     }
-  }, [watch('type')]);
+  }, [type, method, setValue, settedType]);
 
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();

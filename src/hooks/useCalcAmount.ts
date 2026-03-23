@@ -12,8 +12,8 @@ export const useCalcAmount = () => {
   const { selectedCoin, currencies } = useMultiCoinStore((state) => state);
 
   const calcAmount = useCallback(
-    (amount: number) => {
-      if (selectedCoin.value === 'BS') {
+    (amount: number, defaultCurrency?: 'USD' | 'BS') => {
+      if (selectedCoin.value === 'BS' || defaultCurrency === 'BS') {
         return amount * (currencies[0]?.exchangeRate || 1);
       }
       return amount;
@@ -22,12 +22,17 @@ export const useCalcAmount = () => {
   );
 
   const choosePrice = useCallback(
-    (item: Product | OrderProduct, makeCalc?: boolean) => {
-      return selectedCoin.value === 'USD'
+    (
+      item: Product | OrderProduct,
+      makeCalc?: boolean,
+      defaultCurrency: 'USD' | 'BS' = 'USD',
+    ) => {
+      return selectedCoin.value === 'USD' && defaultCurrency === 'USD'
         ? item.priceWithTaxBs || item.promotionalPriceBs || item.priceBs // This line means the price in dollars for BS,
         : makeCalc
           ? calcAmount(
               item.priceWithTaxBs || item.promotionalPriceBs || item.priceBs,
+              defaultCurrency,
             )
           : item.priceWithTaxBs || item.promotionalPriceBs || item.priceBs;
     },
@@ -39,8 +44,9 @@ export const useCalcAmount = () => {
       product?: Product | OrderProduct,
       price?: number,
       priceType: 'price' | 'promoPrice' | 'any' = 'any',
+      defaultCurrency: 'USD' | 'BS' = 'BS',
     ): string => {
-      if (selectedCoin.value === 'BS') {
+      if (selectedCoin.value === 'BS' && defaultCurrency === 'BS') {
         if (product) {
           const { priceWithTaxBs, promotionalPriceBs, priceBs } = product;
           switch (priceType) {

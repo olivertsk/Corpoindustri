@@ -21,7 +21,7 @@ export default function CardProductPrice({ product }: CardProductPriceProps) {
   return (
     <>
       {productPrice || productPromotionalPrice || totalRef ? (
-        <div className='flex px-4 justify-between h-[80px] mt-1'>
+        <div className='flex px-4 justify-between min-h-[100px] mt-1'>
           <div>
             <p
               className={`text-sm  text-slate-500 flex-1 overflow-hidden text-ellipsis ${

@@ -73,7 +73,7 @@ function AdminLayoutContent({
     if (!mQuery.matches && loaded) {
       setSizes([0, '100%']);
     }
-  }, [pathname]);
+  }, [pathname, mQuery.matches, loaded]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -115,11 +115,11 @@ function AdminLayoutContent({
   const permittedUrls = new Set(
     (user?.rol?.permissions ?? [])
       .map((permission) => permission.view?.route)
-      .filter((url): url is string => Boolean(url))
+      .filter((url): url is string => Boolean(url)),
   );
 
   const visibleButtons = adminButtons.filter((button) =>
-    permittedUrls.has(button.url)
+    permittedUrls.has(button.url),
   );
 
   return (

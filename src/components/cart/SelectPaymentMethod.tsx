@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import Spinner from '../spinner/Spinner';
 import { inputStlyes } from '@/src/lib/global';
 import MethodOption from './MethodOption';
+import { useCartStore } from '@/src/store/cartSlice';
 
 export default function SelectPaymentMethod() {
   const [typePayment, setTypePayment] = useState<ETypePaymentMethods>(
-    ETypePaymentMethods.Zelle
+    ETypePaymentMethods.Zelle,
   );
   const [loading, setLoading] = useState(false);
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
+  const setSelectedMethod = useCartStore((state) => state.setSelectedMethod);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,11 @@ export default function SelectPaymentMethod() {
     };
     fetchData();
   }, [typePayment]);
+
+  const handleSetTypePayment = (type: ETypePaymentMethods) => {
+    setTypePayment(type);
+    setSelectedMethod(undefined);
+  };
 
   return (
     <div>
@@ -40,7 +47,7 @@ export default function SelectPaymentMethod() {
             id={ETypePaymentMethods.Zelle}
             value={ETypePaymentMethods.Zelle}
             defaultChecked={true}
-            onChange={() => setTypePayment(ETypePaymentMethods.Zelle)}
+            onChange={() => handleSetTypePayment(ETypePaymentMethods.Zelle)}
           />
           Zelle
         </label>
@@ -53,7 +60,7 @@ export default function SelectPaymentMethod() {
             name='typePayment'
             id={ETypePaymentMethods.Bank}
             value={ETypePaymentMethods.Bank}
-            onChange={() => setTypePayment(ETypePaymentMethods.Bank)}
+            onChange={() => handleSetTypePayment(ETypePaymentMethods.Bank)}
           />
           Banco / Transferencia
         </label>
@@ -66,7 +73,7 @@ export default function SelectPaymentMethod() {
             name='typePayment'
             id={ETypePaymentMethods.Cash}
             value={ETypePaymentMethods.Cash}
-            onChange={() => setTypePayment(ETypePaymentMethods.Cash)}
+            onChange={() => handleSetTypePayment(ETypePaymentMethods.Cash)}
           />
           Efectivo
         </label>
@@ -79,7 +86,7 @@ export default function SelectPaymentMethod() {
             name='typePayment'
             id={ETypePaymentMethods.PagoMovil}
             value={ETypePaymentMethods.PagoMovil}
-            onChange={() => setTypePayment(ETypePaymentMethods.PagoMovil)}
+            onChange={() => handleSetTypePayment(ETypePaymentMethods.PagoMovil)}
           />
           Pago Móvil
         </label>
@@ -87,7 +94,7 @@ export default function SelectPaymentMethod() {
       {loading ? (
         <Spinner />
       ) : !methods.length && !loading ? (
-        <p className='mt-4 text-slate-600 text-xs mb-8'>
+        <p className='mt-4 text-red-600 mb-8'>
           No hay opciones creadas para este método de pago, por favor seleccione
           otro.
         </p>

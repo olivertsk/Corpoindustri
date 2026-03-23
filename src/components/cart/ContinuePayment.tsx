@@ -26,15 +26,34 @@ export default function ContinuePayment({
 }: ContinuePaymentProps) {
   const orderProducts = useCartStore((state) => state.orderProducts);
   const clearCart = useCartStore((state) => state.clearCart);
+  const selectedMethod = useCartStore((state) => state.selectedMethod);
+  const setSelectedMethod = useCartStore((state) => state.setSelectedMethod);
   const user = useAuthStore((store) => store.user);
   const [sending, setSending] = useState(false);
   const currencies = useMultiCoinStore((state) => state.currencies);
   const { choosePrice, currentCoin, validateNormalizeAmount } = useCalcAmount();
 
+  const totalBs = useMemo(
+    () =>
+      orderProducts.reduce(
+        (init, item) =>
+          (init +=
+            item.quantity *
+            choosePrice(
+              item,
+              currentCoin.value === 'USD' ? true : false,
+              'BS',
+            )),
+        0,
+      ),
+    [orderProducts, choosePrice, currentCoin],
+  );
+
   const total = useMemo(
     () =>
       orderProducts.reduce(
-        (init, item) => (init += item.quantity * choosePrice(item)),
+        (init, item) =>
+          (init += item.quantity * choosePrice(item, false, 'USD')),
         0,
       ),
     [orderProducts, choosePrice],
@@ -171,20 +190,17 @@ export default function ContinuePayment({
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedMethod(undefined);
+  };
+
   return (
     <>
       <SurveyWrapper surveyId={surveyId} setSurveyId={setSurveyId} />
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        maxWidth='sm'
-        fullWidth={true}
-      >
+      <Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth={true}>
         <div className='p-8'>
-          <button
-            className='absolute top-2 right-2'
-            onClick={() => setOpen(false)}
-          >
+          <button className='absolute top-2 right-2' onClick={handleClose}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -327,13 +343,28 @@ export default function ContinuePayment({
 
             <input type='hidden' name='amount' defaultValue={originalTotal} />
             <SelectPaymentMethod />
-            <p className='text-slate-700 font-bold text-lg my-4'>
-              Monto a pagar: <b>{validateNormalizeAmount(undefined, total)}</b>
-            </p>
+            {selectedMethod?.currency?.includes('USD') && (
+              <p className='text-slate-700 font-bold text-lg my-4'>
+                Monto a pagar (USD):{' '}
+                <b>{validateNormalizeAmount(undefined, total, 'any', 'USD')}</b>
+              </p>
+            )}
+            {selectedMethod?.currency?.includes('BS') && (
+              <p className='text-slate-700 font-bold text-lg my-4'>
+                Monto a pagar (BS):{' '}
+                <b>
+                  {validateNormalizeAmount(undefined, totalBs, 'any', 'BS')}
+                </b>
+              </p>
+            )}
             {sending ? (
               <Spinner />
             ) : (
-              <button type='submit' className={`${primaryBtn} w-full`}>
+              <button
+                disabled={!selectedMethod}
+                type='submit'
+                className={`${primaryBtn} w-full disabled:bg-gray-500 disabled:text-gray-300`}
+              >
                 Solicitud de Compra
               </button>
             )}
