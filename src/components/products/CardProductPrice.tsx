@@ -21,17 +21,17 @@ export default function CardProductPrice({ product }: CardProductPriceProps) {
   return (
     <>
       {productPrice || productPromotionalPrice || totalRef ? (
-        <div className='flex px-4 justify-between min-h-[100px] mt-1'>
+        <div className='flex px-4 justify-between min-h-[104px] mt-1'>
           <div>
             <p
-              className={`text-sm  text-slate-500 flex-1 overflow-hidden text-ellipsis ${
+              className={`text-sm text-slate-500 flex-1 overflow-hidden text-ellipsis ${
                 hasPromotionalPrice && 'line-through text-slate-400 text-sm'
               }`}
             >
               Ref. {validateNormalizeAmount(undefined, productPrice)}
             </p>
             {hasPromotionalPrice ? (
-              <p className='text-sm  text-slate-600 flex-1 overflow-hidden text-ellipsis w-full'>
+              <p className='text-sm text-slate-600 flex-1 overflow-hidden text-ellipsis w-full'>
                 Ref Promo.{' '}
                 {validateNormalizeAmount(
                   undefined,

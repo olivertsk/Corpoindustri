@@ -122,7 +122,7 @@ export default function BannerSlider({
 
       <div
         className={`relative overflow-hidden ${
-          floatingBanner && ' sm:shadow-2xl sm:mt-8 sm:rounded-xl'
+          floatingBanner && ' sm:shadow-2xl  sm:rounded-xl'
         } ${redirectTo ? 'cursor-pointer' : ''}`}
         onClick={handleRedirect}
       >

@@ -22,7 +22,9 @@ export default function CategoriesCard({
     return (
       <div className=' gap-4 px-3'>
         {titleSection && (
-          <h4 className='font-bold text-xl my-4'>{titleSection}</h4>
+          <h4 className='font-bold text-2xl text-primary my-4 display-title'>
+            {titleSection}
+          </h4>
         )}
 
         <Swiper
@@ -57,9 +59,11 @@ export default function CategoriesCard({
         >
           {categoryData.map((category) => (
             <SwiperSlide key={category.id} className='pb-8 lg:px-1 !h-auto'>
-              <div className='bg-white shadow-sm rounded-xl p-4 h-full flex flex-col justify-between'>
+              <div className='section-shell shadow-sm rounded-2xl p-4 h-full flex flex-col justify-between border border-white/80'>
                 <div>
-                  <h4 className='text-center font-bold'>{category.name}</h4>
+                  <h4 className='text-center font-bold text-primary text-xl'>
+                    {category.name}
+                  </h4>
                   <div className='my-2'>
                     <Image
                       width={200}
@@ -77,13 +81,13 @@ export default function CategoriesCard({
                       className='rounded-xl'
                     />
                   </div>
-                  <p className='text-center mb-4 text-sm'>
+                  <p className='text-center mb-4 text-sm text-slate-600 line-clamp-3 min-h-[60px]'>
                     {category.description}
                   </p>
                 </div>
                 <Link
                   href={`/search?departmentIds=${category.departmentId}&categoriesIds=${category.id}`}
-                  className={`${primaryBtn} rounded-xl !p-1 text-sm text-center`}
+                  className={`${primaryBtn} rounded-xl !p-2 text-sm text-center`}
                 >
                   Ver
                 </Link>

@@ -21,7 +21,7 @@ export default function AuthButtonMobile({
   return (
     <div className='block lg:hidden w-full'>
       {user ? (
-        <Accordion className='!bg-transparent !shadow-none '>
+        <Accordion className='!bg-transparent !shadow-none border-b border-white/10'>
           <AccordionSummary
             expandIcon={<ChevronDownIcon className='w-6 text-white' />}
             aria-controls='panel1-content'
@@ -32,10 +32,10 @@ export default function AuthButtonMobile({
               <sub className={subStyles}>{user.name}</sub>
             </div>
           </AccordionSummary>
-          <AccordionDetails className='space-y-3'>
+          <AccordionDetails className='space-y-2 pb-5'>
             {user?.rol?.name !== 'client' && (
               <Link
-                className='text-white p-1 flex items-center gap-4'
+                className='text-white p-2 rounded-lg hover:bg-white/10 flex items-center gap-4 transition-colors'
                 href='/admin'
                 onClick={toggleMenu}
               >
@@ -46,7 +46,7 @@ export default function AuthButtonMobile({
             {userButtons.map((button) => (
               <Link
                 key={button.path}
-                className=' p-1 flex text-white items-center gap-4'
+                className='p-2 rounded-lg hover:bg-white/10 flex text-white items-center gap-4 transition-colors'
                 href={button.path}
                 onClick={toggleMenu}
               >

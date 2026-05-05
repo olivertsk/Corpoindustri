@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     'distribuidora de alimentos',
     'combos mayoristas',
     'proveedor para bodegas',
-    'repuestos y accesorios para motos',
+    'proveedor de viveres para bodegas',
     'corpoindustri',
   ],
   alternates: {
@@ -91,7 +91,7 @@ export default function RootLayout({
       <Script
         src={`https://www.google.com/recaptcha/enterprise.js?render=${googleCaptchaPublicKey}`}
       />
-      <body className='bg-gray-100 relative'>
+      <body className='relative'>
         <RequestFavorites />
         <TransitionWrapper />
         <ToastWrapper />

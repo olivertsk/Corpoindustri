@@ -21,13 +21,15 @@ export default function ProductsSlider({
   departmentId,
 }: ProductsSliderProps) {
   return (
-    <div className='px-3 pb-8'>
+    <div className='px-3 pb-8 fade-up'>
       <div className='flex gap-8 justify-between lg:justify-normal items-center'>
-        <h4 className='font-bold text-xl my-4'>{titleSection}</h4>
+        <h4 className='font-bold text-2xl text-primary my-4 display-title'>
+          {titleSection}
+        </h4>
         {departmentId && (
           <Link
             href={`/search?departmentIds=${departmentId}`}
-            className='flex items-center gap-2 m-0 font-bold text-slate-500 uppercase leading-[0] hover:text-slate-600 transition-colors'
+            className='flex items-center gap-2 m-0 font-bold text-primary/80 uppercase leading-[0] hover:text-primary transition-colors'
           >
             Ver mas <ArrowRightCircleIcon className='w-6' />
           </Link>

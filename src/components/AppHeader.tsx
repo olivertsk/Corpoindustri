@@ -67,7 +67,7 @@ export default function AppHeader() {
           </div>
           <div
             className={`fixed top-0 left-0 transition-all  lg:hidden bg-primary overflow-hidden min-h-screen ${
-              openMenu ? 'w-full' : 'w-0'
+              openMenu ? 'w-full px-4' : 'w-0'
             } z-30`}
           >
             <HeaderButtons handleOpenMenu={handleOpenMenu} />
