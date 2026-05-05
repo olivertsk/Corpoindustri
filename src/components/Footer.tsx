@@ -17,7 +17,7 @@ export default function Footer() {
                 <Logo></Logo>
               </div>
               <p className='text-center text-white/80 text-xs mt-4'>
-                Inversiones corpoindustri 2014, c.a.
+                Inversiones Corpoindustri 2014, C.A.
               </p>
               <p className='text-center text-white text-xs font-bold'>
                 Todos los derechos reservados
@@ -25,7 +25,7 @@ export default function Footer() {
             </div>
             <div className='col-span-3 lg:col-span-1'>
               <h4 className='text-center text-white font-bold text-2xl display-title'>
-                Siguenos en nuestras redes
+                Síguenos en nuestras redes
               </h4>
               <div className='flex items-center flex-wrap gap-x-4 mt-3'>
                 <Link
@@ -92,7 +92,7 @@ export default function Footer() {
                 href='/about'
                 className='text-white/95 text-center hover:text-accent-100 transition-colors'
               >
-                Conocenos
+                Conócenos
               </Link>
               <Link
                 href='/profile/orders'
@@ -110,7 +110,7 @@ export default function Footer() {
                 href='/terms'
                 className='text-white/95 text-center hover:text-accent-100 transition-colors'
               >
-                Terminos y Condiciones
+                Términos y Condiciones
               </Link>
               <Link
                 href='/terms'

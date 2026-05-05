@@ -20,7 +20,15 @@ import { TMap } from '@/src/types/map';
 export const metadata: Metadata = {
   title: 'Mayorista de alimentos para negocios en Venezuela',
   description:
-    'Compra viveres, limpieza y productos de alta rotacion para abastos y bodegas. Delivery, cotizaciones y atencion personalizada para negocios en Venezuela.',
+    'Compra víveres, limpieza y productos de alta rotación para abastos y bodegas. Mayorista de alimentos en Venezuela con delivery, cotizaciones y atención personalizada.',
+  keywords: [
+    'mayorista de alimentos en Venezuela',
+    'víveres al mayor',
+    'distribuidora de alimentos',
+    'proveedor para bodegas',
+    'combos mayoristas',
+    'productos de limpieza al mayor',
+  ],
   alternates: {
     canonical: '/',
   },
@@ -118,8 +126,8 @@ export default async function Home() {
 
   const quickAccessLinks = [
     {
-      label: 'Viveres al mayor',
-      description: 'Productos de alta rotacion para reposicion diaria',
+      label: 'Víveres al mayor',
+      description: 'Productos de alta rotación para reposición diaria',
       href: '/search?name=viveres',
     },
     {
@@ -134,7 +142,7 @@ export default async function Home() {
     },
     {
       label: 'Combos mayoristas',
-      description: 'Alternativas por volumen para mejorar margen',
+      description: 'Alternativas por volumen para mejorar márgenes',
       href: '/search?name=combos',
     },
   ];
@@ -142,7 +150,7 @@ export default async function Home() {
   const processSteps = [
     {
       title: 'Busca y cotiza',
-      text: 'Explora categorias, agrega productos y solicita cotizacion por volumen.',
+      text: 'Explora categorías, agrega productos y solicita cotización por volumen.',
     },
     {
       title: 'Confirma con ventas',
@@ -180,10 +188,10 @@ export default async function Home() {
               Entrega en zonas activas y rutas comerciales
             </p>
             <p className='font-semibold'>
-              Cotizaciones rapidas para compra mayorista
+              Cotizaciones rápidas para compra mayorista
             </p>
             <p className='font-semibold'>
-              Atencion personalizada para negocios
+              Atención personalizada para negocios
             </p>
             <p className='font-semibold'>
               Promociones por volumen para mejorar margen
@@ -198,44 +206,44 @@ export default async function Home() {
                 Mayorista B2B en Venezuela
               </p>
               <h1 className='mt-3 text-3xl sm:text-5xl font-black text-slate-900 leading-[0.95] max-w-3xl'>
-                Alimentos, viveres y productos de alta rotacion para tu negocio
+                Alimentos, víveres y productos de alta rotación para tu negocio
               </h1>
               <p className='mt-4 text-slate-600 max-w-2xl'>
-                Abastece mas rapido con un catalogo pensado para abastos,
-                bodegas y distribuidores: cotizacion agil, precios competitivos
-                y acompanamiento comercial.
+                Abastece más rápido con un catálogo pensado para abastos,
+                bodegas y distribuidores: cotización ágil, precios competitivos
+                y acompañamiento comercial.
               </p>
               <div className='mt-5 flex flex-wrap gap-3'>
                 <Link
                   href='/search?name=viveres'
                   className='bg-primary text-white font-bold px-5 py-2.5 rounded-xl hover:bg-primaryHover transition-colors'
                 >
-                  Ver catalogo de alimentos
+                  Ver catálogo de alimentos
                 </Link>
                 <Link
                   href='/contact'
                   className='bg-accent-100 text-black font-bold px-5 py-2.5 rounded-xl hover:bg-accent-200 transition-colors'
                 >
-                  Solicitar cotizacion
+                  Solicitar cotización
                 </Link>
               </div>
               <div className='mt-6 grid sm:grid-cols-3 gap-3'>
                 <div className='bg-white rounded-xl border border-slate-100 p-3'>
                   <p className='text-xl font-black text-slate-900'>+10k</p>
                   <p className='text-xs text-slate-500'>
-                    Productos para reposicion continua
+                    Productos para reposición continua
                   </p>
                 </div>
                 <div className='bg-white rounded-xl border border-slate-100 p-3'>
                   <p className='text-xl font-black text-slate-900'>24h</p>
                   <p className='text-xs text-slate-500'>
-                    Respuesta comercial en dias habiles
+                    Respuesta comercial en días hábiles
                   </p>
                 </div>
                 <div className='bg-white rounded-xl border border-slate-100 p-3'>
                   <p className='text-xl font-black text-slate-900'>B2B</p>
                   <p className='text-xs text-slate-500'>
-                    Atencion especializada por volumen
+                    Atención especializada por volumen
                   </p>
                 </div>
               </div>
@@ -246,7 +254,7 @@ export default async function Home() {
                 Compra Inteligente
               </p>
               <h2 className='mt-2 text-2xl font-black leading-tight'>
-                Atajos para comprar mas rapido
+                Atajos para comprar más rápido
               </h2>
               <div className='mt-4 space-y-3'>
                 {quickAccessLinks.map((item) => (
@@ -280,7 +288,7 @@ export default async function Home() {
                 Top busquedas
               </p>
               <h2 className='mt-1 text-lg font-extrabold text-slate-800'>
-                Viveres
+                Víveres
               </h2>
             </Link>
             <Link
@@ -324,7 +332,7 @@ export default async function Home() {
                 Equipo comercial
               </p>
               <h2 className='mt-1 text-lg font-extrabold'>
-                Solicita cotizacion
+                Solicita cotización
               </h2>
             </Link>
           </div>
@@ -339,7 +347,7 @@ export default async function Home() {
               href='/search'
               className='text-sm font-bold text-primary hover:text-primaryHover transition-colors'
             >
-              Ver todo el catalogo
+              Ver todo el catálogo
             </Link>
           </div>
           {categoryData && <CategoriesWrapper categoryData={categoryData} />}
@@ -391,7 +399,7 @@ export default async function Home() {
                   Promociones por volumen
                 </h3>
                 <p className='text-sm text-white/90 mt-2'>
-                  Descubre productos de alta rotacion con mejores margenes.
+                  Descubre productos de alta rotación con mejores márgenes.
                 </p>
               </Link>
             </div>
@@ -417,7 +425,7 @@ export default async function Home() {
 
           <section className='rounded-2xl bg-white border border-slate-200 p-6 md:p-8 mb-10'>
             <h3 className='text-2xl font-black text-slate-800'>
-              Como comprar en Corpoindustri
+              Cómo comprar en Corpoindustri
             </h3>
             <div className='grid md:grid-cols-3 gap-4 mt-4'>
               {processSteps.map((step, index) => (
@@ -445,7 +453,7 @@ export default async function Home() {
 
           <div className='section-shell rounded-2xl border border-white/80 p-6 md:p-8 mt-12 mb-12'>
             <h3 className='text-3xl font-black text-slate-800'>
-              Por que negocios compran con Corpoindustri
+              ¿Por qué negocios compran con Corpoindustri?
             </h3>
             <div className='grid gap-6 mt-5 md:grid-cols-2 lg:grid-cols-4'>
               <article>
@@ -515,7 +523,7 @@ export default async function Home() {
                   ¿Ofrecen delivery y cobertura por zonas?
                 </h4>
                 <p className='text-sm text-slate-600 mt-1'>
-                  Si. Revisa zonas disponibles y tiempos en contacto con nuestro
+                  Sí. Revisa zonas disponibles y tiempos en contacto con nuestro
                   equipo de ventas.
                 </p>
               </article>
@@ -524,7 +532,7 @@ export default async function Home() {
                   ¿Se pueden solicitar cotizaciones personalizadas?
                 </h4>
                 <p className='text-sm text-slate-600 mt-1'>
-                  Si. Armamos cotizaciones según tipo de negocio, categoría y
+                  Sí. Armamos cotizaciones según tipo de negocio, categoría y
                   frecuencia de reposición.
                 </p>
               </article>

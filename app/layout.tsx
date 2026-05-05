@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     template: '%s | Corpoindustri',
   },
   description:
-    'Mayorista B2B en Venezuela para abastos, bodegas y comercios. Compra viveres, limpieza y productos de alta rotacion con delivery, cotizaciones y atencion personalizada.',
+    'Mayorista B2B en Venezuela para abastos, bodegas y comercios. Compra víveres, limpieza y productos de alta rotación con delivery, cotizaciones y atención personalizada.',
   keywords: [
-    'mayorista de alimentos venezuela',
-    'viveres al mayor caracas',
+    'mayorista de alimentos en venezuela',
+    'víveres al mayor en caracas',
     'distribuidora de alimentos',
     'combos mayoristas',
     'proveedor para bodegas',
-    'proveedor de viveres para bodegas',
+    'proveedor de víveres para bodegas',
     'corpoindustri',
   ],
   alternates: {
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
     siteName: 'Corpoindustri',
     title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
     description:
-      'Compra al mayor para tu negocio en Venezuela con precios competitivos, cobertura y atencion personalizada.',
+      'Compra al mayor para tu negocio en Venezuela con precios competitivos, cobertura y atención personalizada.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
     description:
-      'Mayorista B2B para abastos, bodegas y comercios con delivery y cotizaciones rapidas.',
+      'Mayorista B2B para abastos, bodegas y comercios con delivery y cotizaciones rápidas.',
   },
   robots: {
     index: true,
