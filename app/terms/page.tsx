@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     'Consulta los terminos, politicas y condiciones de compra en Corpoindustri.',
   alternates: {
-    canonical: '/terms',
+    canonical: '/terminos',
   },
 };
 

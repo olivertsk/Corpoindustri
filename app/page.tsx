@@ -100,7 +100,7 @@ export default async function Home() {
     inLanguage: 'es-VE',
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://corpoindustri.com/search?search={search_term_string}',
+      target: 'https://corpoindustri.com/buscar?name={search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   };
@@ -171,7 +171,7 @@ export default async function Home() {
         <div className='container mx-auto px-4 pt-4 pb-8'>
           <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
             <Link
-              href='/search?name=viveres'
+              href='/buscar?name=viveres'
               className='rounded-2xl bg-white p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -185,7 +185,7 @@ export default async function Home() {
               </p>
             </Link>
             <Link
-              href='/search?name=limpieza'
+              href='/buscar?name=limpieza'
               className='rounded-2xl bg-white p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -199,7 +199,7 @@ export default async function Home() {
               </p>
             </Link>
             <Link
-              href='/search?name=combos'
+              href='/buscar?name=combos'
               className='rounded-2xl bg-white p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -213,7 +213,7 @@ export default async function Home() {
               </p>
             </Link>
             <Link
-              href='/contact'
+              href='/contacto'
               className='rounded-2xl bg-primary text-white p-4 shadow-sm hover:bg-primaryHover transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-white/70'>

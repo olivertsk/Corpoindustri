@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   description:
     'Explora el catalogo de Corpoindustri y encuentra productos mayoristas por categoria, precio y disponibilidad.',
   alternates: {
-    canonical: '/search',
+    canonical: '/buscar',
+  },
+  robots: {
+    index: false,
+    follow: true,
   },
 };
 

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Conoce la historia, mision, vision y valores de Corpoindustri, mayorista de alimentos para negocios en Venezuela.',
   alternates: {
-    canonical: '/about',
+    canonical: '/nosotros',
   },
 };
 

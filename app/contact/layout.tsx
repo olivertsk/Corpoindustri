@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Contacta a Corpoindustri para cotizaciones, consultas y soporte comercial para compras al mayor en Venezuela.',
   alternates: {
-    canonical: '/contact',
+    canonical: '/contacto',
   },
 };
 

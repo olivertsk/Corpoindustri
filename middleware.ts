@@ -8,7 +8,15 @@ export function middleware(req: NextRequest) {
     },
   });
 
-  const noIndexPaths = ['/auth', '/admin', '/profile', '/logout'];
+  const noIndexPaths = [
+    '/auth',
+    '/acceso',
+    '/admin',
+    '/profile',
+    '/perfil',
+    '/logout',
+    '/cerrar-sesion',
+  ];
   const shouldNoIndex = noIndexPaths.some((path) => pathname.startsWith(path));
 
   if (shouldNoIndex) {
