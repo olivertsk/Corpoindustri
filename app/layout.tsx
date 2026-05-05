@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import AppHeader from '@/src/components/AppHeader';
 import Footer from '@/src/components/Footer';
 import ToastWrapper from '@/src/components/ToastWrapper';
@@ -8,11 +7,55 @@ import RequestFavorites from '@/src/components/RequestFavorites';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import { googleCaptchaPublicKey } from '@/src/config/google_captcha';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Corpoindustri | Mayorista de alimentos al alcance de tu mano',
+  metadataBase: new URL('https://corpoindustri.com'),
+  title: {
+    default:
+      'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
+    template: '%s | Corpoindustri',
+  },
   description:
-    'Somos una compañía mayorista de alimentos, brindamos servicios como delivery, combos personalizados, cotizaciones y atención personalizada.',
+    'Mayorista B2B en Venezuela para abastos, bodegas y comercios. Compra viveres, limpieza y productos de alta rotacion con delivery, cotizaciones y atencion personalizada.',
+  keywords: [
+    'mayorista de alimentos venezuela',
+    'viveres al mayor caracas',
+    'distribuidora de alimentos',
+    'combos mayoristas',
+    'proveedor para bodegas',
+    'repuestos y accesorios para motos',
+    'corpoindustri',
+  ],
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_VE',
+    url: 'https://corpoindustri.com',
+    siteName: 'Corpoindustri',
+    title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
+    description:
+      'Compra al mayor para tu negocio en Venezuela con precios competitivos, cobertura y atencion personalizada.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
+    description:
+      'Mayorista B2B para abastos, bodegas y comercios con delivery y cotizaciones rapidas.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -20,6 +63,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Corpoindustri',
+    url: 'https://corpoindustri.com',
+    logo: 'https://corpoindustri.com/logo.png',
+    sameAs: [
+      'https://www.instagram.com/corpoindustri/',
+      'https://www.facebook.com/Corpoindustri?locale=es_LA',
+      'https://www.tiktok.com/@corpoindustri',
+    ],
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        areaServed: 'VE',
+        availableLanguage: ['Spanish'],
+      },
+    ],
+  };
+
   return (
     <html lang='es'>
       {/* Remove synchronous script and use Next.js Script component below */}
@@ -31,6 +95,13 @@ export default function RootLayout({
         <RequestFavorites />
         <TransitionWrapper />
         <ToastWrapper />
+        <Script
+          id='organization-jsonld'
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
         <AppHeader />
         {children}
         <Footer />

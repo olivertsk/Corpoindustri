@@ -35,7 +35,7 @@ export default function SignInPage() {
         window.grecaptcha.enterprise.ready(async () => {
           const token = await window.grecaptcha.enterprise.execute(
             googleCaptchaPublicKey,
-            { action: 'LOGIN' }
+            { action: 'LOGIN' },
           );
           data.recaptchaToken = token;
           const response = await authenticateUser(data);
@@ -47,7 +47,7 @@ export default function SignInPage() {
         });
       } else {
         toast.error(
-          'reCAPTCHA no está listo. Intenta de nuevo en unos segundos.'
+          'reCAPTCHA no está listo. Intenta de nuevo en unos segundos.',
         );
         return;
       }
@@ -78,7 +78,6 @@ export default function SignInPage() {
             toast.error(response.message);
           }
         });
-        console.log('user :>> ', user);
       }
     } catch (error) {
       console.error('Error signing in with Google:', error);

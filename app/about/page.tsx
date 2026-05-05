@@ -1,5 +1,15 @@
 import Section from '@/src/components/about/Section';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Sobre Nosotros',
+  description:
+    'Conoce la historia, mision, vision y valores de Corpoindustri, mayorista de alimentos para negocios en Venezuela.',
+  alternates: {
+    canonical: '/about',
+  },
+};
 
 export default function aboutUs() {
   const items = [

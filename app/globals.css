@@ -2,8 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --surface-bg: #f5f7fb;
+  --surface-pattern: radial-gradient(
+    circle at 25% 20%,
+    rgba(25, 88, 172, 0.08),
+    transparent 40%
+  );
+}
+
 html {
   @apply text-slate-700;
+}
+
+body {
+  background-color: var(--surface-bg);
+  background-image: var(--surface-pattern);
+  overflow-x: hidden;
 }
 
 .swiper-button-prev:after,

@@ -7,10 +7,10 @@ export default function Footer() {
   const pathname = usePathname();
 
   return (
-    !pathname.includes('auth') &&
-    !pathname.includes('admin') && (
+    !pathname?.includes('auth') &&
+    !pathname?.includes('admin') && (
       <>
-        <footer className='grid grid-cols-3 bg-primary p-4 rounded-tl-xl rounded-tr-xl lg:rounded-xl shadow-2xl py-16 items-center lg:mb-8 container mx-auto pt-8 space-y-8 lg:space-y-0'>
+        <footer className='grid grid-cols-3 bg-primary p-4 rounded-tl-xl rounded-tr-xl lg:rounded-xl shadow-2xl py-16 items-start lg:items-center lg:mb-8 container mx-auto pt-8 gap-8'>
           <div className='col-span-3 lg:col-span-1'>
             <div className='max-w-[200px] mx-auto'>
               <Logo></Logo>
@@ -84,8 +84,20 @@ export default function Footer() {
             </div>
           </div>
           <div className='text-center flex flex-col gap-3 col-span-3 lg:col-span-1'>
+            <p className='text-white/80 text-xs font-semibold uppercase tracking-wide'>
+              Centro de ayuda
+            </p>
             <Link href='about' className='text-white underline text-center'>
               Conocenos
+            </Link>
+            <Link
+              href='profile/orders'
+              className='text-white underline text-center'
+            >
+              Estado de pedido
+            </Link>
+            <Link href='contact' className='text-white underline text-center'>
+              Cotizaciones
             </Link>
             <Link href='terms' className='text-white underline text-center'>
               Terminos y Condiciones

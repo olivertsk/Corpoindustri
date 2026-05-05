@@ -2,8 +2,12 @@ import AccordionTerms from '@/src/components/terms/AccordionTerm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Corpoindustri | Términos y Condiciones',
-  description: 'Términos y condiciones de nuestra tienda virtual de víveres.',
+  title: 'Terminos y Condiciones',
+  description:
+    'Consulta los terminos, politicas y condiciones de compra en Corpoindustri.',
+  alternates: {
+    canonical: '/terms',
+  },
 };
 
 const TermsPage: React.FC = () => {

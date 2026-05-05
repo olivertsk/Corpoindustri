@@ -5,6 +5,7 @@ import HandleProductClick from './HandleProductClick';
 import { Product } from '@/src/types/product';
 import { apiUrl } from '@/src/lib/global';
 import CardProductPrice from './CardProductPrice';
+import { buildProductSlug } from '@/src/utils/productSlug';
 
 type CardProductsProps = {
   product: Product;
@@ -15,6 +16,8 @@ export default function CardProducts({
   product,
   className,
 }: CardProductsProps) {
+  const productSlug = buildProductSlug({ id: product.id, name: product.name });
+
   return (
     <div
       className={`bg-white product block shadow-sm rounded-xl pb-3 overflow-hidden ${className} relative group min-h-[350px]`}
@@ -22,11 +25,11 @@ export default function CardProducts({
       {/* <div className='absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity'>
         <AddProductFavorite product={product} />
       </div> */}
-      <Link href={`/products/${product.id}`} className='block'>
+      <Link href={`/productos/${productSlug}`} className='block'>
         <Image
           width={1024}
           height={1024}
-          alt='Harina Pan'
+          alt={`${product.name} - ${product.department?.name || 'Categoria'} en Corpoindustri`}
           src={
             product?.coverImage || (product?.images && product?.images[0])
               ? `${apiUrl}/file/${

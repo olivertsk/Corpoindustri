@@ -18,20 +18,21 @@ function Main() {
   const setArrayFilter = useCallback(
     (name: string) =>
       searchParams
-        .get(name)
+        ?.get(name)
         ?.split(',')
         ?.filter((item) => item) || [],
     [searchParams],
   );
 
   const [filters, setFilters] = useState<ProductFilters>({
-    pag: searchParams.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
-    name: searchParams.get('name') || '',
+    pag: searchParams?.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
+    name: searchParams?.get('name') || '',
     departmentIds: setArrayFilter('departmentIds'),
     categoriesIds: setArrayFilter('categoriesIds'),
-    minPrice: searchParams.get('minPrice') || '',
-    maxPrice: searchParams.get('maxPrice') || '',
-    order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
+    minPrice: searchParams?.get('minPrice') || '',
+    maxPrice: searchParams?.get('maxPrice') || '',
+    order:
+      (searchParams?.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
     isClient: true,
     typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
   });
@@ -55,14 +56,12 @@ function Main() {
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,
-      name: searchParams.get('name') || '',
+      name: searchParams?.get('name') || '',
       departmentIds: setArrayFilter('departmentIds'),
       categoriesIds: setArrayFilter('categoriesIds'),
-      pag: searchParams.get('pag') ? +searchParams.get('pag')! : 1,
+      pag: searchParams?.get('pag') ? +searchParams.get('pag')! : 1,
       typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
     }));
-
-    console.log('currentCoin', currentCoin);
 
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
