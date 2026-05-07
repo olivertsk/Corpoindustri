@@ -1,75 +1,78 @@
-'use client';
+import { getMaps } from '@/src/api/MapApi ';
+import ContactMap from '@/src/components/contact/ContactMap';
+import MainForm from '@/src/components/contact/MainForm';
+import { TMap } from '@/src/types/map';
 
-import { createSuggestion } from '@/src/api/SuggestionApi';
-import { inputStlyes } from '@/src/lib/global';
-import { useFormState } from 'react-dom';
-import { toast } from 'react-toastify';
-
-export default function ContactPage() {
-  async function sendContactAction(
-    _: { success: boolean; message: string } | null,
-    data: FormData
-  ) {
-    const title = data.get('title') as string;
-    const description = data.get('description') as string;
-
-    if (!title || !description) {
-      return { success: false, message: 'Todos los campos son obligatorios.' };
-    }
-    try {
-      await createSuggestion({ title, description });
-      toast.success('Mensaje enviado correctamente.');
-      return { success: true, message: 'Mensaje enviado correctamente.' };
-    } catch {
-      toast.error('Error al enviar el contacto.');
-      return { success: false, message: 'Error al enviar el contacto.' };
-    }
-  }
-
-  const [state, formAction] = useFormState(sendContactAction, null);
+export default async function ContactPage() {
+  const mapData: { data: TMap[] } = await getMaps({
+    isClient: true,
+  });
 
   return (
-    <section className='container mx-auto py-16'>
-      <h1 className='text-3xl font-bold text-center mb-8'>Contáctanos</h1>
-      <p className='text-center mb-8'>
-        Si tienes alguna pregunta o comentario, no dudes en contáctarnos.
-        Estamos aquí para ayudarte.
-      </p>
-      <form
-        action={formAction}
-        className='max-w-3xl mx-auto flex flex-col gap-4'
-      >
-        <div className='mb-4'>
-          <label htmlFor='razon'>Razon</label>
-          <select name='title' id='razon' required className={inputStlyes}>
-            <option value='Queja'>Queja</option>
-            <option value='Sugerencia'>Sugerencia</option>
-            <option value='Consulta'>Consulta</option>
-            <option value='Problema'>Problema</option>
-            <option value='Otro'>Otro</option>
-          </select>
+    <main className='pb-16'>
+      <MainForm />
+
+      <section className='container mx-auto mt-6 grid gap-5 px-4 sm:grid-cols-2 lg:grid-cols-3'>
+        <article className='section-shell rounded-2xl p-5'>
+          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-primary/80'>
+            Atención
+          </p>
+          <h2 className='mt-2 text-lg font-bold text-slate-800'>
+            Horario comercial
+          </h2>
+          <p className='mt-2 text-sm text-slate-600'>
+            Lunes a viernes de 8:00 a. m. a 5:00 p. m. y sábados de 8:00 a. m. a
+            12:00 m.
+          </p>
+        </article>
+
+        <article className='section-shell rounded-2xl p-5'>
+          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-primary/80'>
+            Cobertura
+          </p>
+          <h2 className='mt-2 text-lg font-bold text-slate-800'>
+            Entregas en Venezuela
+          </h2>
+          <p className='mt-2 text-sm text-slate-600'>
+            Coordinamos envíos para abastos, bodegas, minimercados y
+            distribuidores en distintas ciudades del país.
+          </p>
+        </article>
+
+        <article className='section-shell rounded-2xl p-5 sm:col-span-2 lg:col-span-1'>
+          <p className='text-xs font-semibold uppercase tracking-[0.16em] text-primary/80'>
+            Prioridad
+          </p>
+          <h2 className='mt-2 text-lg font-bold text-slate-800'>
+            Soporte por volumen
+          </h2>
+          <p className='mt-2 text-sm text-slate-600'>
+            Si compras al mayor, te asignamos atención especializada para
+            acelerar cotizaciones recurrentes.
+          </p>
+        </article>
+      </section>
+
+      <section className='container mx-auto mt-8 px-4'>
+        <div className='relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_42px_rgba(15,39,70,0.12)]'>
+          <ContactMap mapData={mapData} />
+          <article className='m-4 rounded-2xl bg-white/95 p-5 shadow-xl backdrop-blur sm:absolute sm:right-4 sm:top-4 sm:m-0 sm:max-w-sm z-10'>
+            <p className='text-xs font-semibold uppercase tracking-[0.16em] text-primary/80'>
+              Visítanos
+            </p>
+            <h2 className='mt-1 text-2xl font-black text-slate-800 display-title'>
+              Centro de atención
+            </h2>
+            <p className='mt-3 text-sm text-slate-600'>
+              Recibimos citas para asesoría de compras de alimentos y productos
+              de consumo masivo al mayor.
+            </p>
+            <p className='mt-3 text-sm font-semibold text-slate-700'>
+              Caracas, Venezuela
+            </p>
+          </article>
         </div>
-        <div>
-          <label htmlFor='comentario'>Comentario</label>
-          <textarea
-            name='description'
-            className={`${inputStlyes} h-[300px]`}
-            required
-          />
-        </div>
-        <button className='bg-primary text-white py-3 max-w-lg w-full mx-auto px-4 rounded hover:bg-primary/80 transition-colors'>
-          Enviar
-        </button>
-        {state?.message && (
-          <div
-            className={`text-center mb-4 font-bold ${
-              state.success ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
-            {state.message}
-          </div>
-        )}
-      </form>
-    </section>
+      </section>
+    </main>
   );
 }

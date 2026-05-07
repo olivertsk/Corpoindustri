@@ -19,7 +19,18 @@ export default function SuggestionPage() {
   const allColumns: GridColDef[] = [
     { field: 'createdAt', headerName: 'Fecha', minWidth: 150, flex: 1 },
     { field: 'title', headerName: 'Razón', minWidth: 150, flex: 1 },
-    { field: 'description', headerName: 'Descripción', minWidth: 150, flex: 1 },
+    {
+      field: 'description',
+      headerName: 'Descripción',
+      minWidth: 150,
+      flex: 1,
+      renderCell: (params) => (
+        <div
+          className='whitespace-pre-line break-words'
+          dangerouslySetInnerHTML={{ __html: params.value }}
+        />
+      ),
+    },
     {
       field: 'actions',
       headerName: 'Acciones',

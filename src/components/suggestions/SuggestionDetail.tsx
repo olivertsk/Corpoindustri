@@ -27,15 +27,16 @@ export default function SuggestionDetail() {
         <h2 className='text-2xl font-bold mb-4'>Detalle de Sugerencia</h2>
         {data ? (
           <>
-            <p className='mb-2'>
+            <p className='mb-5'>
               <strong>Fecha:</strong> {normalizeDateWithTime(data.createdAt)}
             </p>
-            <p className='mb-2'>
-              <strong>Razon:</strong> {data.title}
+            <p className='mb-5'>
+              <strong>Razón:</strong> {data.title}
             </p>
-            <p className='mb-4'>
-              <strong>Descripción:</strong> {data.description}
-            </p>
+            <p
+              className='mb-4 whitespace-pre-line break-words'
+              dangerouslySetInnerHTML={{ __html: data.description }}
+            />
           </>
         ) : (
           <p>Cargando...</p>
