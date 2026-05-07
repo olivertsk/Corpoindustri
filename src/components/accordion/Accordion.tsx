@@ -35,7 +35,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   const isOpenStyles = useMemo(
     () =>
       isOpen ? 'opacity-100 translate-x-0' : '-translate-x-full opacity-0 ',
-    [isOpen]
+    [isOpen],
   );
 
   const handleFilter = () => {
@@ -45,7 +45,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   /** VALIDATE MATCH MEDIA TO SHOW THE FILTERS */
   const [isMobile, setIsMobile] = useState(false);
   const [filteredCategories, setCategories] = useState<FilteredCategories[]>(
-    []
+    [],
   );
 
   const { data: filterBanner } = useQuery<IBanner[]>({
@@ -58,13 +58,16 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
     refetchOnWindowFocus: false,
   });
 
-  console.log('filterBanner', filterBanner);
-
   const { data } = useQuery({
     queryKey: ['departments'],
     queryFn: () =>
       getDepartments({
         categories: true,
+        productName: filters.name,
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        categoriesIds: filters.categoriesIds?.toString() || null,
+        typePrice: filters.typePrice,
       }),
     refetchOnWindowFocus: false,
   });
@@ -78,22 +81,22 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
 
   const handleDepartmentsIds = (e: React.ChangeEvent<HTMLInputElement>) => {
     const department = data?.data.find(
-      (department) => department.id!.toString() === e.target.value.toString()
+      (department) => department.id!.toString() === e.target.value.toString(),
     );
     if (filters.departmentIds?.includes(e.target.value)) {
       const filteredDepartments = filters.departmentIds.filter(
-        (filter) => filter !== e.target.value
+        (filter) => filter !== e.target.value,
       );
       const categoriesIds: string[] = [];
       setCategories(
         filteredCategories.filter(
-          (category) => category.departmentId !== e.target.value
-        )
+          (category) => category.departmentId !== e.target.value,
+        ),
       );
       filters.categoriesIds?.forEach((categoryId) => {
         if (
           !department!.categories!.find(
-            (departmentCategoryId) => categoryId === departmentCategoryId.id!
+            (departmentCategoryId) => categoryId === departmentCategoryId.id!,
           )
         ) {
           categoriesIds.push(categoryId);
@@ -124,7 +127,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
       setFilters({
         ...filters,
         categoriesIds: filters.categoriesIds?.filter(
-          (categoryId) => categoryId !== e.target.value
+          (categoryId) => categoryId !== e.target.value,
         ),
       });
     } else {
@@ -171,7 +174,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
       const filteredCategories: FilteredCategories[] = [];
       filters.departmentIds?.forEach((departmentId) => {
         const department = data.data.find(
-          (department) => department.id === departmentId
+          (department) => department.id === departmentId,
         );
         if (department) {
           filteredCategories.push({
@@ -274,10 +277,10 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                             onChange={handleDepartmentsIds}
                             value={department.id}
                             checked={filters.departmentIds?.includes(
-                              department.id
+                              department.id,
                             )}
                           />
-                          {department.name}
+                          {department.name} ({department.productCount})
                         </label>
                       </div>
                     ))}
@@ -334,7 +337,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                               onChange={handleCategoriesIds}
                               value={category.id}
                               checked={filters.categoriesIds?.includes(
-                                category.id
+                                category.id,
                               )}
                             />
                             {category.name}

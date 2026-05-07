@@ -29,7 +29,7 @@ export default function AppHeader() {
   }, []);
 
   return (
-    !pathname.includes('auth') &&
+    !pathname.includes('acceso') &&
     !pathname.includes('admin') && (
       <>
         {isLoadingCurrencies && (

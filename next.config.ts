@@ -1,10 +1,20 @@
 import type { NextConfig } from 'next';
 
+const actionAllowedOrigins = [
+  'localhost:8002',
+  '127.0.0.1:8002',
+  '*.devtunnels.ms',
+  ...(process.env.NEXT_SERVER_ACTIONS_ALLOWED_ORIGINS?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean) ?? []),
+];
+
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     serverActions: {
       bodySizeLimit: '5mb',
+      allowedOrigins: actionAllowedOrigins,
     },
   },
   images: {
@@ -20,7 +30,11 @@ const nextConfig: NextConfig = {
       { source: '/about', destination: '/nosotros', permanent: true },
       { source: '/contact', destination: '/contacto', permanent: true },
       { source: '/terms', destination: '/terminos', permanent: true },
-      { source: '/search/:path*', destination: '/buscar/:path*', permanent: true },
+      {
+        source: '/search/:path*',
+        destination: '/buscar/:path*',
+        permanent: true,
+      },
       { source: '/search', destination: '/buscar', permanent: true },
       { source: '/cart', destination: '/carrito', permanent: true },
       { source: '/favorites', destination: '/favoritos', permanent: true },
@@ -72,7 +86,10 @@ const nextConfig: NextConfig = {
       { source: '/buscar', destination: '/search' },
       { source: '/carrito', destination: '/cart' },
       { source: '/favoritos', destination: '/favorites' },
-      { source: '/perfil/notificaciones', destination: '/profile/notifications' },
+      {
+        source: '/perfil/notificaciones',
+        destination: '/profile/notifications',
+      },
       { source: '/perfil/pedidos', destination: '/profile/orders' },
       { source: '/perfil', destination: '/profile' },
       { source: '/acceso/iniciar-sesion', destination: '/auth/sign-in' },

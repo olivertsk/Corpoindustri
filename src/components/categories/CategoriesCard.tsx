@@ -20,7 +20,7 @@ export default function CategoriesCard({
 }: CategoriesCardProps) {
   if (categoryData)
     return (
-      <div className=' gap-4 px-3'>
+      <div>
         {titleSection && (
           <h4 className='font-bold text-2xl text-primary my-4 display-title'>
             {titleSection}
@@ -59,12 +59,15 @@ export default function CategoriesCard({
         >
           {categoryData.map((category) => (
             <SwiperSlide key={category.id} className='pb-8 lg:px-1 !h-auto'>
-              <div className='section-shell shadow-sm rounded-2xl p-4 h-full flex flex-col justify-between border border-white/80'>
+              <div className='section-shell shadow-sm rounded-2xl p-4 h-full flex flex-col justify-between border border-white/80 group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_26px_rgba(25,88,172,0.15)]'>
                 <div>
-                  <h4 className='text-center font-bold text-primary text-xl'>
+                  <p className='text-[11px] uppercase tracking-[0.12em] text-slate-400 text-center font-semibold'>
+                    Categoría destacada
+                  </p>
+                  <h4 className='text-center font-bold text-primary text-xl mt-1 leading-tight min-h-[56px] flex items-center justify-center'>
                     {category.name}
                   </h4>
-                  <div className='my-2'>
+                  <div className='my-3 rounded-xl border border-slate-100 bg-white p-2'>
                     <Image
                       width={200}
                       height={200}
@@ -76,20 +79,18 @@ export default function CategoriesCard({
                         aspectRatio: '1/1',
                         height: '128px',
                         maxHeight: '128px',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                       }}
-                      className='rounded-xl'
+                      className='rounded-lg transition-transform duration-300 group-hover:scale-[1.03]'
                     />
                   </div>
-                  <p className='text-center mb-4 text-sm text-slate-600 line-clamp-3 min-h-[60px]'>
-                    {category.description}
-                  </p>
                 </div>
                 <Link
                   href={`/search?departmentIds=${category.departmentId}&categoriesIds=${category.id}`}
-                  className={`${primaryBtn} rounded-xl !p-2 text-sm text-center`}
+                  className={`${primaryBtn} rounded-xl !py-2.5 !px-3 text-sm text-center w-full`}
+                  aria-label={`Ver productos de la categoría ${category.name}`}
                 >
-                  Ver
+                  Ver categoría
                 </Link>
               </div>
             </SwiperSlide>

@@ -65,6 +65,7 @@ function Main() {
 
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['departments'] });
     }, 500);
   }, [searchParams, currentCoin, queryClient, setArrayFilter]);
 

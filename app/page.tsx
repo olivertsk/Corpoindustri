@@ -182,6 +182,10 @@ export default async function Home() {
       />
       <section>
         <ShowClientSurvey />
+
+        {principalBannerData.length && (
+          <BannerSlider slides={principalBannerData} showFadeOut={true} />
+        )}
         <div className='container mx-auto px-4 pt-4'>
           <div className='bg-secondary text-white rounded-2xl px-4 py-3 grid gap-2 text-xs sm:text-sm lg:grid-cols-4 lg:gap-4 shadow-[0_14px_28px_rgba(8,26,50,0.22)]'>
             <p className='font-semibold'>
@@ -273,10 +277,6 @@ export default async function Home() {
             </div>
           </div>
         </div>
-
-        {principalBannerData.length && (
-          <BannerSlider slides={principalBannerData} showFadeOut={true} />
-        )}
 
         <div className='container mx-auto px-4 pt-4 pb-6'>
           <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-5'>
