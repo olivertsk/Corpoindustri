@@ -20,6 +20,14 @@ export const getPost = async (id: string): Promise<TPost> => {
   }
 };
 
+export const getPostBySlug = async (slug: string): Promise<TPost> => {
+  try {
+    return await makeGet(`/posts/slug/${slug}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createPost = async (data: TPostForm) => {
   try {
     return await makePost('/posts/create', data);

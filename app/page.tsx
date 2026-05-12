@@ -2,10 +2,12 @@ import { fxAllBanner } from '@/src/api/BannerApi';
 import { fxAllCategories } from '@/src/api/CategoriesApi';
 import { getDepartments } from '@/src/api/DepartmentsApi';
 import { getMaps } from '@/src/api/MapApi ';
+import { getPosts } from '@/src/api/PostApi';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
 import BannerSlider from '@/src/components/home/BannerSlider';
+import HomePostsSection from '@/src/components/home/HomePostsSection';
 import InstagramSection from '@/src/components/home/InstagramSection';
 import { MapSection } from '@/src/components/home/MapSection';
 import PopoverBanner from '@/src/components/home/PopoverBanner';
@@ -16,6 +18,7 @@ import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
 import { TMap } from '@/src/types/map';
+import { TPost } from '@/src/types/post';
 
 export const metadata: Metadata = {
   title: 'Mayorista de alimentos para negocios en Venezuela',
@@ -92,6 +95,12 @@ export default async function Home() {
   const mapData: { data: TMap[] } = await getMaps({
     isClient: true,
   });
+
+  const postsResponse = await getPosts({
+    pag: 1,
+    limit: 8,
+  });
+  const homePosts: TPost[] = postsResponse.data.filter((item) => item.status);
 
   const departamentData: { data: Department[] } =
     await getDepartments(departamentFilter);
@@ -449,6 +458,11 @@ export default async function Home() {
             <TiktokSection />
             <InstagramSection />
           </div>
+
+          <div className='mt-12'>
+            <HomePostsSection posts={homePosts} />
+          </div>
+
           <MapSection data={mapData.data} />
 
           <div className='section-shell rounded-2xl border border-white/80 p-6 md:p-8 mt-12 mb-12'>
