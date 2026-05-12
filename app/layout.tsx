@@ -8,6 +8,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import { googleCaptchaPublicKey } from '@/src/config/google_captcha';
 import './globals.css';
+import 'react-quill-new/dist/quill.snow.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://corpoindustri.com'),

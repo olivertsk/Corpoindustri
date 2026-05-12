@@ -110,3 +110,16 @@ body::before {
 .fade-up {
   animation: fade-up 420ms ease-out both;
 }
+
+.post-rich-editor .ql-toolbar.ql-snow {
+  border: 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.post-rich-editor .ql-container.ql-snow {
+  border: 0;
+}
+
+.post-rich-editor .ql-editor {
+  min-height: 260px;
+}
