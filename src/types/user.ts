@@ -7,7 +7,7 @@ export const userSchema = z.object({
   password: z.string(),
   name: z.string(),
   lastName: z.string(),
-  dni: z.number(),
+  dni: z.number().optional(),
   dniType: z.enum(['V', 'E', 'J']),
   receiveNotification: z.boolean(),
   phoneNumber: z.string(),
