@@ -1,5 +1,7 @@
 import { getPostBySlug } from '@/src/api/PostApi';
 import { apiUrl } from '@/src/lib/global';
+import { TPost } from '@/src/types/post';
+import { buildProductSlug } from '@/src/utils/productSlug';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -51,9 +53,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PublicacionDetailPage({ params }: Props) {
   const { id } = await params;
 
-  let post;
+  let post: TPost;
   try {
     post = await getPostBySlug(id);
+    console.log('post :>> ', post);
   } catch {
     notFound();
   }
@@ -98,6 +101,36 @@ export default async function PublicacionDetailPage({ params }: Props) {
           className='prose prose-slate max-w-none mt-8 overflow-hidden break-words [&_*]:max-w-full [&_img]:h-auto [&_pre]:whitespace-pre-wrap [&_pre]:break-words'
           dangerouslySetInnerHTML={{ __html: renderedContent }}
         />
+
+        {post.products && post.products.length > 0 && (
+          <section className='mt-10 border-t border-slate-200 pt-6'>
+            <h2 className='text-xl font-bold text-slate-900'>
+              Productos recomendados en esta publicacion
+            </h2>
+            <p className='text-sm text-slate-600 mt-1'>
+              Estos productos fueron mencionados en el contenido.
+            </p>
+            <ul className='mt-4 grid gap-2'>
+              {post.products.map((product) => {
+                const productSlug = buildProductSlug({
+                  id: product.id,
+                  name: product.name,
+                });
+
+                return (
+                  <li key={product.id}>
+                    <Link
+                      href={`/productos/${productSlug}`}
+                      className='inline-flex items-center text-primary font-semibold hover:text-primaryHover transition-colors'
+                    >
+                      &gt; {product.name}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
       </article>
     </main>
   );

@@ -43,7 +43,7 @@ export default function NewPostPage() {
 
   const navigate = useRouter();
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: createPost,
     onSuccess: (response) => {
       if (response.success) {
@@ -86,6 +86,7 @@ export default function NewPostPage() {
         errors={errors}
         watch={watch}
         setValue={setValue}
+        isPending={isPending}
       />
     </form>
   );

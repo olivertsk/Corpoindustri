@@ -16,6 +16,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
+import Spinner from '../../spinner/Spinner';
 
 type ProductOption = Pick<Product, 'id' | 'name' | 'code'>;
 
@@ -29,6 +30,7 @@ type PostFormProps = {
   watch: UseFormWatch<TPostForm>;
   setValue: UseFormSetValue<TPostForm>;
   initialProducts?: TPost['products'];
+  isPending: boolean;
 };
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -50,10 +52,12 @@ export default function PostForm({
   watch,
   setValue,
   initialProducts,
+  isPending,
 }: PostFormProps) {
   const [slugEdited, setSlugEdited] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [isSeoOpen, setIsSeoOpen] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<ProductOption[]>(
     (initialProducts || []).map((item) => ({
       id: item.id,
@@ -128,6 +132,12 @@ export default function PostForm({
       setValue('productIds', []);
     }
   }, [type, selectedProducts.length, setValue]);
+
+  useEffect(() => {
+    if (errors.metaTitle || errors.metaDescription) {
+      setIsSeoOpen(true);
+    }
+  }, [errors.metaTitle, errors.metaDescription]);
 
   const { data: productsData, isFetching } = useQuery({
     queryKey: ['post-products-search', debouncedQuery],
@@ -319,19 +329,25 @@ export default function PostForm({
         )}
 
         <div className='lg:col-span-2 mt-2'>
-          <details className='rounded-md border border-slate-300 bg-white'>
+          <details
+            className='rounded-md border border-slate-300 bg-white'
+            open={isSeoOpen}
+            onToggle={(event) => setIsSeoOpen(event.currentTarget.open)}
+          >
             <summary className='cursor-pointer select-none px-4 py-3 font-semibold text-primary'>
               Configuracion SEO
             </summary>
             <div className='p-4 grid lg:grid-cols-2 gap-4'>
               <div className='lg:col-span-2'>
                 <label>
-                  metaTitle
+                  Meta Title
                   <input
                     type='text'
                     className={inputStlyes}
                     maxLength={60}
+                    placeholder='Harina de Maíz al Mayor | Recetas de Cocina | Corpoindustri'
                     {...register('metaTitle', {
+                      required: 'El Meta Title es obligatorio',
                       maxLength: {
                         value: 60,
                         message: 'metaTitle no puede exceder 60 caracteres',
@@ -349,12 +365,14 @@ export default function PostForm({
 
               <div className='lg:col-span-2'>
                 <label>
-                  metaDescription
+                  Meta Description
                   <textarea
                     className={inputStlyes}
                     rows={3}
                     maxLength={160}
+                    placeholder='Descubre la mejor receta para hacer arepas esponjosas con Harina Pan. Compra todos tus ingredientes al mayor en Corpoindustri con los mejores precios de Venezuela.'
                     {...register('metaDescription', {
+                      required: 'La Meta Description es obligatoria',
                       maxLength: {
                         value: 160,
                         message:
@@ -376,12 +394,18 @@ export default function PostForm({
       </div>
 
       <div className='mt-6 space-x-2'>
-        <button type='submit' className={primaryBtn}>
-          Guardar publicacion
-        </button>
-        <Link href='/admin/post' type='button' className={secondaryBtn}>
-          Cancelar
-        </Link>
+        {isPending ? (
+          <Spinner />
+        ) : (
+          <>
+            <button type='submit' className={primaryBtn}>
+              Guardar publicacion
+            </button>
+            <Link href='/admin/post' type='button' className={secondaryBtn}>
+              Cancelar
+            </Link>
+          </>
+        )}
       </div>
     </>
   );

@@ -2,7 +2,7 @@ import { updatePost } from '@/src/api/PostApi';
 import { useBreadcrumb } from '@/src/hooks/useBreadcrumb';
 import { containerStyles } from '@/src/lib/global';
 import { TPost, TPostForm } from '@/src/types/post';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -50,36 +50,40 @@ export default function EditPostFormWrapper({
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: updatePost,
+    onSuccess: (response) => {
+      if (response.success) {
+        queryClient.invalidateQueries({ queryKey: ['posts'] });
+        queryClient.invalidateQueries({ queryKey: ['post', id] });
+        navigate.replace('/admin/post');
+        reset();
+        setTimeout(() => {
+          toast.success('Publicacion editada correctamente');
+        }, 1000);
+      } else {
+        if (Array.isArray(response.message)) {
+          response.message.forEach(
+            (item: { field: string; message: string }) => {
+              if (item.field === 'slug') {
+                toast.error('El slug ya existe, por favor elige otro');
+              }
+            },
+          );
+        } else {
+          toast.error(response.message);
+        }
+      }
+    },
+  });
+
   const handleForm = async (formData: TPostForm) => {
     const payload: TPostForm = {
       ...formData,
       productIds: formData.type === 'recipe' ? formData.productIds || [] : [],
     };
 
-    const response = await updatePost({
-      id,
-      data: payload,
-    });
-
-    if (response.success) {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
-      queryClient.invalidateQueries({ queryKey: ['post', id] });
-      navigate.replace('/admin/post');
-      reset();
-      setTimeout(() => {
-        toast.success('Publicacion editada correctamente');
-      }, 1000);
-    } else {
-      if (Array.isArray(response.message)) {
-        response.message.forEach((item: { field: string; message: string }) => {
-          if (item.field === 'slug') {
-            toast.error('El slug ya existe, por favor elige otro');
-          }
-        });
-      } else {
-        toast.error(response.message);
-      }
-    }
+    mutate({ id, data: payload });
   };
 
   return (
@@ -90,6 +94,7 @@ export default function EditPostFormWrapper({
         watch={watch}
         setValue={setValue}
         initialProducts={post.products}
+        isPending={isPending}
       />
     </form>
   );
