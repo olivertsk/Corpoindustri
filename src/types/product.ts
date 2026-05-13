@@ -33,7 +33,7 @@ export const productSchema = z.object({
       file: z.string(),
       productId: z.string(),
       position: z.number(),
-    })
+    }),
   ),
   status: z.boolean().optional(),
   longDescription: z.string().nullable(),
@@ -64,7 +64,11 @@ export const productDetailSchema = productSchema.extend({
 });
 
 export type Product = z.infer<typeof productSchema>;
-export type ProductDetail = z.infer<typeof productDetailSchema>;
+export type ProductDetail = z.infer<typeof productDetailSchema> & {
+  totalReviews: number;
+  avgRating: number;
+  totalComments: number;
+};
 export type TProductForm = Pick<
   Product,
   | 'departmentId'
