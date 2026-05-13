@@ -110,3 +110,17 @@ export const createProductReview = async (
     throw error;
   }
 };
+
+export const approveProductReview = async (id: string) => {
+  try {
+    return await makePost(
+      `/product-reviews/approve/${id}`,
+      {
+        isApproved: true,
+      },
+      'PUT',
+    );
+  } catch (error) {
+    throw error;
+  }
+};
