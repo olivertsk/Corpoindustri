@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import type { Meta } from '.';
+import type { User } from './user';
 
 export const departmentSchema = z.object({
   icon: z.string(),
@@ -64,6 +66,25 @@ export const productDetailSchema = productSchema.extend({
 });
 
 export type Product = z.infer<typeof productSchema>;
+export type IProductAttributes = Product;
+export type IUserAttributes = User;
+
+export interface IProductReviewAttributes {
+  id?: string;
+  productId?: IProductAttributes['id'];
+  userId?: IUserAttributes['id'];
+  rating: number;
+  comment?: string;
+  isApproved?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IProductReviewDetail {
+  data: IProductReviewAttributes[];
+  meta: Meta;
+}
+
 export type ProductDetail = z.infer<typeof productDetailSchema> & {
   totalReviews: number;
   avgRating: number;

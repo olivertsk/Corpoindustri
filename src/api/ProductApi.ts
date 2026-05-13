@@ -2,7 +2,13 @@ import { makeGet, makePost } from '../config/fetch';
 import { Meta } from '../types';
 import { ICategory } from '../types/category';
 import { Department } from '../types/department';
-import { Product, ProductDetail, TProductForm } from '../types/product';
+import {
+  IProductReviewAttributes,
+  IProductReviewDetail,
+  Product,
+  ProductDetail,
+  TProductForm,
+} from '../types/product';
 
 export type ProductFilters = {
   pag?: number;
@@ -20,8 +26,16 @@ export type ProductFilters = {
   isClient?: boolean;
 };
 
+export type ProductReviewFilters = {
+  pag?: number;
+  limit?: number;
+  productId?: string;
+  sort?: string;
+  isClient?: boolean;
+};
+
 export const getProducts = async (
-  params?: ProductFilters
+  params?: ProductFilters,
 ): Promise<{
   data: Product[];
   meta: Meta;
@@ -52,7 +66,7 @@ export const deleteProduct = async (id: Product['id']) => {
 
 export const getProduct = async (
   id: string,
-  isClient: boolean = false
+  isClient: boolean = false,
 ): Promise<ProductDetail> => {
   try {
     return await makeGet(`/products/show/${id}`, {
@@ -72,6 +86,26 @@ export const updateProduct = async ({
 }) => {
   try {
     return await makePost(`/products/update/${id}`, data, 'PUT');
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductReviews = async (
+  params?: ProductReviewFilters,
+): Promise<IProductReviewDetail> => {
+  try {
+    return await makeGet('/product-reviews/all', params);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createProductReview = async (
+  data: Pick<IProductReviewAttributes, 'productId' | 'rating' | 'comment'>,
+) => {
+  try {
+    return await makePost('/product-reviews/create', data);
   } catch (error) {
     throw error;
   }

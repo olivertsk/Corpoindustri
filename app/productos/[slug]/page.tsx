@@ -8,6 +8,7 @@ import AddProductFavorite from '@/src/components/products/AddProductFavorite';
 import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
 import ProductDetailPrices from '@/src/components/products/ProductDetailPrices';
+import ProductReviewsSection from '@/src/components/products/ProductReviewsSection';
 import BannerProduct from '@/src/components/products/BannerProduct';
 import { apiUrl } from '@/src/lib/global';
 import {
@@ -147,6 +148,11 @@ export default async function ProductShowBySlugPage({ params }: Props) {
                 <h4 className='font-bold text-2xl mb-4'>{product.name}</h4>
                 <AddProductFavorite product={product} />
               </div>
+              <ProductReviewsSection
+                productId={product.id || ''}
+                avgRating={product.avgRating || 0}
+                totalReviews={product.totalReviews || 0}
+              />
               <ProductDetailPrices product={product} />
             </div>
           </aside>
