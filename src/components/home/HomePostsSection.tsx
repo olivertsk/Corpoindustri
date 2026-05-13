@@ -78,7 +78,7 @@ export default function HomePostsSection({ posts }: HomePostsSectionProps) {
                   >
                     {featured.type === 'recipe' ? 'Receta' : 'Articulo'}
                   </span>
-                  <h4 className='text-white text-2xl md:text-3xl font-black mt-3 leading-tight'>
+                  <h4 className='text-white text-2xl md:text-3xl font-black mt-3 leading-tight line-clamp-3'>
                     {featured.title}
                   </h4>
                   <p className='text-white/85 text-sm mt-2 max-w-2xl line-clamp-3'>

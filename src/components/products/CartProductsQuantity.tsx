@@ -28,6 +28,7 @@ export default function CartProductsQuantity({
         plusCb={plusCb}
         quantity={orderProduct.quantity}
         orderProduct={orderProduct}
+        className='max-w-[50%]'
       />
       <button onClick={() => removeProduct(orderProduct)}>
         <svg
