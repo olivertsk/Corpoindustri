@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Meta } from '.';
-import type { User } from './user';
+import type { TUser, User } from './user';
 
 export const departmentSchema = z.object({
   icon: z.string(),
@@ -80,8 +80,27 @@ export interface IProductReviewAttributes {
   updatedAt?: Date;
 }
 
+export interface IProductCommentAttributes {
+  id?: string;
+  productId?: IProductAttributes['id'];
+  author?: Pick<TUser, 'name' | 'id'>;
+  userId?: IUserAttributes['id'];
+  parentId?: string | null;
+  content: string;
+  isApproved?: boolean;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
+  replies?: IProductCommentAttributes[];
+}
+
 export interface IProductReviewDetail {
   data: IProductReviewAttributes[];
+  meta: Meta;
+}
+
+export interface IProductCommentDetail {
+  data: IProductCommentAttributes[];
   meta: Meta;
 }
 

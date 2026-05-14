@@ -8,6 +8,7 @@ import AddProductFavorite from '@/src/components/products/AddProductFavorite';
 import ImagePreview from '@/src/components/products/ImagePreview';
 import ProductBreadcrumb from '@/src/components/products/ProductBreadcrumb';
 import ProductDetailPrices from '@/src/components/products/ProductDetailPrices';
+import ProductCommentsSection from '@/src/components/products/ProductCommentsSection';
 import ProductReviewsSection from '@/src/components/products/ProductReviewsSection';
 import BannerProduct from '@/src/components/products/BannerProduct';
 import { apiUrl } from '@/src/lib/global';
@@ -160,6 +161,9 @@ export default async function ProductShowBySlugPage({ params }: Props) {
       </main>
       <div className='container mx-auto mt-10'>
         <BannerProduct />
+      </div>
+      <div className='container mx-auto mt-10'>
+        <ProductCommentsSection productId={product.id || ''} />
       </div>
       <div className='container mx-auto mt-10'>
         <ProductsSlider

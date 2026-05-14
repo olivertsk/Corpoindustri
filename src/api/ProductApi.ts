@@ -3,6 +3,8 @@ import { Meta } from '../types';
 import { ICategory } from '../types/category';
 import { Department } from '../types/department';
 import {
+  IProductCommentAttributes,
+  IProductCommentDetail,
   IProductReviewAttributes,
   IProductReviewDetail,
   Product,
@@ -31,6 +33,14 @@ export type ProductReviewFilters = {
   limit?: number;
   productId?: string;
   sort?: string;
+  isClient?: boolean;
+};
+
+export type ProductCommentFilters = {
+  pag?: number;
+  productId?: string;
+  limit?: number;
+  sort?: 'desc' | 'asc';
   isClient?: boolean;
 };
 
@@ -120,6 +130,34 @@ export const approveProductReview = async (id: string) => {
       },
       'PUT',
     );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductComments = async (
+  params?: ProductCommentFilters,
+): Promise<IProductCommentDetail> => {
+  try {
+    return await makeGet('/product-comments/all', params);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createProductComment = async (
+  data: Pick<IProductCommentAttributes, 'productId' | 'parentId' | 'content'>,
+) => {
+  try {
+    return await makePost('/product-comments/create', data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteProductComment = async (id: string) => {
+  try {
+    return await makePost(`/product-comments/delete/${id}`, {}, 'DELETE');
   } catch (error) {
     throw error;
   }
