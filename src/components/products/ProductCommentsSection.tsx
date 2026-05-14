@@ -20,6 +20,7 @@ import {
 import { FormEvent, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '@/src/store/authStore';
+import { useRouter } from 'next/navigation';
 
 type ProductCommentsSectionProps = {
   productId: string;
@@ -94,7 +95,13 @@ const ProductCommentsSectionContent = ({
   const [replyToId, setReplyToId] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState<Record<string, string>>({});
   const currentUser = useAuthStore((state) => state.user);
+  const router = useRouter();
   const queryClient = useQueryClient();
+
+  const redirectToLogin = () => {
+    toast.info('Debes iniciar sesión para comentar');
+    router.push('/auth/sign-in');
+  };
 
   const {
     data,
@@ -230,6 +237,11 @@ const ProductCommentsSectionContent = ({
   const handleSubmitComment = (event: FormEvent) => {
     event.preventDefault();
 
+    if (!currentUser) {
+      redirectToLogin();
+      return;
+    }
+
     if (!content.trim()) {
       toast.error('El comentario no puede estar vacío');
       return;
@@ -243,6 +255,11 @@ const ProductCommentsSectionContent = ({
   };
 
   const handleSubmitReply = (commentId: string) => {
+    if (!currentUser) {
+      redirectToLogin();
+      return;
+    }
+
     const value = replyContent[commentId]?.trim();
 
     if (!value) {
@@ -305,11 +322,16 @@ const ProductCommentsSectionContent = ({
           <div className='mt-3'>
             <button
               type='button'
-              onClick={() =>
+              onClick={() => {
+                if (!currentUser) {
+                  redirectToLogin();
+                  return;
+                }
+
                 setReplyToId((prev) =>
                   prev === comment.id ? null : comment.id || null,
-                )
-              }
+                );
+              }}
               className='text-xs font-semibold text-primary hover:text-primaryHover'
             >
               {replyToId === comment.id ? 'Cancelar respuesta' : 'Responder'}
@@ -365,16 +387,27 @@ const ProductCommentsSectionContent = ({
           rows={3}
           placeholder='Escribe un comentario sobre este producto...'
           value={content}
+          disabled={!currentUser}
           onChange={(event) => setContent(event.target.value)}
         />
         <div className='mt-2 flex justify-end'>
-          <button
-            type='submit'
-            disabled={isCreatingComment}
-            className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover disabled:opacity-50'
-          >
-            Publicar comentario
-          </button>
+          {currentUser ? (
+            <button
+              type='submit'
+              disabled={isCreatingComment}
+              className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover disabled:opacity-50'
+            >
+              Publicar comentario
+            </button>
+          ) : (
+            <button
+              type='button'
+              onClick={redirectToLogin}
+              className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover'
+            >
+              Iniciar sesión para comentar
+            </button>
+          )}
         </div>
       </form>
 

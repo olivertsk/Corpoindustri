@@ -10,7 +10,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { useAuthStore } from '@/src/store/authStore';
 
 type ProductReviewsSectionProps = {
   productId: string;
@@ -25,8 +27,10 @@ export default function ProductReviewsSection({
   avgRating,
   totalReviews,
 }: ProductReviewsSectionProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <QueryClientProvider client={new QueryClient()}>
+    <QueryClientProvider client={queryClient}>
       <ProductReviewsContent
         productId={productId}
         avgRating={avgRating}
@@ -46,7 +50,14 @@ function ProductReviewsContent({
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const observerTargetRef = useRef<HTMLDivElement | null>(null);
+  const currentUser = useAuthStore((state) => state.user);
+  const router = useRouter();
   const queryClient = useQueryClient();
+
+  const redirectToLogin = () => {
+    toast.info('Debes iniciar sesión para publicar una reseña');
+    router.push('/auth/sign-in');
+  };
 
   const {
     data,
@@ -102,6 +113,11 @@ function ProductReviewsContent({
 
   const handleCreateReview = async () => {
     if (!productId) {
+      return;
+    }
+
+    if (!currentUser) {
+      redirectToLogin();
       return;
     }
 
@@ -165,30 +181,44 @@ function ProductReviewsContent({
             <p className='text-sm font-semibold text-slate-800'>
               Agregar reseña
             </p>
-            <div className='mt-2'>
-              <Rating
-                name='product-rating-create'
-                value={rating}
-                onChange={(_, newValue) => setRating(newValue)}
-              />
-            </div>
-            <textarea
-              className='mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm'
-              placeholder='Comparte tu experiencia con este producto...'
-              rows={3}
-              value={comment}
-              onChange={(event) => setComment(event.target.value)}
-            />
-            <div className='mt-2 flex justify-end'>
-              <button
-                type='button'
-                onClick={handleCreateReview}
-                disabled={isSubmitting}
-                className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover disabled:opacity-60'
-              >
-                {isSubmitting ? 'Enviando...' : 'Enviar reseña'}
-              </button>
-            </div>
+            {currentUser ? (
+              <>
+                <div className='mt-2'>
+                  <Rating
+                    name='product-rating-create'
+                    value={rating}
+                    onChange={(_, newValue) => setRating(newValue)}
+                  />
+                </div>
+                <textarea
+                  className='mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm'
+                  placeholder='Comparte tu experiencia con este producto...'
+                  rows={3}
+                  value={comment}
+                  onChange={(event) => setComment(event.target.value)}
+                />
+                <div className='mt-2 flex justify-end'>
+                  <button
+                    type='button'
+                    onClick={handleCreateReview}
+                    disabled={isSubmitting}
+                    className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover disabled:opacity-60'
+                  >
+                    {isSubmitting ? 'Enviando...' : 'Enviar reseña'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className='mt-2 flex justify-end'>
+                <button
+                  type='button'
+                  onClick={redirectToLogin}
+                  className='rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover'
+                >
+                  Iniciar sesión para reseñar
+                </button>
+              </div>
+            )}
           </div>
 
           <div className='mt-4 max-h-[420px] overflow-auto pr-1'>
