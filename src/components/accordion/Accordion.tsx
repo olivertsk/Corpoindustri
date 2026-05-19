@@ -63,11 +63,12 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
     queryFn: () =>
       getDepartments({
         categories: true,
-        productName: filters.name,
+        productName: filters.search,
         minPrice: filters.minPrice,
         maxPrice: filters.maxPrice,
         categoriesIds: filters.categoriesIds?.toString() || null,
         typePrice: filters.typePrice,
+        isClient: true,
       }),
     refetchOnWindowFocus: false,
   });

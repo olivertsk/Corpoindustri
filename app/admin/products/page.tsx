@@ -42,7 +42,7 @@ export default function ProductsPage() {
       flex: 1,
       minWidth: 150,
       filterOperators: getGridBooleanOperators().filter(
-        (op) => op.value === 'is' || op.value === 'isNot'
+        (op) => op.value === 'is' || op.value === 'isNot',
       ),
     },
     { field: 'department', headerName: 'Departamento', flex: 1, minWidth: 150 },
@@ -72,7 +72,7 @@ export default function ProductsPage() {
   ];
   useBreadcrumb('Productos', 'Todos los productos');
   const [filters, setFilters] = useState<ProductFilters>({
-    name: '',
+    search: '',
     pag: 1,
     limit: 50,
   });

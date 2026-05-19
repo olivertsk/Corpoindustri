@@ -7,6 +7,7 @@ import {
   IProductCommentDetail,
   IProductReviewAttributes,
   IProductReviewDetail,
+  IProductSuggestion,
   Product,
   ProductDetail,
   TProductForm,
@@ -15,7 +16,7 @@ import {
 export type ProductFilters = {
   pag?: number;
   limit?: number;
-  name?: string | null;
+  search?: string | null;
   departmentId?: string | null;
   departmentIds?: Department['id'][] | null;
   categoriesIds?: ICategory['id'][] | null;
@@ -53,6 +54,30 @@ export const getProducts = async (
   try {
     const response = await makeGet('/products/all', params);
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getClientProducts = async (
+  params?: ProductFilters,
+): Promise<{
+  data: Product[];
+  meta: Meta;
+}> => {
+  try {
+    const response = await makeGet('/products/search', params);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductSuggestions = async (
+  search: string,
+): Promise<IProductSuggestion[]> => {
+  try {
+    return await makeGet('/products/suggestions', { search });
   } catch (error) {
     throw error;
   }

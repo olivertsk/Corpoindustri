@@ -145,7 +145,7 @@ export default function PostForm({
       getProducts({
         pag: 1,
         limit: 20,
-        name: debouncedQuery,
+        search: debouncedQuery,
       }),
     enabled: type === 'recipe' && debouncedQuery.length >= 2,
     refetchOnWindowFocus: false,

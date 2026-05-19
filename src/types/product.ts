@@ -104,6 +104,11 @@ export interface IProductCommentDetail {
   meta: Meta;
 }
 
+export interface IProductSuggestion {
+  id: string;
+  name: string;
+}
+
 export type ProductDetail = z.infer<typeof productDetailSchema> & {
   totalReviews: number;
   avgRating: number;

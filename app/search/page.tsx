@@ -1,6 +1,6 @@
 'use client';
 
-import { getProducts, ProductFilters } from '@/src/api/ProductApi';
+import { getClientProducts, ProductFilters } from '@/src/api/ProductApi';
 import Accordion from '@/src/components/accordion/Accordion';
 import Paginator from '@/src/components/paginator/Paginator';
 import CardProducts from '@/src/components/products/CardProducts';
@@ -16,9 +16,9 @@ function Main() {
   const searchParams = useSearchParams();
   const { currentCoin } = useCalcAmount();
   const setArrayFilter = useCallback(
-    (name: string) =>
+    (search: string) =>
       searchParams
-        ?.get(name)
+        ?.get(search)
         ?.split(',')
         ?.filter((item) => item) || [],
     [searchParams],
@@ -26,22 +26,24 @@ function Main() {
 
   const [filters, setFilters] = useState<ProductFilters>({
     pag: searchParams?.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
-    name: searchParams?.get('name') || '',
+    search: searchParams?.get('search') || '',
     departmentIds: setArrayFilter('departmentIds'),
     categoriesIds: setArrayFilter('categoriesIds'),
     minPrice: searchParams?.get('minPrice') || '',
     maxPrice: searchParams?.get('maxPrice') || '',
-    order:
-      (searchParams?.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
+    order: (searchParams?.get('order') as 'maxPrice' | 'minPrice') || '',
     isClient: true,
     typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
   });
 
   const { data, isFetching } = useQuery({
     queryKey: ['products'],
-    queryFn: () => getProducts(filters),
+    queryFn: () => getClientProducts(filters),
     refetchOnWindowFocus: false,
   });
+
+  console.log('data :>> ', data);
+  console.log('filters :>> ', filters);
 
   const handlePagination = (pag: number) => {
     window.scrollTo(0, 0);
@@ -56,7 +58,7 @@ function Main() {
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,
-      name: searchParams?.get('name') || '',
+      search: searchParams?.get('search') || '',
       departmentIds: setArrayFilter('departmentIds'),
       categoriesIds: setArrayFilter('categoriesIds'),
       pag: searchParams?.get('pag') ? +searchParams.get('pag')! : 1,
@@ -78,7 +80,7 @@ function Main() {
       } else {
         if (key === 'pag') {
           params.append(key, '1');
-        } else if (key === 'name') {
+        } else if (key === 'search') {
           params.append(key, '');
         } else {
           params.append(key, value + '');
@@ -94,11 +96,11 @@ function Main() {
         className={`container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4  `}
       >
         <aside className='col-span-4 lg:col-span-1'>
-          {filters.name && (
+          {filters.search && (
             <div className='flex items-center mb-4 gap-2'>
               <p className='text-lg text-slate-500 '>
                 Resultados para:{' '}
-                <span className='font-bold'>{filters.name}</span>
+                <span className='font-bold'>{filters.search}</span>
               </p>
               <button
                 className='border-2 border-red-600 rounded-sm'
@@ -128,7 +130,7 @@ function Main() {
               {!data.data.length && (
                 <div className='col-span-4 flex justify-center items-center h-[300px]'>
                   <p className='font-bold text-slate-500 text-lg'>
-                    No hay resultados para tu busqueda
+                    No hay resultados para tu búsqueda
                   </p>
                 </div>
               )}
