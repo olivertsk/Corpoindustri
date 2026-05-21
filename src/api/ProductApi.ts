@@ -27,6 +27,9 @@ export type ProductFilters = {
   typePrice?: 'price' | 'priceBs';
   typeSearch?: string | null;
   isClient?: boolean;
+  model?: string | null;
+  unit?: string | null;
+  brand?: string | null;
 };
 
 export type ProductReviewFilters = {
@@ -59,11 +62,21 @@ export const getProducts = async (
   }
 };
 
+type Facet = {
+  name: string;
+  count: number;
+};
+
 export const getClientProducts = async (
   params?: ProductFilters,
 ): Promise<{
   data: Product[];
   meta: Meta;
+  facets: {
+    brands: Facet[];
+    units: Facet[];
+    models: Facet[];
+  };
 }> => {
   try {
     const response = await makeGet('/products/search', params);

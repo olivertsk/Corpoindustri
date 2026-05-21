@@ -29,6 +29,9 @@ function Main() {
     search: searchParams?.get('search') || '',
     departmentIds: setArrayFilter('departmentIds'),
     categoriesIds: setArrayFilter('categoriesIds'),
+    brand: searchParams?.get('brand') || null,
+    unit: searchParams?.get('unit') || null,
+    model: searchParams?.get('model') || null,
     minPrice: searchParams?.get('minPrice') || '',
     maxPrice: searchParams?.get('maxPrice') || '',
     order: (searchParams?.get('order') as 'maxPrice' | 'minPrice') || '',
@@ -43,7 +46,6 @@ function Main() {
   });
 
   console.log('data :>> ', data);
-  console.log('filters :>> ', filters);
 
   const handlePagination = (pag: number) => {
     window.scrollTo(0, 0);
@@ -61,6 +63,9 @@ function Main() {
       search: searchParams?.get('search') || '',
       departmentIds: setArrayFilter('departmentIds'),
       categoriesIds: setArrayFilter('categoriesIds'),
+      brand: searchParams?.get('brand') || null,
+      unit: searchParams?.get('unit') || null,
+      model: searchParams?.get('model') || null,
       pag: searchParams?.get('pag') ? +searchParams.get('pag')! : 1,
       typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
     }));
@@ -76,13 +81,19 @@ function Main() {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
       if (Array.isArray(value)) {
-        params.append(key, value.toString());
+        if (value.length) {
+          params.append(key, value.toString());
+        }
       } else {
         if (key === 'pag') {
           params.append(key, '1');
-        } else if (key === 'search') {
-          params.append(key, '');
-        } else {
+        } else if (
+          value !== '' &&
+          value !== null &&
+          value !== undefined &&
+          key !== 'isClient' &&
+          key !== 'typePrice'
+        ) {
           params.append(key, value + '');
         }
       }
@@ -110,7 +121,11 @@ function Main() {
               </button>
             </div>
           )}
-          <Accordion filters={filters} setFilters={setFilters} />
+          <Accordion
+            filters={filters}
+            setFilters={setFilters}
+            facets={data?.facets}
+          />
         </aside>
         {isFetching && (
           <div className='col-span-4 lg:col-span-3 h-[300px] flex justify-center items-center'>

@@ -29,6 +29,7 @@ export default function ProductsPage() {
     },
     { field: 'code', headerName: 'Código', flex: 1, minWidth: 150 },
     { field: 'price', headerName: 'Precio', flex: 1, minWidth: 150 },
+    { field: 'priceBs', headerName: 'Precio Bs', flex: 1, minWidth: 150 },
     {
       field: 'promotionalPrice',
       headerName: 'P. Promocional',
@@ -126,6 +127,7 @@ export default function ProductsPage() {
             id: item.id,
             name: item.name,
             code: item.code,
+            priceBs: normalizeAmounts(item.priceBs),
             price: normalizeAmounts(item.price),
             promotionalPrice: item.promotionalPrice
               ? normalizeAmounts(item.promotionalPrice || 0)
