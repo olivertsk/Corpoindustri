@@ -47,11 +47,14 @@ export default function ProductsPage() {
     },
     { field: 'department', headerName: 'Departamento', flex: 1, minWidth: 150 },
     { field: 'category', headerName: 'Categoria', flex: 1, minWidth: 150 },
+    { field: 'brand', headerName: 'Marca' },
+    { field: 'unit', headerName: 'Unidad' },
+    { field: 'model', headerName: 'Modelo' },
     {
       field: 'actions',
       headerName: 'Acciones',
       flex: 1,
-      minWidth: 150,
+      minWidth: 180,
       renderCell: (params) => (
         <div className='flex items-center h-full'>
           <Link
@@ -131,6 +134,9 @@ export default function ProductsPage() {
             status: item.status ? 'Activo' : 'Inactivo',
             department: item.department?.name || 'N/A',
             category: item.category?.name || 'N/A',
+            brand: item.brand || 'N/A',
+            unit: item.unit || 'N/A',
+            model: item.model || 'N/A',
           }))}
           columns={allColumns}
           rowCount={data.meta.total}
