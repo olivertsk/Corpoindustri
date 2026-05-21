@@ -226,6 +226,11 @@ export default async function Home() {
                 bodegas y distribuidores: cotización ágil, precios competitivos
                 y acompañamiento comercial.
               </p>
+              <p className='mt-4 text-slate-600 max-w-2xl'>
+                🏅 Distribuidor Mayorista # 1 de Alimentos y Productos de
+                Higiene de la Gran <strong>Caracas</strong> y{' '}
+                <strong>Catia</strong>
+              </p>
               <div className='mt-5 flex flex-wrap gap-3'>
                 <Link
                   href='/search?name=viveres'

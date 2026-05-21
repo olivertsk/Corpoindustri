@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: '%s | Corpoindustri',
   },
   description:
-    'Mayorista B2B en Venezuela para abastos, bodegas y comercios. Compra víveres, limpieza y productos de alta rotación con delivery, cotizaciones y atención personalizada.',
+    'Mayorista B2B en Venezuela para abastos, bodegas y comercios. Compra víveres, limpieza y productos de alta rotación con delivery, cotizaciones y atención personalizada. Distribuidor Mayorista # 1 de Alimentos y Productos de Higiene de la Gran Caracas y Catia.',
   keywords: [
     'mayorista de alimentos en venezuela',
     'víveres al mayor en caracas',
@@ -38,13 +38,13 @@ export const metadata: Metadata = {
     siteName: 'Corpoindustri',
     title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
     description:
-      'Compra al mayor para tu negocio en Venezuela con precios competitivos, cobertura y atención personalizada.',
+      'Compra al mayor para tu negocio en Venezuela con precios competitivos, cobertura y atención personalizada. Distribuidor Mayorista # 1 de Alimentos y Productos de Higiene de la Gran Caracas y Catia.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Corpoindustri | Mayorista de alimentos y productos para tu negocio',
     description:
-      'Mayorista B2B para abastos, bodegas y comercios con delivery y cotizaciones rápidas.',
+      'Mayorista B2B para abastos, bodegas y comercios con delivery y cotizaciones rápidas. Distribuidor Mayorista # 1 de Alimentos y Productos de Higiene de la Gran Caracas y Catia.',
   },
   robots: {
     index: true,

@@ -125,6 +125,13 @@ export default function Footer() {
                 Contáctanos
               </Link>
             </div>
+            <div className='text-center col-span-3 flex justify-center'>
+              <p className='mt-4 text-white'>
+                🏅 Distribuidor Mayorista # 1 de Alimentos y Productos de
+                Higiene de la Gran <strong>Caracas</strong> y{' '}
+                <strong>Catia</strong>
+              </p>
+            </div>
           </div>
         </footer>
       </>
