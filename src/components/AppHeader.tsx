@@ -40,7 +40,7 @@ export default function AppHeader() {
             </div>
           </div>
         )}
-        <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
+        <header className='bg-primary py-4 px-2 sticky top-0 z-50'>
           <div className='container mx-auto flex gap-4 items-center'>
             <div className='max-w-[50px] lg:max-w-[100px]'>
               <Logo />

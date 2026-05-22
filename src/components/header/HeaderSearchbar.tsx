@@ -98,7 +98,8 @@ export default function HeaderSearchbar() {
 
             <MenuItems
               anchor='bottom'
-              className='space-y-2 origin-top-right rounded-xl border border-slate-200 p-2 bg-white shadow-md z-30 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0'
+              modal={false}
+              className='space-y-2 origin-top-right rounded-xl border border-slate-200 p-2 bg-white shadow-md z-[70] transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0'
             >
               {coins.map((coin) => (
                 <MenuItem as='div' key={coin.value}>
