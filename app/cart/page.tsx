@@ -47,7 +47,7 @@ export default function CartPage() {
   );
 
   return (
-    <main className='container mx-auto my-8'>
+    <main className='container mx-auto my-8 px-4'>
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start'>
         <section className='lg:col-span-8'>
           {isCheckoutStarted ? (

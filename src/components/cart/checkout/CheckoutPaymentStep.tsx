@@ -3,20 +3,14 @@ import Spinner from '@/src/components/spinner/Spinner';
 import { primaryBtn } from '@/src/lib/global';
 
 type CheckoutPaymentStepProps = {
-  showUsdAmount: boolean;
-  showBsAmount: boolean;
-  amountUsd: string;
-  amountBs: string;
+  amount: string;
   selectedMethod: boolean;
   sending: boolean;
   onBack: () => void;
 };
 
 export default function CheckoutPaymentStep({
-  showUsdAmount,
-  showBsAmount,
-  amountUsd,
-  amountBs,
+  amount,
   selectedMethod,
   sending,
   onBack,
@@ -30,17 +24,9 @@ export default function CheckoutPaymentStep({
 
       <SelectPaymentMethod />
 
-      {showUsdAmount && (
-        <p className='text-slate-700 font-bold text-lg my-4'>
-          Monto a pagar (USD): <b>{amountUsd}</b>
-        </p>
-      )}
-
-      {showBsAmount && (
-        <p className='text-slate-700 font-bold text-lg my-4'>
-          Monto a pagar (BS): <b>{amountBs}</b>
-        </p>
-      )}
+      <p className='text-slate-700 font-bold text-lg my-4'>
+        Monto a pagar <b>{amount}</b>
+      </p>
 
       <div className='mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end'>
         <button

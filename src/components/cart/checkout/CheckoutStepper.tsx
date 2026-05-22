@@ -49,22 +49,6 @@ export default function CheckoutStepper({ onCancel }: CheckoutStepperProps) {
     location: user?.location || '',
   });
 
-  const totalBs = useMemo(
-    () =>
-      orderProducts.reduce(
-        (init, item) =>
-          (init +=
-            item.quantity *
-            choosePrice(
-              item,
-              currentCoin.value === 'USD' ? true : false,
-              'BS',
-            )),
-        0,
-      ),
-    [orderProducts, choosePrice, currentCoin],
-  );
-
   const total = useMemo(
     () =>
       orderProducts.reduce(
@@ -326,10 +310,7 @@ export default function CheckoutStepper({ onCancel }: CheckoutStepperProps) {
 
         {currentStep === 2 && (
           <CheckoutPaymentStep
-            showUsdAmount={selectedMethod?.currency?.includes('USD') || false}
-            showBsAmount={selectedMethod?.currency?.includes('BS') || false}
-            amountUsd={validateNormalizeAmount(undefined, total, 'any', 'USD')}
-            amountBs={validateNormalizeAmount(undefined, totalBs, 'any', 'BS')}
+            amount={validateNormalizeAmount(undefined, total)}
             selectedMethod={Boolean(selectedMethod)}
             sending={sending}
             onBack={handleBack}
