@@ -133,28 +133,16 @@ export default async function Home() {
     slogan: 'Mayorista de alimentos y productos para tu negocio',
   };
 
-  const quickAccessLinks = [
-    {
-      label: 'Víveres al mayor',
-      description: 'Productos de alta rotación para reposición diaria',
-      href: '/search?name=viveres',
-    },
-    {
-      label: 'Limpieza y hogar',
-      description: 'Insumos clave para comercios y hogares',
-      href: '/search?name=limpieza',
-    },
-    {
-      label: 'Bebidas y refrigerados',
-      description: 'Surtido para aumentar ticket promedio',
-      href: '/search?name=bebidas',
-    },
-    {
-      label: 'Combos mayoristas',
-      description: 'Alternativas por volumen para mejorar márgenes',
-      href: '/search?name=combos',
-    },
-  ];
+  const quickAccessLinks: {
+    label: string;
+    href: string;
+  }[] = departamentData.data
+    .filter((department) => department.id)
+    .slice(0, 5)
+    .map((department) => ({
+      label: department.name,
+      href: `/search?departmentIds=${department.id}&pag=1`,
+    }));
 
   const processSteps = [
     {
@@ -279,11 +267,10 @@ export default async function Home() {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className='block bg-white/10 rounded-xl border border-white/20 p-3 hover:bg-white/20 transition-colors'
+                    className='flex items-center bg-white/10 rounded-xl border border-white/20 p-3 hover:bg-white/20 transition-colors min-h-[60px]'
                   >
-                    <p className='font-bold text-white'>{item.label}</p>
-                    <p className='text-xs text-white/80 mt-0.5'>
-                      {item.description}
+                    <p className='text-lg font-semibold text-white'>
+                      {item.label}
                     </p>
                   </Link>
                 ))}
@@ -295,7 +282,7 @@ export default async function Home() {
         <div className='container mx-auto px-4 pt-4 pb-6'>
           <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-5'>
             <Link
-              href='/search?name=viveres'
+              href='/search?search=viveres'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -306,7 +293,7 @@ export default async function Home() {
               </h2>
             </Link>
             <Link
-              href='/search?name=harina'
+              href='/search?search=harina'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -317,7 +304,7 @@ export default async function Home() {
               </h2>
             </Link>
             <Link
-              href='/search?name=arroz'
+              href='/search?search=arroz'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
@@ -328,7 +315,7 @@ export default async function Home() {
               </h2>
             </Link>
             <Link
-              href='/search?name=limpieza'
+              href='/search?search=limpieza'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>

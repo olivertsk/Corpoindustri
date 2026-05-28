@@ -22,7 +22,6 @@ export default function HeaderSearchbar() {
 
   const onSearch = () => {
     const query = search.trim();
-    if (!query) return;
 
     router.push(`/search?search=${encodeURIComponent(query)}`);
     setSearch('');

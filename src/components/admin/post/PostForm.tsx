@@ -17,6 +17,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import Spinner from '../../spinner/Spinner';
+import UploadImage from '../../UploadImage';
 
 type ProductOption = Pick<Product, 'id' | 'name' | 'code'>;
 
@@ -167,9 +168,18 @@ export default function PostForm({
     return Array.from(uniqueOptions.values());
   }, [productsData?.data, selectedProducts]);
 
+  const uploadImageCb = (fileName: string) => setValue('coverImage', fileName);
+
   return (
     <>
       <div className='grid lg:grid-cols-2 gap-4'>
+        <div className='lg:col-span-2'>
+          <UploadImage
+            callback={uploadImageCb}
+            type='square'
+            initialValue={watch('coverImage')}
+          />
+        </div>
         <div>
           <label>
             Tipo
@@ -237,18 +247,6 @@ export default function PostForm({
             Sugerido automaticamente desde el titulo, pero editable.
           </p>
           {errors.slug && <ErrorMessage>{errors.slug.message}</ErrorMessage>}
-        </div>
-
-        <div className='lg:col-span-2'>
-          <label>
-            Imagen de portada (URL)
-            <input
-              type='text'
-              className={inputStlyes}
-              placeholder='https://...'
-              {...register('coverImage')}
-            />
-          </label>
         </div>
 
         <div className='lg:col-span-2'>

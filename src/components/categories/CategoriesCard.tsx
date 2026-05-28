@@ -61,9 +61,6 @@ export default function CategoriesCard({
             <SwiperSlide key={category.id} className='pb-8 lg:px-1 !h-auto'>
               <div className='section-shell shadow-sm rounded-2xl p-4 h-full flex flex-col justify-between border border-white/80 group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_26px_rgba(25,88,172,0.15)]'>
                 <div>
-                  <p className='text-[11px] uppercase tracking-[0.12em] text-slate-400 text-center font-semibold'>
-                    Categoría destacada
-                  </p>
                   <h4 className='text-center font-bold text-primary text-xl mt-1 leading-tight min-h-[56px] flex items-center justify-center'>
                     {category.name}
                   </h4>

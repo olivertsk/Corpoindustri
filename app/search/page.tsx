@@ -45,8 +45,6 @@ function Main() {
     refetchOnWindowFocus: false,
   });
 
-  console.log('data :>> ', data);
-
   const handlePagination = (pag: number) => {
     window.scrollTo(0, 0);
     setFilters({ ...filters, pag });
@@ -84,6 +82,8 @@ function Main() {
         if (value.length) {
           params.append(key, value.toString());
         }
+      } else if (key === 'search') {
+        params.append(key, '');
       } else {
         if (key === 'pag') {
           params.append(key, '1');

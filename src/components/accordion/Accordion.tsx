@@ -81,6 +81,7 @@ export default function Accordion({
       }),
     refetchOnWindowFocus: false,
   });
+  console.log('data :>> ', data);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({
@@ -93,6 +94,7 @@ export default function Accordion({
     const department = data?.data.find(
       (department) => department.id!.toString() === e.target.value.toString(),
     );
+    console.log('department :>> ', department);
     if (filters.departmentIds?.includes(e.target.value)) {
       const filteredDepartments = filters.departmentIds.filter(
         (filter) => filter !== e.target.value,
@@ -309,7 +311,10 @@ export default function Accordion({
                               department.id,
                             )}
                           />
-                          {department.name} ({department.productCount})
+                          {department.name}{' '}
+                          {department.productCount
+                            ? `(${department.productCount})`
+                            : ''}
                         </label>
                       </div>
                     ))}
@@ -369,7 +374,10 @@ export default function Accordion({
                                 category.id,
                               )}
                             />
-                            {category.name}
+                            {category.name}{' '}
+                            {category.productCount
+                              ? `(${category.productCount})`
+                              : ''}
                           </label>
                         ))}
                       </div>

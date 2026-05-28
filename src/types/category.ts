@@ -20,6 +20,7 @@ export const categorySchema = z.object({
   status: z.boolean(),
   departmentId: z.string(),
   isSalient: z.boolean(),
+  productCount: z.number().optional(),
 });
 
 export type ICategory = z.infer<typeof categorySchema>;

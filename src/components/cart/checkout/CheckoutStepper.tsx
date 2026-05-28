@@ -207,6 +207,7 @@ export default function CheckoutStepper({ onCancel }: CheckoutStepperProps) {
         clearCart(currentCoin);
         setSelectedMethod(undefined);
         setCurrentStep(1);
+        onCancel();
         const clientSurveyId = await getClientSurvey(ESurveyType.FIRSTPURCHASE);
         setSurveyId(clientSurveyId);
         return;
