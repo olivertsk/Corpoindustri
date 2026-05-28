@@ -10,6 +10,7 @@ import React, {
 import './Accordion.css';
 import { useQuery } from '@tanstack/react-query';
 import { getDepartments } from '@/src/api/DepartmentsApi';
+import { getCategories } from '@/src/api/CategoriesApi';
 import { ProductFilters } from '@/src/api/ProductApi';
 import { useRouter } from 'next/navigation';
 import { inputStlyes, primaryBtn } from '@/src/lib/global';
@@ -81,7 +82,35 @@ export default function Accordion({
       }),
     refetchOnWindowFocus: false,
   });
-  console.log('data :>> ', data);
+
+  const selectedDepartmentIds = useMemo(
+    () => filters.departmentIds?.toString() || null,
+    [filters.departmentIds],
+  );
+
+  const { data: categoriesData, isFetching: isFetchingCategories } = useQuery({
+    queryKey: [
+      'categories_by_filters',
+      filters.search,
+      filters.minPrice,
+      filters.maxPrice,
+      filters.typePrice,
+      selectedDepartmentIds,
+    ],
+    queryFn: () =>
+      getCategories({
+        // Keep categories query aligned with the departments filter payload.
+        productName: filters.search,
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        typePrice: filters.typePrice,
+        isClient: true,
+        // Apply selected departments so this query changes on selection changes.
+        departmentIds: selectedDepartmentIds || undefined,
+      }),
+    enabled: !!filters.departmentIds?.length,
+    refetchOnWindowFocus: false,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({
@@ -94,17 +123,13 @@ export default function Accordion({
     const department = data?.data.find(
       (department) => department.id!.toString() === e.target.value.toString(),
     );
-    console.log('department :>> ', department);
+
     if (filters.departmentIds?.includes(e.target.value)) {
       const filteredDepartments = filters.departmentIds.filter(
         (filter) => filter !== e.target.value,
       );
       const categoriesIds: string[] = [];
-      setCategories(
-        filteredCategories.filter(
-          (category) => category.departmentId !== e.target.value,
-        ),
-      );
+
       filters.categoriesIds?.forEach((categoryId) => {
         if (
           !department!.categories!.find(
@@ -120,14 +145,6 @@ export default function Accordion({
         categoriesIds,
       });
     } else {
-      setCategories([
-        ...filteredCategories,
-        {
-          departmentName: department!.name!,
-          departmentId: department!.id!,
-          categories: department!.categories!,
-        },
-      ]);
       setFilters({
         ...filters,
         departmentIds: [...filters.departmentIds!, e.target.value],
@@ -201,23 +218,41 @@ export default function Accordion({
   }, []);
 
   useEffect(() => {
-    if (data) {
-      const filteredCategories: FilteredCategories[] = [];
-      filters.departmentIds?.forEach((departmentId) => {
-        const department = data.data.find(
-          (department) => department.id === departmentId,
-        );
-        if (department) {
-          filteredCategories.push({
-            departmentName: department.name!,
-            departmentId: department.id!,
-            categories: department.categories!,
-          });
-        }
-      });
-      setCategories(filteredCategories);
+    if (!data || !categoriesData || !filters.departmentIds?.length) {
+      setCategories([]);
+      return;
     }
-  }, [data, filters.departmentIds]);
+
+    const categoriesByDepartment = new Map<string, ICategory[]>();
+    categoriesData.data.forEach((category) => {
+      if (!category.departmentId) {
+        return;
+      }
+      const previous = categoriesByDepartment.get(category.departmentId) || [];
+      categoriesByDepartment.set(category.departmentId, [
+        ...previous,
+        category,
+      ]);
+    });
+
+    const nextCategories = filters.departmentIds
+      .filter((departmentId): departmentId is string => !!departmentId)
+      .map((departmentId) => {
+        const department = data.data.find((item) => item.id === departmentId);
+        if (!department) {
+          return null;
+        }
+
+        return {
+          departmentName: department.name!,
+          departmentId,
+          categories: categoriesByDepartment.get(departmentId) || [],
+        };
+      })
+      .filter((item): item is FilteredCategories => item !== null);
+
+    setCategories(nextCategories);
+  }, [data, categoriesData, filters.departmentIds]);
 
   return (
     <>
@@ -346,10 +381,20 @@ export default function Accordion({
                   Categorias seleccionadas ({filters.categoriesIds?.length})
                 </span>
               )}
+              {isFetchingCategories && (
+                <span className='block text-xs font-normal text-primary'>
+                  Actualizando categorias...
+                </span>
+              )}
             </label>
             <section className='accordion-animation-wrapper'>
               <div className='accordion-animation'>
                 <div className='accordion-transform-wrapper'>
+                  {isFetchingCategories && (
+                    <div className='accordion-content px-4 py-2 text-sm text-slate-500'>
+                      Consultando categorias...
+                    </div>
+                  )}
                   {filteredCategories &&
                     filteredCategories.map((category) => (
                       <div
