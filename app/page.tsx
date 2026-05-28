@@ -315,7 +315,7 @@ export default async function Home() {
               </h2>
             </Link>
             <Link
-              href='/search?search=limpieza'
+              href='/search?pag=1&departmentIds=682957d8-6fb0-40c8-bf2b-6be1e1a44a53'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
