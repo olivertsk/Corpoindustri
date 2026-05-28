@@ -282,7 +282,7 @@ export default async function Home() {
         <div className='container mx-auto px-4 pt-4 pb-6'>
           <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-5'>
             <Link
-              href='/search?search=viveres'
+              href='/search?pag=1&departmentIds=63f2beaa-dbe7-46d2-aa69-5cce621e62f5'
               className='bg-white border border-slate-200 rounded-xl p-4 hover:border-primary/40 transition-colors'
             >
               <p className='text-xs font-bold uppercase tracking-wide text-slate-400'>
