@@ -34,7 +34,13 @@ function Main() {
     model: searchParams?.get('model') || null,
     minPrice: searchParams?.get('minPrice') || '',
     maxPrice: searchParams?.get('maxPrice') || '',
-    order: (searchParams?.get('order') as 'maxPrice' | 'minPrice') || '',
+    order:
+      (searchParams?.get('order') as
+        | 'maxPrice'
+        | 'minPrice'
+        | 'betterRating'
+        | 'worseRating'
+        | '') || '',
     isClient: true,
     typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
   });

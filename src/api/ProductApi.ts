@@ -23,7 +23,7 @@ export type ProductFilters = {
   categoryId?: string | null;
   minPrice?: string | null;
   maxPrice?: string | null;
-  order?: 'maxPrice' | 'minPrice';
+  order?: 'maxPrice' | 'minPrice' | 'betterRating' | 'worseRating' | '';
   typePrice?: 'price' | 'priceBs';
   typeSearch?: string | null;
   isClient?: boolean;
