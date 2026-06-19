@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import type { Meta } from '.';
+import type { TUser, User } from './user';
 
 export const departmentSchema = z.object({
   icon: z.string(),
@@ -33,7 +35,7 @@ export const productSchema = z.object({
       file: z.string(),
       productId: z.string(),
       position: z.number(),
-    })
+    }),
   ),
   status: z.boolean().optional(),
   longDescription: z.string().nullable(),
@@ -47,6 +49,8 @@ export const productSchema = z.object({
   category: categorySchema.optional(),
   stock: z.number(),
   brand: z.string().nullable(),
+  unit: z.string().nullable(),
+  model: z.string().nullable(),
   taxRate: z.number().nullable(),
   coverImage: z.string().nullable(),
   favorite: z
@@ -64,7 +68,54 @@ export const productDetailSchema = productSchema.extend({
 });
 
 export type Product = z.infer<typeof productSchema>;
-export type ProductDetail = z.infer<typeof productDetailSchema>;
+export type IProductAttributes = Product;
+export type IUserAttributes = User;
+
+export interface IProductReviewAttributes {
+  id?: string;
+  productId?: IProductAttributes['id'];
+  userId?: IUserAttributes['id'];
+  rating: number;
+  comment?: string;
+  isApproved?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IProductCommentAttributes {
+  id?: string;
+  productId?: IProductAttributes['id'];
+  author?: Pick<TUser, 'name' | 'id'>;
+  userId?: IUserAttributes['id'];
+  parentId?: string | null;
+  content: string;
+  isApproved?: boolean;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
+  replies?: IProductCommentAttributes[];
+}
+
+export interface IProductReviewDetail {
+  data: IProductReviewAttributes[];
+  meta: Meta;
+}
+
+export interface IProductCommentDetail {
+  data: IProductCommentAttributes[];
+  meta: Meta;
+}
+
+export interface IProductSuggestion {
+  id: string;
+  name: string;
+}
+
+export type ProductDetail = z.infer<typeof productDetailSchema> & {
+  totalReviews: number;
+  avgRating: number;
+  totalComments: number;
+};
 export type TProductForm = Pick<
   Product,
   | 'departmentId'
@@ -84,6 +135,8 @@ export type TProductForm = Pick<
   | 'priceBs'
   | 'promotionalPriceBs'
   | 'priceWithTaxBs'
+  | 'unit'
+  | 'model'
 > & {
   images?: Array<
     Pick<Product['images'][0], 'alt' | 'file' | 'isVideo' | 'position'>

@@ -29,6 +29,7 @@ export default function ProductsPage() {
     },
     { field: 'code', headerName: 'Código', flex: 1, minWidth: 150 },
     { field: 'price', headerName: 'Precio', flex: 1, minWidth: 150 },
+    { field: 'priceBs', headerName: 'Precio Bs', flex: 1, minWidth: 150 },
     {
       field: 'promotionalPrice',
       headerName: 'P. Promocional',
@@ -42,16 +43,19 @@ export default function ProductsPage() {
       flex: 1,
       minWidth: 150,
       filterOperators: getGridBooleanOperators().filter(
-        (op) => op.value === 'is' || op.value === 'isNot'
+        (op) => op.value === 'is' || op.value === 'isNot',
       ),
     },
     { field: 'department', headerName: 'Departamento', flex: 1, minWidth: 150 },
     { field: 'category', headerName: 'Categoria', flex: 1, minWidth: 150 },
+    { field: 'brand', headerName: 'Marca' },
+    { field: 'unit', headerName: 'Unidad' },
+    { field: 'model', headerName: 'Modelo' },
     {
       field: 'actions',
       headerName: 'Acciones',
       flex: 1,
-      minWidth: 150,
+      minWidth: 180,
       renderCell: (params) => (
         <div className='flex items-center h-full'>
           <Link
@@ -72,7 +76,7 @@ export default function ProductsPage() {
   ];
   useBreadcrumb('Productos', 'Todos los productos');
   const [filters, setFilters] = useState<ProductFilters>({
-    name: '',
+    search: '',
     pag: 1,
     limit: 50,
   });
@@ -123,6 +127,7 @@ export default function ProductsPage() {
             id: item.id,
             name: item.name,
             code: item.code,
+            priceBs: normalizeAmounts(item.priceBs),
             price: normalizeAmounts(item.price),
             promotionalPrice: item.promotionalPrice
               ? normalizeAmounts(item.promotionalPrice || 0)
@@ -131,6 +136,9 @@ export default function ProductsPage() {
             status: item.status ? 'Activo' : 'Inactivo',
             department: item.department?.name || 'N/A',
             category: item.category?.name || 'N/A',
+            brand: item.brand || 'N/A',
+            unit: item.unit || 'N/A',
+            model: item.model || 'N/A',
           }))}
           columns={allColumns}
           rowCount={data.meta.total}

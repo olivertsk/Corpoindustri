@@ -5,11 +5,13 @@ import CategoriesCard from './CategoriesCard';
 type CategoriesWrapperProps = {
   categoryData: ICategory[];
 };
-export default function CategoriesWrapper({ categoryData }: CategoriesWrapperProps) {
+export default function CategoriesWrapper({
+  categoryData,
+}: CategoriesWrapperProps) {
   return (
-    <div className='-mt-16 z-20 relative'>
-      <div className='container mx-auto'>
-        <CategoriesCard categoryData={ categoryData }/>
+    <div className='mt-2 md:mt-4 z-20 relative'>
+      <div>
+        <CategoriesCard categoryData={categoryData} />
       </div>
     </div>
   );

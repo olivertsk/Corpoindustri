@@ -10,6 +10,7 @@ import React, {
 import './Accordion.css';
 import { useQuery } from '@tanstack/react-query';
 import { getDepartments } from '@/src/api/DepartmentsApi';
+import { getCategories } from '@/src/api/CategoriesApi';
 import { ProductFilters } from '@/src/api/ProductApi';
 import { useRouter } from 'next/navigation';
 import { inputStlyes, primaryBtn } from '@/src/lib/global';
@@ -21,6 +22,11 @@ import BannerSliderFilter from '../search/BannerSliderFilter';
 type AccordionProps = {
   setFilters: Dispatch<SetStateAction<ProductFilters>>;
   filters: ProductFilters;
+  facets?: {
+    brands: { name: string; count: number }[];
+    units: { name: string; count: number }[];
+    models: { name: string; count: number }[];
+  };
 };
 
 type FilteredCategories = {
@@ -29,13 +35,17 @@ type FilteredCategories = {
   categories: ICategory[];
 };
 
-export default function Accordion({ setFilters, filters }: AccordionProps) {
+export default function Accordion({
+  setFilters,
+  filters,
+  facets,
+}: AccordionProps) {
   // const queryParams = new URLSearchParams(window.location.search);
   const [isOpen, setIsOpen] = useState(false);
   const isOpenStyles = useMemo(
     () =>
       isOpen ? 'opacity-100 translate-x-0' : '-translate-x-full opacity-0 ',
-    [isOpen]
+    [isOpen],
   );
 
   const handleFilter = () => {
@@ -45,7 +55,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   /** VALIDATE MATCH MEDIA TO SHOW THE FILTERS */
   const [isMobile, setIsMobile] = useState(false);
   const [filteredCategories, setCategories] = useState<FilteredCategories[]>(
-    []
+    [],
   );
 
   const { data: filterBanner } = useQuery<IBanner[]>({
@@ -58,14 +68,47 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
     refetchOnWindowFocus: false,
   });
 
-  console.log('filterBanner', filterBanner);
-
   const { data } = useQuery({
     queryKey: ['departments'],
     queryFn: () =>
       getDepartments({
         categories: true,
+        productName: filters.search,
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        categoriesIds: filters.categoriesIds?.toString() || null,
+        typePrice: filters.typePrice,
+        isClient: true,
       }),
+    refetchOnWindowFocus: false,
+  });
+
+  const selectedDepartmentIds = useMemo(
+    () => filters.departmentIds?.toString() || null,
+    [filters.departmentIds],
+  );
+
+  const { data: categoriesData, isFetching: isFetchingCategories } = useQuery({
+    queryKey: [
+      'categories_by_filters',
+      filters.search,
+      filters.minPrice,
+      filters.maxPrice,
+      filters.typePrice,
+      selectedDepartmentIds,
+    ],
+    queryFn: () =>
+      getCategories({
+        // Keep categories query aligned with the departments filter payload.
+        productName: filters.search,
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        typePrice: filters.typePrice,
+        isClient: true,
+        // Apply selected departments so this query changes on selection changes.
+        departmentIds: selectedDepartmentIds || undefined,
+      }),
+    enabled: !!filters.departmentIds?.length,
     refetchOnWindowFocus: false,
   });
 
@@ -78,22 +121,19 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
 
   const handleDepartmentsIds = (e: React.ChangeEvent<HTMLInputElement>) => {
     const department = data?.data.find(
-      (department) => department.id!.toString() === e.target.value.toString()
+      (department) => department.id!.toString() === e.target.value.toString(),
     );
+
     if (filters.departmentIds?.includes(e.target.value)) {
       const filteredDepartments = filters.departmentIds.filter(
-        (filter) => filter !== e.target.value
+        (filter) => filter !== e.target.value,
       );
       const categoriesIds: string[] = [];
-      setCategories(
-        filteredCategories.filter(
-          (category) => category.departmentId !== e.target.value
-        )
-      );
+
       filters.categoriesIds?.forEach((categoryId) => {
         if (
           !department!.categories!.find(
-            (departmentCategoryId) => categoryId === departmentCategoryId.id!
+            (departmentCategoryId) => categoryId === departmentCategoryId.id!,
           )
         ) {
           categoriesIds.push(categoryId);
@@ -105,14 +145,6 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
         categoriesIds,
       });
     } else {
-      setCategories([
-        ...filteredCategories,
-        {
-          departmentName: department!.name!,
-          departmentId: department!.id!,
-          categories: department!.categories!,
-        },
-      ]);
       setFilters({
         ...filters,
         departmentIds: [...filters.departmentIds!, e.target.value],
@@ -124,7 +156,7 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
       setFilters({
         ...filters,
         categoriesIds: filters.categoriesIds?.filter(
-          (categoryId) => categoryId !== e.target.value
+          (categoryId) => categoryId !== e.target.value,
         ),
       });
     } else {
@@ -135,16 +167,35 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
     }
   };
 
+  const handleFacetFilter = (
+    facetType: 'brand' | 'unit' | 'model',
+    value: string,
+  ) => {
+    setFilters((prev) => ({
+      ...prev,
+      pag: 1,
+      [facetType]: prev[facetType] === value ? null : value,
+    }));
+  };
+
   const navigate = useRouter();
   const applyFilters = () => {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
       if (Array.isArray(value)) {
-        params.append(key, value.toString());
+        if (value.length) {
+          params.append(key, value.toString());
+        }
       } else {
         if (key === 'pag') {
           params.append(key, '1');
-        } else {
+        } else if (
+          value !== '' &&
+          value !== null &&
+          value !== undefined &&
+          key !== 'isClient' &&
+          key !== 'typePrice'
+        ) {
           params.append(key, value + '');
         }
       }
@@ -167,23 +218,41 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
   }, []);
 
   useEffect(() => {
-    if (data) {
-      const filteredCategories: FilteredCategories[] = [];
-      filters.departmentIds?.forEach((departmentId) => {
-        const department = data.data.find(
-          (department) => department.id === departmentId
-        );
-        if (department) {
-          filteredCategories.push({
-            departmentName: department.name!,
-            departmentId: department.id!,
-            categories: department.categories!,
-          });
-        }
-      });
-      setCategories(filteredCategories);
+    if (!data || !categoriesData || !filters.departmentIds?.length) {
+      setCategories([]);
+      return;
     }
-  }, [data]);
+
+    const categoriesByDepartment = new Map<string, ICategory[]>();
+    categoriesData.data.forEach((category) => {
+      if (!category.departmentId) {
+        return;
+      }
+      const previous = categoriesByDepartment.get(category.departmentId) || [];
+      categoriesByDepartment.set(category.departmentId, [
+        ...previous,
+        category,
+      ]);
+    });
+
+    const nextCategories = filters.departmentIds
+      .filter((departmentId): departmentId is string => !!departmentId)
+      .map((departmentId) => {
+        const department = data.data.find((item) => item.id === departmentId);
+        if (!department) {
+          return null;
+        }
+
+        return {
+          departmentName: department.name!,
+          departmentId,
+          categories: categoriesByDepartment.get(departmentId) || [],
+        };
+      })
+      .filter((item): item is FilteredCategories => item !== null);
+
+    setCategories(nextCategories);
+  }, [data, categoriesData, filters.departmentIds]);
 
   return (
     <>
@@ -274,10 +343,13 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                             onChange={handleDepartmentsIds}
                             value={department.id}
                             checked={filters.departmentIds?.includes(
-                              department.id
+                              department.id,
                             )}
                           />
-                          {department.name}
+                          {department.name}{' '}
+                          {department.productCount
+                            ? `(${department.productCount})`
+                            : ''}
                         </label>
                       </div>
                     ))}
@@ -309,10 +381,20 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                   Categorias seleccionadas ({filters.categoriesIds?.length})
                 </span>
               )}
+              {isFetchingCategories && (
+                <span className='block text-xs font-normal text-primary'>
+                  Actualizando categorias...
+                </span>
+              )}
             </label>
             <section className='accordion-animation-wrapper'>
               <div className='accordion-animation'>
                 <div className='accordion-transform-wrapper'>
+                  {isFetchingCategories && (
+                    <div className='accordion-content px-4 py-2 text-sm text-slate-500'>
+                      Consultando categorias...
+                    </div>
+                  )}
                   {filteredCategories &&
                     filteredCategories.map((category) => (
                       <div
@@ -334,10 +416,13 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                               onChange={handleCategoriesIds}
                               value={category.id}
                               checked={filters.categoriesIds?.includes(
-                                category.id
+                                category.id,
                               )}
                             />
-                            {category.name}
+                            {category.name}{' '}
+                            {category.productCount
+                              ? `(${category.productCount})`
+                              : ''}
                           </label>
                         ))}
                       </div>
@@ -410,6 +495,141 @@ export default function Accordion({ setFilters, filters }: AccordionProps) {
                       />
                       Menor Precio
                     </label>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className='accordion-item'>
+            <input
+              id='accordion-trigger-4'
+              className='accordion-trigger-input'
+              type='checkbox'
+            ></input>
+            <label
+              className='accordion-trigger font-bold uppercase'
+              htmlFor='accordion-trigger-4'
+            >
+              Marcas
+              <span className='block text-xs font-normal'>
+                Seleccionadas ({filters.brand ? 1 : 0})
+              </span>
+            </label>
+            <section className='accordion-animation-wrapper'>
+              <div className='accordion-animation'>
+                <div className='accordion-transform-wrapper'>
+                  <div className='accordion-content p-4'>
+                    {!facets?.brands?.length && (
+                      <p className='text-sm text-slate-500'>Sin resultados</p>
+                    )}
+                    {facets?.brands?.map((brand) => (
+                      <label
+                        key={`brand-${brand.name}`}
+                        className='flex items-center gap-2 py-2 text-sm'
+                        htmlFor={`facet-brand-${brand.name}`}
+                      >
+                        <input
+                          id={`facet-brand-${brand.name}`}
+                          type='radio'
+                          name='facet-brand-selection'
+                          checked={filters.brand === brand.name}
+                          readOnly
+                          onClick={() => handleFacetFilter('brand', brand.name)}
+                        />
+                        {brand.name} ({brand.count})
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className='accordion-item'>
+            <input
+              id='accordion-trigger-5'
+              className='accordion-trigger-input'
+              type='checkbox'
+            ></input>
+            <label
+              className='accordion-trigger font-bold uppercase'
+              htmlFor='accordion-trigger-5'
+            >
+              Unidades
+              <span className='block text-xs font-normal'>
+                Seleccionadas ({filters.unit ? 1 : 0})
+              </span>
+            </label>
+            <section className='accordion-animation-wrapper'>
+              <div className='accordion-animation'>
+                <div className='accordion-transform-wrapper'>
+                  <div className='accordion-content p-4'>
+                    {!facets?.units?.length && (
+                      <p className='text-sm text-slate-500'>Sin resultados</p>
+                    )}
+                    {facets?.units?.map((unit) => (
+                      <label
+                        key={`unit-${unit.name}`}
+                        className='flex items-center gap-2 py-2 text-sm'
+                        htmlFor={`facet-unit-${unit.name}`}
+                      >
+                        <input
+                          id={`facet-unit-${unit.name}`}
+                          type='radio'
+                          name='facet-unit-selection'
+                          checked={filters.unit === unit.name}
+                          readOnly
+                          onClick={() => handleFacetFilter('unit', unit.name)}
+                        />
+                        {unit.name} ({unit.count})
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className='accordion-item'>
+            <input
+              id='accordion-trigger-6'
+              className='accordion-trigger-input'
+              type='checkbox'
+            ></input>
+            <label
+              className='accordion-trigger font-bold uppercase'
+              htmlFor='accordion-trigger-6'
+            >
+              Modelos
+              <span className='block text-xs font-normal'>
+                Seleccionadas ({filters.model ? 1 : 0})
+              </span>
+            </label>
+            <section className='accordion-animation-wrapper'>
+              <div className='accordion-animation'>
+                <div className='accordion-transform-wrapper'>
+                  <div className='accordion-content p-4'>
+                    {!facets?.models?.length && (
+                      <p className='text-sm text-slate-500'>Sin resultados</p>
+                    )}
+                    {facets?.models?.map((model) => (
+                      <label
+                        key={`model-${model.name}`}
+                        className='flex items-center gap-2 py-2 text-sm'
+                        htmlFor={`facet-model-${model.name}`}
+                      >
+                        <input
+                          id={`facet-model-${model.name}`}
+                          type='radio'
+                          name='facet-model-selection'
+                          checked={filters.model === model.name}
+                          readOnly
+                          onClick={() => handleFacetFilter('model', model.name)}
+                        />
+                        {model.name} ({model.count})
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>

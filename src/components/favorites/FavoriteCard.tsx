@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { apiUrl } from '@/src/lib/global';
 import { Favorite } from '@/src/types/favorite';
 import { useCalcAmount } from '@/src/hooks/useCalcAmount';
+import { buildProductSlug } from '@/src/utils/productSlug';
 
 type FavoriteCardProps = {
   favorite: Favorite;
@@ -13,11 +14,12 @@ export default function FavoriteCard({
   favorite: { product },
 }: FavoriteCardProps) {
   const { validateNormalizeAmount, calcProductTax } = useCalcAmount();
+  const productSlug = buildProductSlug({ id: product.id, name: product.name });
 
   return (
     product && (
       <Link
-        href={`/products/${product.id}`}
+        href={`/productos/${productSlug}`}
         className='grid grid-cols-3 border rounded-lg p-2 overflow-hidden'
       >
         <Image

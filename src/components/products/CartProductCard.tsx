@@ -5,6 +5,7 @@ import CartProductsQuantity from './CartProductsQuantity';
 import Link from 'next/link';
 import { useCartStore } from '@/src/store/cartSlice';
 import { useCalcAmount } from '@/src/hooks/useCalcAmount';
+import { buildProductSlug } from '@/src/utils/productSlug';
 
 type CartProductCardProps = {
   orderProduct: OrderProduct;
@@ -15,6 +16,10 @@ export default function CartProductCard({
 }: CartProductCardProps) {
   const { choosePrice, validateNormalizeAmount, calcProductTax, currentCoin } =
     useCalcAmount();
+  const productSlug = buildProductSlug({
+    id: orderProduct.id,
+    name: orderProduct.name,
+  });
 
   const totalRef = choosePrice(orderProduct, false);
 
@@ -39,7 +44,7 @@ export default function CartProductCard({
           className='rounded-md'
         />
         <div className='col-span-2'>
-          <Link href={`/products/${orderProduct.id}`} className='font-bold'>
+          <Link href={`/productos/${productSlug}`} className='font-bold'>
             {orderProduct.name}
           </Link>
           <p

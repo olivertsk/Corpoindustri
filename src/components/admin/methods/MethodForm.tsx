@@ -10,9 +10,16 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import ErrorMessage from '../../ErrorMessage';
-import { inputStlyes, primaryBtn, secondaryBtn } from '@/src/lib/global';
+import {
+  apiUrl,
+  inputStlyes,
+  primaryBtn,
+  secondaryBtn,
+} from '@/src/lib/global';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
+import { deleteFile, uploadFile } from '@/src/api/FileApi';
+import Image from 'next/image';
 
 type MethodFormProps = {
   register: UseFormRegister<PaymentMethodForm>;
@@ -40,9 +47,49 @@ export default function MethodForm({
     setValue('status', true);
   }, [type, setValue]);
 
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const image = watch('imageInfo');
+  const handleFile = async (ev: ChangeEvent<HTMLInputElement>) => {
+    if (ev.target.files) {
+      if (image) {
+        if (!(await deleteFile(image))) {
+          inputFileRef.current!.value = '';
+          return;
+        }
+      }
+      const file = ev.target.files[0];
+      const res = await uploadFile(file);
+      setValue('imageInfo', res.fileName[0]);
+      inputFileRef.current!.value = '';
+    }
+  };
+
   return (
     <>
       <div>
+        <div className='col-span-2'>
+          {image && (
+            <div className='w-full aspect-square relative'>
+              <Image
+                src={`${apiUrl}/file/${image}`}
+                objectFit='contain'
+                fill
+                alt='a'
+              />
+            </div>
+          )}
+          <button
+            onClick={() => inputFileRef.current?.click()}
+            className={`${primaryBtn} mt-4`}
+            type='button'
+          >
+            Seleccionar Imagen (Opcional)
+          </button>
+          <input onChange={handleFile} type='file' hidden ref={inputFileRef} />
+          {errors.imageInfo && (
+            <ErrorMessage>{errors.imageInfo.message}</ErrorMessage>
+          )}
+        </div>
         <label htmlFor='type'>Tipo</label>
         <select
           id='type'
@@ -56,6 +103,7 @@ export default function MethodForm({
           <option value={ETypePaymentMethods.Cash}>Efectivo</option>
           <option value={ETypePaymentMethods.Zelle}>Zelle</option>
           <option value={ETypePaymentMethods.PagoMovil}>Pago Movil</option>
+          <option value={ETypePaymentMethods.Binance}>Binance</option>
         </select>
         {errors.type && <ErrorMessage>{errors.type.message}</ErrorMessage>}
       </div>
@@ -102,13 +150,17 @@ export default function MethodForm({
               </div>
             </>
           )}
-          {type === ETypePaymentMethods.Zelle && (
+          {(type === ETypePaymentMethods.Zelle ||
+            type === ETypePaymentMethods.Binance) && (
             <div>
               <label htmlFor='email'>Correo Electrónico</label>
               <input
                 id='email'
                 {...register('email', {
-                  required: 'Este campo es requerido',
+                  required:
+                    type === ETypePaymentMethods.Zelle
+                      ? 'Este campo es requerido'
+                      : undefined,
                 })}
                 className={inputStlyes}
               />
@@ -118,46 +170,48 @@ export default function MethodForm({
             </div>
           )}
           {type === ETypePaymentMethods.Bank && (
-            <>
-              <div>
-                <label htmlFor='dni'>Cédula de Identidad</label>
-                <input
-                  id='dni'
-                  {...register('dni', {
-                    required: 'Este campo es requerido',
-                    onChange(event) {
-                      event.target.value = event.target.value.toUpperCase();
-                    },
-                  })}
-                  className={inputStlyes}
-                  placeholder='V-12345678'
-                />
-                {errors.dni && (
-                  <ErrorMessage>{errors.dni.message}</ErrorMessage>
-                )}
-              </div>
-              <div>
-                <label htmlFor='numberAccount'>Número de Cuenta</label>
-                <input
-                  id='numberAccount'
-                  {...register('numberAccount', {
-                    required: 'Este campo es requerido',
-                  })}
-                  className={inputStlyes}
-                />
-                {errors.numberAccount && (
-                  <ErrorMessage>{errors.numberAccount.message}</ErrorMessage>
-                )}
-              </div>
-              <div>
-                <label htmlFor='accountType'>Tipo de cuenta</label>
-                <input
-                  id='accountType'
-                  {...register('accountType')}
-                  className={inputStlyes}
-                />
-              </div>
-            </>
+            <div>
+              <label htmlFor='dni'>Cédula de Identidad</label>
+              <input
+                id='dni'
+                {...register('dni', {
+                  required: 'Este campo es requerido',
+                  onChange(event) {
+                    event.target.value = event.target.value.toUpperCase();
+                  },
+                })}
+                className={inputStlyes}
+                placeholder='V-12345678'
+              />
+              {errors.dni && <ErrorMessage>{errors.dni.message}</ErrorMessage>}
+            </div>
+          )}
+          {(type === ETypePaymentMethods.Bank ||
+            type === ETypePaymentMethods.Binance) && (
+            <div>
+              <label htmlFor='numberAccount'>Número de Cuenta</label>
+              <input
+                id='numberAccount'
+                {...register('numberAccount', {
+                  required: 'Este campo es requerido',
+                })}
+                className={inputStlyes}
+              />
+              {errors.numberAccount && (
+                <ErrorMessage>{errors.numberAccount.message}</ErrorMessage>
+              )}
+            </div>
+          )}
+
+          {type === ETypePaymentMethods.Bank && (
+            <div>
+              <label htmlFor='accountType'>Tipo de cuenta</label>
+              <input
+                id='accountType'
+                {...register('accountType')}
+                className={inputStlyes}
+              />
+            </div>
           )}
           <div>
             <label htmlFor='status'>Estatus</label>

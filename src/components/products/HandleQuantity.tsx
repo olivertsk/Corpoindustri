@@ -8,6 +8,7 @@ type HandleQuantityProps = {
   minusCb: (quantity: number) => void;
   showRemove?: boolean;
   orderProduct?: OrderProduct;
+  className?: string;
 };
 
 export default function HandleQuantity({
@@ -16,6 +17,7 @@ export default function HandleQuantity({
   plusCb,
   showRemove,
   orderProduct,
+  className,
 }: HandleQuantityProps) {
   const removeProduct = useCartStore((state) => state.removeProduct);
 
@@ -28,7 +30,9 @@ export default function HandleQuantity({
   };
 
   return (
-    <div className='border rounded-full flex items-center p-2 px-4 max-w-[50%]'>
+    <div
+      className={`border rounded-full flex items-center p-2 px-4 w-full ${className}`}
+    >
       <button
         disabled={quantity <= 1 && !showRemove}
         className='disabled:opacity-50'
@@ -52,7 +56,7 @@ export default function HandleQuantity({
       </button>
       <input
         type='number'
-        className='flex-1 text-center w-full'
+        className='flex-1 text-center w-full bg-transparent border-none focus:ring-0'
         value={quantity}
         readOnly
       />

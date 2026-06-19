@@ -29,7 +29,7 @@ export default function AppHeader() {
   }, []);
 
   return (
-    !pathname.includes('auth') &&
+    !pathname.includes('acceso') &&
     !pathname.includes('admin') && (
       <>
         {isLoadingCurrencies && (
@@ -40,7 +40,7 @@ export default function AppHeader() {
             </div>
           </div>
         )}
-        <header className='bg-primary py-4 px-2 sticky top-0 z-30'>
+        <header className='bg-primary py-4 px-2 sticky top-0 z-50'>
           <div className='container mx-auto flex gap-4 items-center'>
             <div className='max-w-[50px] lg:max-w-[100px]'>
               <Logo />
@@ -67,7 +67,7 @@ export default function AppHeader() {
           </div>
           <div
             className={`fixed top-0 left-0 transition-all  lg:hidden bg-primary overflow-hidden min-h-screen ${
-              openMenu ? 'w-full' : 'w-0'
+              openMenu ? 'w-full px-4' : 'w-0'
             } z-30`}
           >
             <HeaderButtons handleOpenMenu={handleOpenMenu} />

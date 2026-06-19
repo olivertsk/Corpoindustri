@@ -346,6 +346,30 @@ export default function ProductForm({
           </div>
           <div>
             <label htmlFor=''>
+              Unidad
+              <input
+                {...register('unit')}
+                type='text'
+                className={inputStlyes}
+              />
+            </label>
+            {errors.unit && <ErrorMessage>{errors.unit.message}</ErrorMessage>}
+          </div>
+          <div>
+            <label htmlFor=''>
+              Modelo
+              <input
+                {...register('model')}
+                type='text'
+                className={inputStlyes}
+              />
+            </label>
+            {errors.model && (
+              <ErrorMessage>{errors.model.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <label htmlFor=''>
               Inventario
               <input
                 {...register('stock', {

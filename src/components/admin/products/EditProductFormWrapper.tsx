@@ -48,6 +48,8 @@ export default function EditProductFormWrapper({
       priceBs: product.priceBs,
       promotionalPriceBs: product.promotionalPriceBs,
       priceWithTaxBs: product.priceWithTaxBs,
+      unit: product.unit,
+      model: product.model,
     },
   });
   const queryClient = useQueryClient();

@@ -1,14 +1,23 @@
-'use client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { Metadata } from 'next';
+import SearchQueryProvider from '@/src/components/search/SearchQueryProvider';
 
-const queryClient = new QueryClient();
+export const metadata: Metadata = {
+  title: 'Buscar Productos',
+  description:
+    'Explora el catalogo de Corpoindustri y encuentra productos mayoristas por categoria, precio y disponibilidad.',
+  alternates: {
+    canonical: '/buscar',
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
-export default function SearchProductLayout({
+export default function SearchLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+}) {
+  return <SearchQueryProvider>{children}</SearchQueryProvider>;
 }

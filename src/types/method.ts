@@ -3,6 +3,7 @@ export enum ETypePaymentMethods {
   Bank = 'bank',
   Zelle = 'zelle',
   PagoMovil = 'pago movil',
+  Binance = 'binance',
 }
 
 export enum EAvailableCurrency {
@@ -15,6 +16,7 @@ export const methodEnumTranslation = {
   [ETypePaymentMethods.Bank]: 'Transferencia Bancaria',
   [ETypePaymentMethods.Zelle]: 'Zelle',
   [ETypePaymentMethods.PagoMovil]: 'Pago Móvil',
+  [ETypePaymentMethods.Binance]: 'Binance',
 };
 
 export type PaymentMethod = {
@@ -26,8 +28,9 @@ export type PaymentMethod = {
   phoneNumber?: string;
   numberAccount?: string;
   accountType?: string;
-  currency?: string;
+  currency?: EAvailableCurrency;
   status: boolean | true;
+  imageInfo?: string | null;
 };
 
 export type PaymentMethodForm = Omit<PaymentMethod, 'id'>;

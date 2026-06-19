@@ -71,7 +71,7 @@ export default function BannerPage() {
       renderCell: (params) => (
         <div className='flex items-center h-full'>
           <Link
-            href={`departments/${params.row.id}`}
+            href={`banners/${params.row.id}`}
             className={`${editBtn} h-[32px] flex items-center justify-center`}
           >
             Editar

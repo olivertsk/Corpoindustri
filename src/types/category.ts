@@ -7,6 +7,14 @@ export type ICategoryFilter = {
   name?: string;
   isSalient?: boolean | string;
   departmentId?: Department['id'];
+  categories?: boolean;
+  isClient?: boolean;
+  productName?: string | null;
+  minPrice?: string | null;
+  maxPrice?: string | null;
+  categoriesIds?: string | null;
+  departmentIds?: string | null;
+  typePrice?: 'price' | 'priceBs';
   sort?: string;
   filters?: string;
 };
@@ -20,6 +28,7 @@ export const categorySchema = z.object({
   status: z.boolean(),
   departmentId: z.string(),
   isSalient: z.boolean(),
+  productCount: z.number().optional(),
 });
 
 export type ICategory = z.infer<typeof categorySchema>;

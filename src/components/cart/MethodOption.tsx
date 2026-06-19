@@ -1,6 +1,8 @@
+import { apiUrl } from '@/src/lib/global';
 import { useCartStore } from '@/src/store/cartSlice';
 import { PaymentMethod } from '@/src/types/method';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import { toast } from 'react-toastify';
 
 type MethodOptionProps = {
@@ -11,6 +13,7 @@ export default function MethodOption({
   method,
   isAdmin = false,
 }: MethodOptionProps) {
+  console.log('method :>> ', method);
   const setSelectedMethod = useCartStore((state) => state.setSelectedMethod);
   const copyText = (text?: string) => {
     navigator.clipboard.writeText(text || '');
@@ -110,6 +113,16 @@ export default function MethodOption({
                 Copiar
               </button>
             </div>
+          </div>
+        )}
+        {method.imageInfo && (
+          <div className='w-full aspect-square relative'>
+            <Image
+              src={`${apiUrl}/file/${method.imageInfo}`}
+              objectFit='contain'
+              fill
+              alt={method.name}
+            />
           </div>
         )}
       </div>

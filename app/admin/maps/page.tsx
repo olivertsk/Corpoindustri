@@ -10,7 +10,7 @@ import { GridColDef } from '@mui/x-data-grid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const queryKey = 'maps';
@@ -78,12 +78,6 @@ export default function LocationPage() {
     limit: 10,
   });
 
-  const handleChange = (
-    ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [ev.target.name]: ev.target.value });
-  };
-
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [queryKey],
@@ -101,13 +95,6 @@ export default function LocationPage() {
     },
   });
 
-  const handleFilterBtn = () => {
-    setFilters({ ...filters, pag: 1 });
-    setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-    });
-  };
-
   const handleDeleteBtn = (id: IBanner['id']) => {
     if (typeof window !== 'undefined') {
       if (window.confirm('¿Estás seguro de eliminar esta ubicación?')) {
@@ -124,29 +111,7 @@ export default function LocationPage() {
     return (
       <section className='overflow-hidden'>
         <h4 className='font-bold mb-2'>Filtros</h4>
-        <div className='mb-4 flex gap-2 flex-wrap'>
-          <input
-            value={filters.name!}
-            onChange={handleChange}
-            type='text'
-            name='name'
-            placeholder='Buscar Banner'
-            className='h-full py-2 rounded-md flex-1 px-4'
-            onKeyUp={(ev) => ev.key === 'Enter' && handleFilterBtn()}
-          />
-          <button
-            onClick={handleFilterBtn}
-            className='bg-primary text-white py-2 px-4 rounded-md font-bold'
-          >
-            Filtrar
-          </button>
-          <Link
-            href='maps/new'
-            className='bg-accent-100 font-bold py-2 px-4 rounded-md'
-          >
-            Nueva Ubicación
-          </Link>
-        </div>
+
         <TaskTable<TMapFilter>
           rows={data.data.map((item) => ({
             id: item.id,

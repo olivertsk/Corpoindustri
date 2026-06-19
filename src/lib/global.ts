@@ -1,6 +1,7 @@
 export const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-export const containerStyles = 'bg-white p-6 lg:p-16 rounded-xl shadow-sm';
-export const mainContainerStyles = 'container mx-auto py-8';
+export const containerStyles =
+  'section-shell p-6 lg:p-16 rounded-2xl shadow-[0_14px_28px_rgba(15,39,70,0.08)]';
+export const mainContainerStyles = 'container mx-auto py-8 px-4 lg:px-6';
 export const inputStlyes =
   'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm !min-h-[40px]';
 export const primaryBtn =

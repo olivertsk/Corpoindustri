@@ -1,6 +1,6 @@
 'use client';
 
-import { getProducts, ProductFilters } from '@/src/api/ProductApi';
+import { getClientProducts, ProductFilters } from '@/src/api/ProductApi';
 import Accordion from '@/src/components/accordion/Accordion';
 import Paginator from '@/src/components/paginator/Paginator';
 import CardProducts from '@/src/components/products/CardProducts';
@@ -16,29 +16,32 @@ function Main() {
   const searchParams = useSearchParams();
   const { currentCoin } = useCalcAmount();
   const setArrayFilter = useCallback(
-    (name: string) =>
+    (search: string) =>
       searchParams
-        .get(name)
+        ?.get(search)
         ?.split(',')
         ?.filter((item) => item) || [],
     [searchParams],
   );
 
   const [filters, setFilters] = useState<ProductFilters>({
-    pag: searchParams.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
-    name: searchParams.get('name') || '',
+    pag: searchParams?.get('pag') ? parseInt(searchParams.get('pag')!) : 1,
+    search: searchParams?.get('search') || '',
     departmentIds: setArrayFilter('departmentIds'),
     categoriesIds: setArrayFilter('categoriesIds'),
-    minPrice: searchParams.get('minPrice') || '',
-    maxPrice: searchParams.get('maxPrice') || '',
-    order: (searchParams.get('order') as 'maxPrice' | 'minPrice') || 'maxPrice',
+    brand: searchParams?.get('brand') || null,
+    unit: searchParams?.get('unit') || null,
+    model: searchParams?.get('model') || null,
+    minPrice: searchParams?.get('minPrice') || '',
+    maxPrice: searchParams?.get('maxPrice') || '',
+    order: (searchParams?.get('order') as 'maxPrice' | 'minPrice') || '',
     isClient: true,
     typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
   });
 
   const { data, isFetching } = useQuery({
     queryKey: ['products'],
-    queryFn: () => getProducts(filters),
+    queryFn: () => getClientProducts(filters),
     refetchOnWindowFocus: false,
   });
 
@@ -55,17 +58,19 @@ function Main() {
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,
-      name: searchParams.get('name') || '',
+      search: searchParams?.get('search') || '',
       departmentIds: setArrayFilter('departmentIds'),
       categoriesIds: setArrayFilter('categoriesIds'),
-      pag: searchParams.get('pag') ? +searchParams.get('pag')! : 1,
+      brand: searchParams?.get('brand') || null,
+      unit: searchParams?.get('unit') || null,
+      model: searchParams?.get('model') || null,
+      pag: searchParams?.get('pag') ? +searchParams.get('pag')! : 1,
       typePrice: currentCoin.value === 'BS' ? 'priceBs' : 'price',
     }));
 
-    console.log('currentCoin', currentCoin);
-
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['departments'] });
     }, 500);
   }, [searchParams, currentCoin, queryClient, setArrayFilter]);
 
@@ -74,13 +79,21 @@ function Main() {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
       if (Array.isArray(value)) {
-        params.append(key, value.toString());
+        if (value.length) {
+          params.append(key, value.toString());
+        }
+      } else if (key === 'search') {
+        params.append(key, '');
       } else {
         if (key === 'pag') {
           params.append(key, '1');
-        } else if (key === 'name') {
-          params.append(key, '');
-        } else {
+        } else if (
+          value !== '' &&
+          value !== null &&
+          value !== undefined &&
+          key !== 'isClient' &&
+          key !== 'typePrice'
+        ) {
           params.append(key, value + '');
         }
       }
@@ -94,11 +107,11 @@ function Main() {
         className={`container mx-auto grid grid-cols-4 lg:gap-4 lg:py-8 p-4 gap-y-4  `}
       >
         <aside className='col-span-4 lg:col-span-1'>
-          {filters.name && (
+          {filters.search && (
             <div className='flex items-center mb-4 gap-2'>
               <p className='text-lg text-slate-500 '>
                 Resultados para:{' '}
-                <span className='font-bold'>{filters.name}</span>
+                <span className='font-bold'>{filters.search}</span>
               </p>
               <button
                 className='border-2 border-red-600 rounded-sm'
@@ -108,7 +121,11 @@ function Main() {
               </button>
             </div>
           )}
-          <Accordion filters={filters} setFilters={setFilters} />
+          <Accordion
+            filters={filters}
+            setFilters={setFilters}
+            facets={data?.facets}
+          />
         </aside>
         {isFetching && (
           <div className='col-span-4 lg:col-span-3 h-[300px] flex justify-center items-center'>
@@ -128,7 +145,7 @@ function Main() {
               {!data.data.length && (
                 <div className='col-span-4 flex justify-center items-center h-[300px]'>
                   <p className='font-bold text-slate-500 text-lg'>
-                    No hay resultados para tu busqueda
+                    No hay resultados para tu búsqueda
                   </p>
                 </div>
               )}

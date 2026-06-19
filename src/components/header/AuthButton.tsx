@@ -18,7 +18,7 @@ export default function AuthButton({
   return (
     <div className={`${menuBtnStyles} group relative hidden lg:inline-block`}>
       <Link
-        className={`${menuBtnStyles} !p-0`}
+        className={`flex lg:flex-col items-center gap-2 `}
         href={user ? '/profile' : '/auth/sign-in'}
         onClick={toggleMenu}
       >
@@ -26,10 +26,10 @@ export default function AuthButton({
         <sub className={subStyles}>{user ? user?.name : 'Iniciar Sesión'}</sub>
       </Link>
       {user && (
-        <div className='absolute top-[80%] -left-[100%] w-64 bg-white p-4 hidden user-options lg:group-hover:flex shadow-lg rounded-md text-black flex-col gap-2 text-sm'>
+        <div className='absolute top-[95%] -left-[80%] w-64 bg-white p-4 hidden user-options lg:group-hover:flex shadow-xl rounded-xl text-black flex-col gap-2 text-sm border border-slate-100'>
           {user?.rol?.name !== 'client' && (
             <Link
-              className='hover:text-gray-700 p-1 flex gap-2'
+              className='hover:text-primary hover:bg-slate-50 p-2 rounded-lg flex gap-2 transition-colors'
               href='/admin'
               onClick={toggleMenu}
             >
@@ -40,7 +40,7 @@ export default function AuthButton({
           {userButtons.map((button) => (
             <Link
               key={button.path}
-              className='hover:text-gray-700 p-1 flex gap-2'
+              className='hover:text-primary hover:bg-slate-50 p-2 rounded-lg flex gap-2 transition-colors'
               href={button.path}
               onClick={toggleMenu}
             >
@@ -54,7 +54,7 @@ export default function AuthButton({
           ))}
 
           <button
-            className='hover:text-gray-700 p-1 text-left flex gap-2'
+            className='hover:text-primary hover:bg-slate-50 p-2 rounded-lg text-left flex gap-2 transition-colors'
             type='button'
             onClick={handleLogout}
           >

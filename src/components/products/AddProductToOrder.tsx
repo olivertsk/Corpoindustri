@@ -42,7 +42,7 @@ export default function AddProductToOrder({ product }: AddProductToOrderProps) {
         />
         <button
           onClick={handleAddCart}
-          className='bg-accent-100 hover:bg-accent-200 transition-colors py-3 font-bold px-8 flex items-center gap-2 rounded-full'
+          className='bg-accent-100 hover:bg-accent-200 transition-colors py-3 font-bold px-8 flex items-center gap-2 rounded-full w-full justify-center'
         >
           <ShoppingCartIcon className='w-4' />
           Agregar

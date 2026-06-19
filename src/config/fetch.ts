@@ -6,11 +6,11 @@ import { redirect } from 'next/navigation';
 
 const handleUnauthorized = async (statusCode: number): Promise<never> => {
   if (statusCode === 401 || statusCode === 403) {
-    redirect(`/logout?status=${statusCode}`);
+    redirect(`/cerrar-sesion?status=${statusCode}`);
   } else if (statusCode === 419) {
     redirect('?permission=denied');
   }
-  redirect(`/logout?status=${statusCode}`);
+  redirect(`/cerrar-sesion?status=${statusCode}`);
 };
 
 const comprobeToken = async () => {

@@ -14,6 +14,7 @@ export type Department = {
   deletedAt?: Date;
   products?: Product[];
   categories?: ICategory[];
+  productCount?: number;
 };
 
 export type TDepartmentForm = Pick<
@@ -31,4 +32,9 @@ export type DepartmentFilters = {
   categories?: boolean;
   filters?: string;
   sort?: string;
+  productName?: string | null;
+  minPrice?: string | null;
+  maxPrice?: string | null;
+  categoriesIds?: string | null;
+  typePrice?: 'price' | 'priceBs';
 };

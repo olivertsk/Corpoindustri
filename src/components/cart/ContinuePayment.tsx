@@ -33,27 +33,10 @@ export default function ContinuePayment({
   const currencies = useMultiCoinStore((state) => state.currencies);
   const { choosePrice, currentCoin, validateNormalizeAmount } = useCalcAmount();
 
-  const totalBs = useMemo(
-    () =>
-      orderProducts.reduce(
-        (init, item) =>
-          (init +=
-            item.quantity *
-            choosePrice(
-              item,
-              currentCoin.value === 'USD' ? true : false,
-              'BS',
-            )),
-        0,
-      ),
-    [orderProducts, choosePrice, currentCoin],
-  );
-
   const total = useMemo(
     () =>
       orderProducts.reduce(
-        (init, item) =>
-          (init += item.quantity * choosePrice(item, false, 'USD')),
+        (init, item) => (init += item.quantity * choosePrice(item)),
         0,
       ),
     [orderProducts, choosePrice],
@@ -343,20 +326,9 @@ export default function ContinuePayment({
 
             <input type='hidden' name='amount' defaultValue={originalTotal} />
             <SelectPaymentMethod />
-            {selectedMethod?.currency?.includes('USD') && (
-              <p className='text-slate-700 font-bold text-lg my-4'>
-                Monto a pagar (USD):{' '}
-                <b>{validateNormalizeAmount(undefined, total, 'any', 'USD')}</b>
-              </p>
-            )}
-            {selectedMethod?.currency?.includes('BS') && (
-              <p className='text-slate-700 font-bold text-lg my-4'>
-                Monto a pagar (BS):{' '}
-                <b>
-                  {validateNormalizeAmount(undefined, totalBs, 'any', 'BS')}
-                </b>
-              </p>
-            )}
+            <p className='text-slate-700 font-bold text-lg my-4'>
+              Monto a pagar: <b>{validateNormalizeAmount(undefined, total)}</b>
+            </p>
             {sending ? (
               <Spinner />
             ) : (

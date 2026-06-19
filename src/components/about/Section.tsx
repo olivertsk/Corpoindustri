@@ -40,7 +40,7 @@ export default function Section({
           background: 'linear-gradient(rgba(17,22,27,0) 0,#11161b 100%)',
         }}
       >
-        <h1 className='text-2xl text-start font-black mb-1'>{title}</h1>
+        <h2 className='text-2xl text-start font-black mb-1'>{title}</h2>
         {title === 'Valores' && typeof content === 'object' && (
           <ul>
             {content.map((item, index) => {

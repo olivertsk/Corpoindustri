@@ -58,7 +58,7 @@ export type Order = {
 
 export type DataOrderProduct = {
   productId: Product['id'];
-  product: Product;
+  product?: Product;
   code: Product['code'];
   valueTax: Product['taxRate'];
   salePrice: number;

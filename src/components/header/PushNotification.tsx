@@ -8,8 +8,9 @@ import { getMessaging, onMessage, getToken } from 'firebase/messaging';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
-export const menuBtnStyles = `text-white flex lg:flex-col items-center gap-2 p-4 lg:p-0`;
-export const subStyles = 'bottom-0 lg:-bottom-[5px]';
+export const menuBtnStyles =
+  'text-white flex lg:flex-col items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/15 border border-transparent hover:border-white/25 transition-colors';
+export const subStyles = 'bottom-0 lg:-bottom-[3px] text-xs lg:text-[11px]';
 
 export default function PushNotification({
   toggleMenu,
@@ -18,10 +19,10 @@ export default function PushNotification({
 }) {
   const user = useAuthStore((store) => store.user);
   const totalNotifications = useAppGlobalStore(
-    (store) => store.totalNotifications
+    (store) => store.totalNotifications,
   );
   const getAllNotifications = useAppGlobalStore(
-    (store) => store.getAllNotifications
+    (store) => store.getAllNotifications,
   );
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -47,7 +48,7 @@ export default function PushNotification({
       }
     }
     getAllNotifications();
-  }, []);
+  }, [getAllNotifications]);
 
   if (!user) return '';
   if (user)
@@ -69,7 +70,7 @@ export default function PushNotification({
               d='m450.27 348.569l-43.67-80.624V184c0-83.813-68.187-152-152-152s-152 68.187-152 152v83.945l-43.672 80.623A24 24 0 0 0 80.031 384h86.935a89 89 0 0 0-.367 8a88 88 0 0 0 176 0c0-2.7-.129-5.364-.367-8h86.935a24 24 0 0 0 21.1-35.431ZM310.6 392a56 56 0 1 1-111.419-8h110.837a56 56 0 0 1 .582 8M93.462 352l41.138-75.945V184a120 120 0 0 1 240 0v92.055L415.736 352Z'
             />
           </svg>
-          <span className='absolute text-xs -top-1 -right-1 bg-accent-100 text-black rounded-full px-1'>
+          <span className='absolute text-[11px] -top-1 -right-1 bg-accent-100 text-black rounded-full px-1.5 py-[1px] min-w-5 text-center'>
             {totalNotifications}
           </span>
         </div>
