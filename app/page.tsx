@@ -1,11 +1,13 @@
 import { fxAllBanner } from '@/src/api/BannerApi';
 import { fxAllCategories } from '@/src/api/CategoriesApi';
+import { getCombos } from '@/src/api/ComboApi';
 import { getDepartments } from '@/src/api/DepartmentsApi';
 import { getMaps } from '@/src/api/MapApi ';
 import { getPosts } from '@/src/api/PostApi';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import CategoriesWrapper from '@/src/components/categories/CategoriesWrapper';
+import CombosSection from '@/src/components/combos/CombosSection';
 import BannerSlider from '@/src/components/home/BannerSlider';
 import HomePostsSection from '@/src/components/home/HomePostsSection';
 import InstagramSection from '@/src/components/home/InstagramSection';
@@ -17,6 +19,7 @@ import ShowClientSurvey from '@/src/components/survey/ShowClientSurvey';
 import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
+import { Combo } from '@/src/types/combo';
 import { TMap } from '@/src/types/map';
 import { TPost } from '@/src/types/post';
 
@@ -104,6 +107,15 @@ export default async function Home() {
 
   const departamentData: { data: Department[] } =
     await getDepartments(departamentFilter);
+
+  /** Combos para la Home (tolerante a fallo si el endpoint aún no existe) */
+  let combos: Combo[] = [];
+  try {
+    const combosResponse = await getCombos({ pag: 1, limit: 12 });
+    combos = (combosResponse?.data || []).filter((c) => c.status !== false);
+  } catch {
+    combos = [];
+  }
 
   const half = Math.ceil(departamentData.data.length / 2);
   const firstHalf = departamentData.data.slice(0, half);
@@ -353,6 +365,12 @@ export default async function Home() {
           </div>
           {categoryData && <CategoriesWrapper categoryData={categoryData} />}
         </div>
+
+        {combos.length > 0 && (
+          <div className='container mx-auto mb-4 px-4'>
+            <CombosSection titleSection='Combos destacados' combos={combos} />
+          </div>
+        )}
 
         <div className='container mx-auto mb-4'>
           {firstHalf.map((department: Department) => (
