@@ -16,6 +16,7 @@ import PopoverBanner from '@/src/components/home/PopoverBanner';
 import ProductsSlider from '@/src/components/home/ProductsSlider';
 import TiktokSection from '@/src/components/home/TiktokSection';
 import ShowClientSurvey from '@/src/components/survey/ShowClientSurvey';
+import { apiUrl } from '@/src/lib/global';
 import { EPositionBanner, IBanner } from '@/src/types/banner';
 import { ICategory, ICategoryFilter } from '@/src/types/category';
 import { Department, DepartmentFilters } from '@/src/types/department';
@@ -72,6 +73,10 @@ export default async function Home() {
       position: EPositionBanner.AlwaysPopup,
       isClient: true,
     }),
+    fxAllBanner({
+      position: EPositionBanner.downloadCatalog,
+      isClient: true,
+    }),
   ]);
 
   const principalBannerData: IBanner[] =
@@ -87,6 +92,8 @@ export default async function Home() {
     result[4].status === 'fulfilled' ? result[4].value : [];
   const alwaysPopup: IBanner[] =
     result[5].status === 'fulfilled' ? result[5].value : [];
+  const downloadCatalog: IBanner[] =
+    result[6].status === 'fulfilled' ? result[6].value : [];
 
   /** Departamentos destacadas para secciones de productos */
   const departamentFilter: DepartmentFilters = {
@@ -571,6 +578,16 @@ export default async function Home() {
               </article>
             </div>
           </section>
+
+          {downloadCatalog.length > 0 && (
+            <div className='mb-24'>
+              <BannerSlider
+                floatingBanner={true}
+                slides={downloadCatalog}
+                downloadUrl={`${apiUrl}/catalog/download`}
+              />
+            </div>
+          )}
         </div>
       </section>
     </>

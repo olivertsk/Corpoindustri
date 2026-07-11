@@ -19,6 +19,7 @@ export enum EPositionBanner {
   AlwaysPopup = 'AlwaysPopup',
   Product = 'Product',
   Filter = 'Filter',
+  downloadCatalog = 'downloadCatalog',
 }
 
 export const positionBanenrDictionary: Record<EPositionBanner, string> = {
@@ -32,6 +33,7 @@ export const positionBanenrDictionary: Record<EPositionBanner, string> = {
   [EPositionBanner.AlwaysPopup]: 'Popup Siempre',
   [EPositionBanner.Product]: 'Producto',
   [EPositionBanner.Filter]: 'Filtro',
+  [EPositionBanner.downloadCatalog]: 'Descarga Catalogo',
 };
 
 export const bannerSchema = z.object({
