@@ -14,6 +14,7 @@ export default function WelcomeToChat({ setInitChat }: WelcomeToChatProps) {
           width={150}
           height={150}
           alt='No hay conversaciones'
+          loading='lazy'
         />
         <p className='text-sm text-slate-400'>No hay conversaciones aún</p>
       </div>

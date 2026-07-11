@@ -36,6 +36,7 @@ export default function LocationPage() {
             width={250}
             height={300}
             className='w-full h-full object-contain'
+            loading='lazy'
           />
         </div>
       ),

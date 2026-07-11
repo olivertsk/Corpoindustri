@@ -193,6 +193,7 @@ export default function ComboForm({
                           : '/logo.png'
                       }
                       className='rounded object-cover w-10 h-10'
+                      loading='lazy'
                     />
                     <span className='flex-1 text-sm'>{product.name}</span>
                     <span className='text-xs text-slate-400'>
@@ -227,6 +228,7 @@ export default function ComboForm({
                         : '/logo.png'
                     }
                     className='rounded object-cover w-12 h-12'
+                    loading='lazy'
                   />
                   <div className='flex-1'>
                     <p className='text-sm font-semibold'>{detail?.name}</p>

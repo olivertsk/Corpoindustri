@@ -1,6 +1,12 @@
 'use client';
+import { useEffect, useState } from 'react';
+
 export default function TiktokSection() {
-  if (typeof window === 'undefined') return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
 
   return (
     <div className='container mx-auto grid grid-cols-3'>

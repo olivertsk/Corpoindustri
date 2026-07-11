@@ -38,6 +38,7 @@ export default function ComboCard({ combo, className }: ComboCardProps) {
             aspectRatio: '1/1',
             objectFit: combo.coverImage ? 'cover' : 'contain',
           }}
+          loading='lazy'
         />
         <h5 className='px-4 font-bold overflow-hidden text-ellipsis text-base mt-3 h-[calc(1.25rem*2)] leading-5 line-clamp-2 text-slate-800'>
           {combo.name}
@@ -75,6 +76,7 @@ export default function ComboCard({ combo, className }: ComboCardProps) {
                     : '/logo.png'
                 }
                 className='w-9 h-9 rounded-full object-cover border border-slate-200 bg-white'
+                loading='lazy'
               />
               {item.quantity > 1 && (
                 <span className='absolute -bottom-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full px-1 leading-tight'>

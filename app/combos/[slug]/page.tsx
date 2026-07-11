@@ -154,6 +154,7 @@ export default async function ComboShowBySlugPage({ params }: Props) {
                             : '/logo.png'
                         }
                         className='w-16 h-16 rounded-lg object-cover border border-slate-100 bg-white'
+                        loading='lazy'
                       />
                       <div className='flex-1'>
                         <p className='font-bold text-slate-800'>

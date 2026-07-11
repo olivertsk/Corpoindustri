@@ -65,6 +65,7 @@ export default function BannerForm({
                 fill
                 alt='a'
                 className='object-contain'
+                loading='lazy'
               />
             </div>
           )}
@@ -91,6 +92,7 @@ export default function BannerForm({
                 fill
                 alt='a'
                 className='object-contain'
+                loading='lazy'
               />
             </div>
           )}
