@@ -48,6 +48,7 @@ export default function CardProducts({
                 : 'contain',
           }}
           loading='lazy'
+          quality={50}
         />
         <div className='px-3'>
           <Rating
