@@ -124,6 +124,7 @@ export default function ProductForm({
                   alt={item.alt}
                   src={`${apiUrl}/file/${item.file}`}
                   className='rounded-md'
+                  loading='lazy'
                 />
                 <button
                   onClick={() => handleRemoveFile(index)}

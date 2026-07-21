@@ -42,6 +42,7 @@ export const MapSection = ({ data }: MapSeccionProps) => {
                         aspectRatio: 16 / 9,
                         objectFit: 'cover',
                       }}
+                      loading='lazy'
                     />
                   </div>
                   <div className='h-[50%] mt-4'>

@@ -44,6 +44,7 @@ function UsersPageContent() {
               src={`${apiUrl}/file/${params.row.avatar}`}
               alt={params.row.name}
               className='w-[40px] h-[40px] object-cover rounded-full'
+              loading='lazy'
             />
           ) : (
             <div>
@@ -137,7 +138,7 @@ function UsersPageContent() {
 
   const handleRolChange = (
     ev: ChangeEvent<HTMLSelectElement>,
-    userId: User['id']
+    userId: User['id'],
   ) => {
     const newRolId = ev.target.value;
     mutate({

@@ -79,6 +79,7 @@ export default function CategoriesCard({
                         objectFit: 'contain',
                       }}
                       className='rounded-lg transition-transform duration-300 group-hover:scale-[1.03]'
+                      loading='lazy'
                     />
                   </div>
                 </div>

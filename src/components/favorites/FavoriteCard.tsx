@@ -34,6 +34,7 @@ export default function FavoriteCard({
           width={100}
           height={100}
           className='rounded-md'
+          loading='lazy'
         />
         <div className='col-span-2'>
           <h2 className='font-bold'>{product.name}</h2>
