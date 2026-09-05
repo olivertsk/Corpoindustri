@@ -44,11 +44,16 @@ export const makeGet = async (url: string, parameters?: unknown) => {
       return respJSON.data;
     } else {
       if (
-        (response.status === 403 ||
-          response.status === 401 ||
-          response.status === 419) &&
-        url !== '/auth/me'
+        response.status === 403 ||
+        response.status === 401 ||
+        response.status === 419
       ) {
+        // /auth/me se usa para saber si hay sesion: sin token responde 401 y
+        // eso no es un error, es un visitante anonimo. Lanzarlo aqui hace que
+        // la server action devuelva un 500 en produccion.
+        if (url === '/auth/me') {
+          return null;
+        }
         return await handleUnauthorized(response.status);
       }
       throw new Error(`Error ${response.status}: ${response.statusText}`);
