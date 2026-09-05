@@ -81,6 +81,7 @@ export default function UploadImage({
                 style={{ objectFit: 'cover' }}
                 width={512}
                 height={512}
+                loading='lazy'
               />
             )}
           </div>

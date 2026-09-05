@@ -431,7 +431,6 @@ export default function Accordion({
               </div>
             </section>
           </div>
-
           <div className='accordion-item'>
             <input
               id='accordion-trigger-3'
@@ -442,7 +441,7 @@ export default function Accordion({
               className='accordion-trigger font-bold uppercase'
               htmlFor='accordion-trigger-3'
             >
-              Precio
+              Ordenar por
             </label>
             <section className='accordion-animation-wrapper'>
               <div className='accordion-animation'>
@@ -481,8 +480,20 @@ export default function Accordion({
                       <input
                         type='radio'
                         name='order'
+                        value=''
+                        onChange={handleChange}
+                        checked={filters.order === ''}
+                      />
+                      Sin especificar
+                    </label>
+
+                    <label className='items-center flex gap-2'>
+                      <input
+                        type='radio'
+                        name='order'
                         value='maxPrice'
                         onChange={handleChange}
+                        checked={filters.order === 'maxPrice'}
                       />
                       Mayor Precio
                     </label>
@@ -492,8 +503,29 @@ export default function Accordion({
                         name='order'
                         value='minPrice'
                         onChange={handleChange}
+                        checked={filters.order === 'minPrice'}
                       />
                       Menor Precio
+                    </label>
+                    <label className='items-center flex gap-2'>
+                      <input
+                        type='radio'
+                        name='order'
+                        value='betterRating'
+                        onChange={handleChange}
+                        checked={filters.order === 'betterRating'}
+                      />
+                      Mejores Calificados
+                    </label>
+                    <label className='items-center flex gap-2'>
+                      <input
+                        type='radio'
+                        name='order'
+                        value='worseRating'
+                        onChange={handleChange}
+                        checked={filters.order === 'worseRating'}
+                      />
+                      Peores Calificados
                     </label>
                   </div>
                 </div>
@@ -501,140 +533,151 @@ export default function Accordion({
             </section>
           </div>
 
-          <div className='accordion-item'>
-            <input
-              id='accordion-trigger-4'
-              className='accordion-trigger-input'
-              type='checkbox'
-            ></input>
-            <label
-              className='accordion-trigger font-bold uppercase'
-              htmlFor='accordion-trigger-4'
-            >
-              Marcas
-              <span className='block text-xs font-normal'>
-                Seleccionadas ({filters.brand ? 1 : 0})
-              </span>
-            </label>
-            <section className='accordion-animation-wrapper'>
-              <div className='accordion-animation'>
-                <div className='accordion-transform-wrapper'>
-                  <div className='accordion-content p-4'>
-                    {!facets?.brands?.length && (
-                      <p className='text-sm text-slate-500'>Sin resultados</p>
-                    )}
-                    {facets?.brands?.map((brand) => (
-                      <label
-                        key={`brand-${brand.name}`}
-                        className='flex items-center gap-2 py-2 text-sm'
-                        htmlFor={`facet-brand-${brand.name}`}
-                      >
-                        <input
-                          id={`facet-brand-${brand.name}`}
-                          type='radio'
-                          name='facet-brand-selection'
-                          checked={filters.brand === brand.name}
-                          readOnly
-                          onClick={() => handleFacetFilter('brand', brand.name)}
-                        />
-                        {brand.name} ({brand.count})
-                      </label>
-                    ))}
+          {facets?.brands && facets?.brands.length > 0 && (
+            <div className='accordion-item'>
+              <input
+                id='accordion-trigger-4'
+                className='accordion-trigger-input'
+                type='checkbox'
+              ></input>
+              <label
+                className='accordion-trigger font-bold uppercase'
+                htmlFor='accordion-trigger-4'
+              >
+                Marcas
+                <span className='block text-xs font-normal'>
+                  Seleccionadas ({filters.brand ? 1 : 0})
+                </span>
+              </label>
+              <section className='accordion-animation-wrapper'>
+                <div className='accordion-animation'>
+                  <div className='accordion-transform-wrapper'>
+                    <div className='accordion-content p-4'>
+                      {!facets?.brands?.length && (
+                        <p className='text-sm text-slate-500'>Sin resultados</p>
+                      )}
+                      {facets?.brands?.map((brand) => (
+                        <label
+                          key={`brand-${brand.name}`}
+                          className='flex items-center gap-2 py-2 text-sm'
+                          htmlFor={`facet-brand-${brand.name}`}
+                        >
+                          <input
+                            id={`facet-brand-${brand.name}`}
+                            type='radio'
+                            name='facet-brand-selection'
+                            checked={filters.brand === brand.name}
+                            readOnly
+                            onClick={() =>
+                              handleFacetFilter('brand', brand.name)
+                            }
+                          />
+                          {brand.name} ({brand.count})
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
+              </section>
+            </div>
+          )}
 
-          <div className='accordion-item'>
-            <input
-              id='accordion-trigger-5'
-              className='accordion-trigger-input'
-              type='checkbox'
-            ></input>
-            <label
-              className='accordion-trigger font-bold uppercase'
-              htmlFor='accordion-trigger-5'
-            >
-              Unidades
-              <span className='block text-xs font-normal'>
-                Seleccionadas ({filters.unit ? 1 : 0})
-              </span>
-            </label>
-            <section className='accordion-animation-wrapper'>
-              <div className='accordion-animation'>
-                <div className='accordion-transform-wrapper'>
-                  <div className='accordion-content p-4'>
-                    {!facets?.units?.length && (
-                      <p className='text-sm text-slate-500'>Sin resultados</p>
-                    )}
-                    {facets?.units?.map((unit) => (
-                      <label
-                        key={`unit-${unit.name}`}
-                        className='flex items-center gap-2 py-2 text-sm'
-                        htmlFor={`facet-unit-${unit.name}`}
-                      >
-                        <input
-                          id={`facet-unit-${unit.name}`}
-                          type='radio'
-                          name='facet-unit-selection'
-                          checked={filters.unit === unit.name}
-                          readOnly
-                          onClick={() => handleFacetFilter('unit', unit.name)}
-                        />
-                        {unit.name} ({unit.count})
-                      </label>
-                    ))}
+          {facets?.units && facets?.units.length > 0 && (
+            <div className='accordion-item'>
+              <input
+                id='accordion-trigger-5'
+                className='accordion-trigger-input'
+                type='checkbox'
+              ></input>
+              <label
+                className='accordion-trigger font-bold uppercase'
+                htmlFor='accordion-trigger-5'
+              >
+                Unidades
+                <span className='block text-xs font-normal'>
+                  Seleccionadas ({filters.unit ? 1 : 0})
+                </span>
+              </label>
+              <section className='accordion-animation-wrapper'>
+                <div className='accordion-animation'>
+                  <div className='accordion-transform-wrapper'>
+                    <div className='accordion-content p-4'>
+                      {!facets?.units?.length && (
+                        <p className='text-sm text-slate-500'>Sin resultados</p>
+                      )}
+                      {facets?.units?.map((unit) => (
+                        <label
+                          key={`unit-${unit.name}`}
+                          className='flex items-center gap-2 py-2 text-sm'
+                          htmlFor={`facet-unit-${unit.name}`}
+                        >
+                          <input
+                            id={`facet-unit-${unit.name}`}
+                            type='radio'
+                            name='facet-unit-selection'
+                            checked={filters.unit === unit.name}
+                            readOnly
+                            onClick={() => handleFacetFilter('unit', unit.name)}
+                          />
+                          {unit.name} ({unit.count})
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
+              </section>
+            </div>
+          )}
 
-          <div className='accordion-item'>
-            <input
-              id='accordion-trigger-6'
-              className='accordion-trigger-input'
-              type='checkbox'
-            ></input>
-            <label
-              className='accordion-trigger font-bold uppercase'
-              htmlFor='accordion-trigger-6'
-            >
-              Modelos
-              <span className='block text-xs font-normal'>
-                Seleccionadas ({filters.model ? 1 : 0})
-              </span>
-            </label>
-            <section className='accordion-animation-wrapper'>
-              <div className='accordion-animation'>
-                <div className='accordion-transform-wrapper'>
-                  <div className='accordion-content p-4'>
-                    {!facets?.models?.length && (
-                      <p className='text-sm text-slate-500'>Sin resultados</p>
-                    )}
-                    {facets?.models?.map((model) => (
-                      <label
-                        key={`model-${model.name}`}
-                        className='flex items-center gap-2 py-2 text-sm'
-                        htmlFor={`facet-model-${model.name}`}
-                      >
-                        <input
-                          id={`facet-model-${model.name}`}
-                          type='radio'
-                          name='facet-model-selection'
-                          checked={filters.model === model.name}
-                          readOnly
-                          onClick={() => handleFacetFilter('model', model.name)}
-                        />
-                        {model.name} ({model.count})
-                      </label>
-                    ))}
+          {facets?.models && facets?.models.length > 0 && (
+            <div className='accordion-item'>
+              <input
+                id='accordion-trigger-6'
+                className='accordion-trigger-input'
+                type='checkbox'
+              ></input>
+              <label
+                className='accordion-trigger font-bold uppercase'
+                htmlFor='accordion-trigger-6'
+              >
+                Modelos
+                <span className='block text-xs font-normal'>
+                  Seleccionadas ({filters.model ? 1 : 0})
+                </span>
+              </label>
+              <section className='accordion-animation-wrapper'>
+                <div className='accordion-animation'>
+                  <div className='accordion-transform-wrapper'>
+                    <div className='accordion-content p-4'>
+                      {!facets?.models?.length && (
+                        <p className='text-sm text-slate-500'>Sin resultados</p>
+                      )}
+                      {facets?.models?.map((model) => (
+                        <label
+                          key={`model-${model.name}`}
+                          className='flex items-center gap-2 py-2 text-sm'
+                          htmlFor={`facet-model-${model.name}`}
+                        >
+                          <input
+                            id={`facet-model-${model.name}`}
+                            type='radio'
+                            name='facet-model-selection'
+                            checked={filters.model === model.name}
+                            readOnly
+                            onClick={() =>
+                              handleFacetFilter('model', model.name)
+                            }
+                          />
+                          {model.name} ({model.count})
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
+              </section>
+            </div>
+          )}
+
           <div className='flex justify-center p-4'>
             <button
               onClick={applyFilters}

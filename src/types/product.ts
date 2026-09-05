@@ -45,6 +45,7 @@ export const productSchema = z.object({
   priceBs: z.number(),
   promotionalPriceBs: z.number().nullable(),
   priceWithTaxBs: z.number().nullable(),
+  avgRating: z.string().optional(),
   department: departmentSchema.optional(),
   category: categorySchema.optional(),
   stock: z.number(),

@@ -36,6 +36,7 @@ export default function ImagePreview({
                 objectFit: 'cover',
                 height: '85px',
               }}
+              loading='lazy'
             />
           </div>
         ))}
@@ -54,6 +55,7 @@ export default function ImagePreview({
               aspectRatio: '1/1',
             }}
             className='rounded-xl overflow-hidden '
+            loading='lazy'
           />
         ) : (
           <Image
@@ -68,6 +70,7 @@ export default function ImagePreview({
               aspectRatio: '1/1',
             }}
             className='rounded-xl overflow-hidden '
+            loading='lazy'
           />
         )}
       </div>

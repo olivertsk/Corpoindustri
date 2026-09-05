@@ -13,6 +13,7 @@ export default function AuthProfileImg() {
           alt='upload image'
           width={24}
           height={24}
+          loading='lazy'
         />
       ) : (
         <svg

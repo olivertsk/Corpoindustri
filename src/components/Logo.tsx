@@ -13,6 +13,7 @@ export default function Logo() {
         }}
         src='/logo.png'
         alt='Corpoindustri Logo'
+        loading='lazy'
       />
     </Link>
   );

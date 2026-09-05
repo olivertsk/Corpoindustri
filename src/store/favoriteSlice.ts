@@ -20,14 +20,19 @@ export const createFavoriteSlice: StateCreator<
   page: 1,
   totalPages: 1,
   getFavorites: async () => {
-    const products = await getFavoriteProducts({
-      pag: get().page,
-      isClient: true,
-    });
-    set({
-      favorite: products?.data || [],
-      totalPages: products?.meta?.totalPage || 1,
-    });
+    try {
+      const products = await getFavoriteProducts({
+        pag: get().page,
+        isClient: true,
+      });
+      set({
+        favorite: products?.data || [],
+        totalPages: products?.meta?.totalPage || 1,
+      });
+    } catch (error) {
+      console.error('Error obteniendo favoritos:', error);
+      set({ favorite: [], totalPages: 1 });
+    }
   },
   setPage: (page: number) => {
     set({ page });

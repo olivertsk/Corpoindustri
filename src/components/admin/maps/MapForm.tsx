@@ -52,7 +52,12 @@ export default function MapForm({
       <div className='col-span-2'>
         {image && (
           <div className='w-full aspect-video relative'>
-            <Image src={`${apiUrl}/file/${image}`} fill alt='a' />
+            <Image
+              src={`${apiUrl}/file/${image}`}
+              fill
+              alt='a'
+              loading='lazy'
+            />
           </div>
         )}
         <button

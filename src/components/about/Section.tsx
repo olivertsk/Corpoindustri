@@ -32,6 +32,7 @@ export default function Section({
           src={imageSrc}
           alt={imageAlt}
           className='rounded-xl m-auto'
+          loading='lazy'
         />
       </div>
       <div

@@ -9,7 +9,6 @@ import Spinner from './spinner/Spinner';
 export default function TransitionWrapper() {
   const pathName = usePathname();
   const [transitionWrapper, setTransitionWrapper] = useState<Element | null>();
-
   useEffect(() => {
     if (document) {
       setTransitionWrapper(document.querySelector('#transition-wrapper'));
@@ -23,7 +22,7 @@ export default function TransitionWrapper() {
         transitionWrapper.classList.remove('page-transition');
       }
     });
-  }, [pathName]);
+  }, [pathName, transitionWrapper]);
 
   return (
     <div

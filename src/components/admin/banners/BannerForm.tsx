@@ -32,7 +32,7 @@ export default function BannerForm({
   const position = watch('position');
   const handleFile = async (
     ev: ChangeEvent<HTMLInputElement>,
-    field: 'images' | 'mobileImage'
+    field: 'images' | 'mobileImage',
   ) => {
     if (ev.target.files) {
       if (
@@ -65,6 +65,7 @@ export default function BannerForm({
                 fill
                 alt='a'
                 className='object-contain'
+                loading='lazy'
               />
             </div>
           )}
@@ -91,6 +92,7 @@ export default function BannerForm({
                 fill
                 alt='a'
                 className='object-contain'
+                loading='lazy'
               />
             </div>
           )}
@@ -159,6 +161,9 @@ export default function BannerForm({
               </option>
               <option value={EPositionBanner.AlwaysPopup}>
                 Emergente (Siempre)
+              </option>
+              <option value={EPositionBanner.downloadCatalog}>
+                Descarga Catalogo
               </option>
             </select>
           </label>
