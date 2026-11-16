@@ -170,7 +170,7 @@ export default function BannerSlider({
             (slide) =>
               slide.images && (
                 <SwiperSlide key={slide.id}>
-                  <picture className='relative w-full h-[420px]'>
+                  <picture className='relative w-full '>
                     <source
                       srcSet={`${apiUrl}/file/${
                         slide.mobileImage || slide.images
@@ -184,7 +184,6 @@ export default function BannerSlider({
                       height={1024}
                       style={{
                         width: '100%',
-                        height: '420px',
                         objectFit: 'cover',
                       }}
                     />
