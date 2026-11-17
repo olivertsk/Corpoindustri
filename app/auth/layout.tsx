@@ -21,7 +21,7 @@ export default function AuthLayout({
       toast.success(`Bienvenido ${user.name}`);
       handleTransition('/');
     }
-  }, [user, router]);
+  }, [user, router, handleTransition]);
 
   return (
     <>
@@ -37,6 +37,7 @@ export default function AuthLayout({
               src='/viveres.png'
               objectFit='cover'
               alt='Viveres'
+              loading='lazy'
             />
           </div>
         </div>

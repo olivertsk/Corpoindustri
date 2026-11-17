@@ -69,19 +69,13 @@ body::before {
   letter-spacing: normal;
 }
 
-.swiper-button-prev:after,
-.swiper-button-next:after {
-  font-family: swiper-icons;
-  width: 42px;
-  height: 42px;
+.swiper-button-prev,
+.swiper-button-next {
+  --swiper-navigation-size: 42px;
+  --swiper-navigation-color: #000;
   background: #ffed00;
-  font-size: 1rem !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
   border-radius: 100%;
-  padding: 1rem;
+  padding: 13px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
 }
 

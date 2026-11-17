@@ -78,7 +78,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['orders'] });
-  }, [data]);
+  }, [data, queryClient]);
 
   const manageCoinToShow = (price: number): string => {
     return normalizeAmounts(price);
@@ -170,6 +170,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
                         }}
                         layout='responsive'
                         objectFit='contain'
+                        loading='lazy'
                       />
                       <button
                         onClick={() => setFullScreenVoucher(true)}
@@ -366,6 +367,7 @@ export default function OrderDetail({ isClient }: OrderDetailProps) {
               }
               layout='responsive'
               objectFit='contain'
+              loading='lazy'
             />
           )}
           <div className='sticky bottom-4 left-0 w-full flex justify-center gap-4'>

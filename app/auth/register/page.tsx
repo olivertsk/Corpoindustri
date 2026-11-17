@@ -42,7 +42,7 @@ export default function RegisterPage() {
       window.grecaptcha.enterprise.ready(async () => {
         const token = await window.grecaptcha.enterprise.execute(
           googleCaptchaPublicKey,
-          { action: 'LOGIN' }
+          { action: 'LOGIN' },
         );
         formData.recaptchaToken = token;
         const response = await registerUser(formData);
@@ -50,7 +50,7 @@ export default function RegisterPage() {
           response.message.forEach(
             (item: { field: keyof UserFormRegistration; message: string }) => {
               setError(item.field, { message: item.message });
-            }
+            },
           );
           return;
         }
@@ -87,6 +87,7 @@ export default function RegisterPage() {
                 alt='upload image'
                 width={512}
                 height={512}
+                loading='lazy'
               />
             </div>
             <button

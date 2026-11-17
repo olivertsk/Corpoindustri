@@ -136,7 +136,7 @@ function FeatureCard({
 }
 
 export default function AboutUsPage() {
-  const beneficios = [
+  const beneficios: string[] = [
     'Soluciones adaptadas a su empresa',
     'Calidad y confianza en cada entrega',
     'Aliados para el crecimiento de su organizacion',
@@ -180,6 +180,7 @@ export default function AboutUsPage() {
                 alt='Corpoindustri Logo'
                 className='mx-auto'
                 priority
+                loading='lazy'
               />
             </div>
             <div className='mt-4 flex flex-wrap gap-3 text-sm'>

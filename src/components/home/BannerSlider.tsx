@@ -21,6 +21,7 @@ type BannerSliderProps = {
   showFadeOut?: boolean;
   floatingBanner?: boolean;
   redirectTo?: string;
+  downloadUrl?: string;
 };
 
 // Componente de copo de nieve individual
@@ -98,10 +99,22 @@ export default function BannerSlider({
   slides,
   floatingBanner,
   redirectTo,
+  downloadUrl,
 }: BannerSliderProps) {
   const router = useRouter();
   const season = getSeason();
   const handleRedirect = () => {
+    if (downloadUrl) {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', '');
+      link.setAttribute('target', '_blank');
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
     if (redirectTo) {
       router.push(`${redirectTo}`);
     }
@@ -123,7 +136,7 @@ export default function BannerSlider({
       <div
         className={`relative overflow-hidden ${
           floatingBanner && ' sm:shadow-2xl  sm:rounded-xl'
-        } ${redirectTo ? 'cursor-pointer' : ''}`}
+        } ${redirectTo || downloadUrl ? 'cursor-pointer' : ''}`}
         onClick={handleRedirect}
       >
         {/* Efecto de nieve solo cuando NO es floatingBanner */}
@@ -157,7 +170,7 @@ export default function BannerSlider({
             (slide) =>
               slide.images && (
                 <SwiperSlide key={slide.id}>
-                  <picture className='relative w-full h-[420px]'>
+                  <picture className='relative w-full '>
                     <source
                       srcSet={`${apiUrl}/file/${
                         slide.mobileImage || slide.images
@@ -171,7 +184,6 @@ export default function BannerSlider({
                       height={1024}
                       style={{
                         width: '100%',
-                        height: '420px',
                         objectFit: 'cover',
                       }}
                     />

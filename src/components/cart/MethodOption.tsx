@@ -122,6 +122,7 @@ export default function MethodOption({
               objectFit='contain'
               fill
               alt={method.name}
+              loading='lazy'
             />
           </div>
         )}

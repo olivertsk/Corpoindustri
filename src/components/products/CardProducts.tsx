@@ -6,6 +6,7 @@ import { Product } from '@/src/types/product';
 import { apiUrl } from '@/src/lib/global';
 import CardProductPrice from './CardProductPrice';
 import { buildProductSlug } from '@/src/utils/productSlug';
+import { Rating } from '@mui/material';
 
 type CardProductsProps = {
   product: Product;
@@ -46,7 +47,18 @@ export default function CardProducts({
                 ? 'cover'
                 : 'contain',
           }}
+          loading='lazy'
+          quality={50}
         />
+        <div className='px-3'>
+          <Rating
+            name='product-rating-summary'
+            value={Number(product.avgRating || 0)}
+            precision={0.1}
+            readOnly
+            size='small'
+          />
+        </div>
         <h4 className='px-4 overflow-hidden text-ellipsis text-sm mt-3 text-slate-400'>
           {product.department?.name}
         </h4>

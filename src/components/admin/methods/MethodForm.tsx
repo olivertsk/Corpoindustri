@@ -75,6 +75,7 @@ export default function MethodForm({
                 objectFit='contain'
                 fill
                 alt='a'
+                loading='lazy'
               />
             </div>
           )}
