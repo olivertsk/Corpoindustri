@@ -64,12 +64,14 @@ export default function SignInPage() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       if (user) {
+        const firebaseToken = await user.getIdToken();
         registerUser({
           email: user.email || '',
           name: user.displayName || '',
           password: '', // Google sign-in does not require a password
           passwordConfirmation: '', // Add passwordConfirmation to match password
           uid: user.uid, // Use the user's UID as the ID token
+          firebaseToken,
         }).then((response) => {
           if (response.success) {
             setUser(response.user, response.token);

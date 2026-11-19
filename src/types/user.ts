@@ -83,6 +83,7 @@ export type UserFormRegistration = Pick<
   | 'gender'
 > & {
   uid?: string;
+  firebaseToken?: string;
   recaptchaToken?: string;
 };
 export type UserFormChangePassword = Pick<

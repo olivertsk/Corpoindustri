@@ -5,9 +5,11 @@ import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import ProgressBar from '@ramonak/react-progress-bar';
 import { apiUrl } from '@/src/lib/global';
+import { useAuthStore } from '@/src/store/authStore';
 
 export default function MasiveImagesPage() {
   useBreadcrumb('Carga Masiva');
+  const token = useAuthStore((state) => state.token);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -35,6 +37,7 @@ export default function MasiveImagesPage() {
         };
 
         request.open('POST', `${apiUrl}/A2/upload`);
+        if (token) request.setRequestHeader('Authorization', `Bearer ${token}`);
         request.send(formData);
 
         request.onload = () => {
